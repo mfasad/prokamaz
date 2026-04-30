@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Принцип работы ЭФУ КАМАЗ: устройство, диагностика и ремонт — Про КАМАЗ</title>
+    <meta name="description" content="Подробный разбор системы ЭФУ КАМАЗ: принцип действия, устройство электрофакельного подогревателя, коды ошибок и алгоритмы поиска неисправностей.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/e/ef/efu-kamaz-printsip-raboty.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Принцип работы ЭФУ КАМАЗ: устройство, диагностика и ремонт">
+    <meta property="og:description" content="Подробный разбор системы ЭФУ КАМАЗ: принцип действия, устройство электрофакельного подогревателя, коды ошибок и алгоритмы поиска неисправностей.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Принцип работы ЭФУ КАМАЗ: устройство, диагностика и ремонт</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Принцип работы ЭФУ КАМАЗ: устройство, диагностика и ремонт</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#конструктивные-особенности-и-устройство-системы">Конструктивные особенности и устройство системы</a></li><li><a href="#алгоритм-работы-и-циклограмма-запуска">Алгоритм работы и циклограмма запуска</a></li><li><a href="#диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</a></li><li><a href="#типичные-ошибки-и-обслуживание-системы">Типичные ошибки и обслуживание системы</a></li><li><a href="#оптимальная-эксплуатация-в-зимний-период">Оптимальная эксплуатация в зимний период</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+<p>С наступлением устойчивых морозов водители грузовых автомобилей часто сталкиваются с невозможностью запустить двигатель, несмотря на исправный стартер и полностью заряженные аккумуляторы. Дизельное топливо в баках и топливной магистрали парафинизируется, а сжатие в цилиндрах не может обеспечить необходимую температуру для воспламенения смеси.</p>
+<p>В такой ситуации штатная система холодного пуска может оказаться неэффективной, особенно если моторесурс двигателя велик или условия эксплуатации экстремальны. Отсутствие прогрева приводит к повышенному износу цилиндро-поршневой группы и критическому разряжению аккумуляторных батарей при попытках запуска.</p>
+<p>Решением проблемы становится установка или штатное наличие электрофакельного устройства (ЭФУ), которое принудительно нагревает воздух во впускном коллекторе. Понимание того, как именно функционирует этот узел, позволяет оперативно устранять неисправности и избегать простоев техники в зимний период.</p>
+<p>Принцип действия системы базируется на искусственном повышении температуры всасываемого воздуха перед его попаданием в камеры сгорания. Это создает условия, при которых воспламенение дизельного топлива происходит даже при низких температурах окружающей среды и сниженной компрессии.</p>
+
+<h2 id="конструктивные-особенности-и-устройство-системы">Конструктивные особенности и устройство системы</h2>
+<p>Основным исполнительным элементом системы является электрофакельный подогреватель, который представляет собой сложное устройство, состоящее из нескольких ключевых компонентов. В его конструкции предусмотрены нагревательная свеча, клапан подачи топлива и корпус с завихрителем воздушного потока. Нагревательный элемент изготавливается из жаропрочных сплавов, способных выдерживать высокие тепловые нагрузки в течение короткого времени.</p>
+<p>Подача топлива к факелу осуществляется через электромагнитный клапан, который открывается только по команде электронного блока управления. Топливо подается дозировано, смешивается с воздухом и воспламеняется от раскаленной спирали свечи. Образовавшееся пламя нагревает проходящий воздушный поток до температуры 800-900 градусов Цельсия.</p>
+<p>Управление всем процессом берет на себя специализированный контроллер или реле, часто называемое «реле ЭФУ». Этот блок получает сигналы от датчика температуры охлаждающей жидкости и датчика положения ключа зажигания. На основе полученных данных алгоритм принимает решение о включении режима предпускового прогрева или поддержания температуры.</p>
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На современных двигателях КАМАЗ-65115 и аналогичных моделях реле ЭФУ интегрировано в общую систему управления двигателем (ЭБУ), тогда как на старых моделях используется отдельный блок.</p></div>
+<p>Важнейшим элементом является сама факельная свеча, которая выполняет двойную функцию: сначала она накаливается для воспламенения топливной смеси, а затем продолжает поддерживать горение факела. Конструкция свечи предусматривает защиту от перегрева и механических повреждений потоком воздуха.</p>
+
+<h3>Компоненты на разных модификациях двигателей</h3>
+<p>На двигателях с механическим ТНВД, таких как КАМАЗ-740.10 или 740.11, система ЭФУ часто реализована в виде отдельного узла, установленного на впускном коллекторе. Топливо для факела в таких системах может подаваться непосредственно из магистрали низкого давления через отдельный жиклер или электромагнитный клапан.</p>
+<p>В двигателях с электронной системой управления (Common Rail), например, Cummins или КАМАЗ-540, принцип работы ЭФУ остается схожим, но управление осуществляется напрямую блоком EDC. Здесь отсутствуют отдельные реле в классическом понимании, их функцию выполняют силовые ключи внутри ЭБУ, а диагностика ведется через протокол K-Line или J1939.</p>
+<p>Отличия также касаются количества подогревателей. На V-образных двигателях КАМАЗ обычно устанавливается два факельных устройства — по одному на каждую головку блока цилиндров, что обеспечивает равномерный прогрев всего объема поступающего воздуха. Синхронизация их работы критически важна для стабильного запуска.</p>
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Использование неисправных или «уставших» свечей ЭФУ приводит к попаданию неиспарившегося дизельного топлива в цилиндры, что может вызвать гидроудар или смытие масляной пленки со стенок цилиндров.</p></div>
+
+<h2 id="алгоритм-работы-и-циклограмма-запуска">Алгоритм работы и циклограмма запуска</h2>
+<p>Процесс активации системы холодного пуска строго регламентирован и проходит в несколько последовательных этапов, каждый из которых контролируется электроникой. Нарушение последовательности или временных интервалов свидетельствует о неисправности компонентов системы. Понимание циклограммы необходимо для правильной диагностики.</p>
+<p>Первым этапом является активация режима прогрева при повороте ключа зажигания в положение «Включено», но до включения стартера. В этот момент на панели приборов загорается индикатор (спираль), сигнализирующий о накале свечей. Длительность этого этапа зависит от температуры двигателя и может составлять от 3 до 20 секунд.</p>
+<p>После того как индикатор гаснет, система переходит в режим готовности к запуску. При прокрутке стартером электромагнитные клапаны открываются, и топливо подается в факельные устройства, где оно воспламеняется от раскаленных свечей. Горящий факел интенсивно нагревает воздух, поступающий в цилиндры.</p>
+<div class="checklist-block"><h4>📋 Алгоритм работы ЭФУ</h4><ol><li><strong>Шаг 1.</strong> Поворот ключа в положение «Зажигание» (активация реле)</li><li><strong>Шаг 2.</strong> Накал свечей (горение индикатора на панели)</li><li><strong>Шаг 3.</strong> Подача топлива и воспламенение факела (при прокрутке стартера)</li><li><strong>Шаг 4.</strong> Отключение подачи топлива после пуска двигателя</li></ol></div>
+<p>Третий этап — это поддержание работы факела в течение определенного времени после запуска двигателя. Это необходимо для обеспечения стабильной работы мотора в первые минуты, пока он не выйдет на рабочий температурный режим. После этого подача топлива прекращается, и система переходит в ждущий режим.</p>
+
+<h3>Режимы работы контроллера</h3>
+<p>Электронный блок управления ЭФУ работает в нескольких режимах, зависящих от температуры охлаждающей жидкости. Если температура выше +5 градусов Цельсия, система может не активироваться вообще, так как в этом нет необходимости. Это предотвращает износ свечей и перерасход топлива.</p>
+<p>При температуре от -10 до +5 градусов Цельсия включается режим кратковременного прогрева. Время накала свечей минимально, а факел работает только во время работы стартера. Этого достаточно для облегчения запуска в условиях умеренного холода.</p>
+<p>В диапазоне температур ниже -10 градусов Цельсия активируется полный цикл предпускового прогрева. Блок управления увеличивает время первичного накала свечей и продлевает время работы факела после запуска двигателя. В этом режиме потребление электроэнергии максимально.</p>
+<table>
+<thead>
+<tr>
+<th>Температура ОЖ</th>
+<th>Режим работы</th>
+<th>Время предпускового накала</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Выше +5°C</td>
+<td>Отключен</td>
+<td>0 сек</td>
+</tr>
+<tr>
+<td>От -10°C до +5°C</td>
+<td>Стандартный</td>
+<td>3-5 сек</td>
+</tr>
+<tr>
+<td>Ниже -10°C</td>
+<td>Усиленный</td>
+<td>15-20 сек</td>
+</tr>
+</tbody>
+</table>
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Корректная работа алгоритма зависит от исправности датчика температуры, который дает сигнал блоку управления о необходимости активации того или иного режима.</p></div>
+
+<h2 id="диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</h2>
+<p>Своевременное выявление проблем в системе ЭФУ позволяет избежать ситуаций, когда автомобиль невозможно завести в мороз. Диагностика начинается с визуального осмотра и проверки индикации на приборной панели. Отсутствие свечения индикатора «спираль» при включении зажигания является первым признаком неисправности.</p>
+<p>Для более глубокой проверки необходимо использовать мультиметр или диагностический сканер. Проверке подлежат цепи питания, целостность свечей накала и работа электромагнитных клапанов. Сопротивление исправной свечи ЭФУ КАМАЗ обычно составляет от 0,4 до 0,8 Ом, что требует использования мультиметра с низким пределом измерения.</p>
+<p>При наличии электронного блока управления возможна считка кодов ошибок через диагностический разъем. Система самодиагностики фиксирует обрыв цепи свечей, короткое замыкание или неисправность клапана подачи топлива. Эти данные сохраняются в памяти даже после выключения зажигания.</p>
+<div class="checklist-block"><h4>☑️ Первичная диагностика ЭФУ</h4><label class="check-item"><input type="checkbox"><span>Проверка горения индикатора на панели приборов</span></label><label class="check-item"><input type="checkbox"><span>Замер напряжения на клеммах свечей при активации</span></label><label class="check-item"><input type="checkbox"><span>Проверка сопротивления свечей накала</span></label><label class="check-item"><input type="checkbox"><span>Аудит работы электромагнитного клапана (щелчок при включении)</span></label><label class="check-item"><input type="checkbox"><span>Сканирование системы на наличие ошибок ЭБУ</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+<p>Частой проблемой является окисление контактов в разъемах подключения из-за агрессивной среды под капотом. Влага и реагенты разрушают соединения, приводя к падению напряжения на свечах. В результате свечи не раскаляются до нужной температуры, и факел не загорается.</p>
+
+<h3>Методы проверки исполнительных механизмов</h3>
+<p>Проверка свечей накала требует осторожности, так как они потребляют огромный ток. Прямое подключение к аккумулятору без нагрузки может привести к повреждению батареи или проводов. Лучше всего проверять их падением напряжения или через токовые клещи при работающей системе.</p>
+<p>Электромагнитный клапан проверяется на слышимость щелчка при подаче напряжения 12 Вольт, а также на проходимость топлива. Если клапан не открывается, топливо не поступает к факелу, и прогрев воздуха не происходит, хотя свечи могут быть исправны.</p>
+<p>Реле управления (если оно вынесено в отдельный блок) проверяется на наличие управляющего сигнала на входе и наличие напряжения на выходе при активации. Часто выходит из строя сама плата реле из-за перегрева или вибрации, что требует замены узла целиком.</p>
+<pre><code>Нормальное сопротивление свечи ЭФУ: 0.4 - 0.8 Ом
+<p>Напряжение бортсети при работе стартера: не менее 10 В</p>
+<p>Время горения индикатора на панели: 3 - 20 сек</code></pre></p>
+<div class="attention-box attention-info"><h4>Диагностика ЭФУ</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Высокая эффективность запуска в мороз</li><li>✅ Возможность запуска при сниженной компрессии</li><li>✅ Продление ресурса двигателя</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Высокий ток потребления</li><li>❌ Сложность диагностики электронных блоков</li><li>❌ Зависимость от качества топлива</li></ul></div></div></div>
+
+<h2 id="типичные-ошибки-и-обслуживание-системы">Типичные ошибки и обслуживание системы</h2>
+<p>Эксплуатация системы ЭФУ требует соблюдения определенных правил, игнорирование которых приводит к выходу из строя дорогостоящих компонентов. Чаще всего проблемы возникают из-за невнимательности к состоянию электрических соединений и качеству топлива.</p>
+<p>Регулярное техническое обслуживание системы должно проводиться перед началом зимнего сезона. Оно включает в себя очистку контактов, проверку затяжки клемм на аккумуляторах (так как ЭФУ создает пиковую нагрузку) и визуальный осмотр проводов на предмет перетертостей.</p>
+<p>Важно следить за состоянием топливных фильтров. Если фильтр забит или в топливе присутствует вода, работа электромагнитного клапана и жиклеров факельного устройства будет нарушена. Вода в системе при замерзании может полностью блокировать подачу топлива к свечам.</p>
+<ol>
+<li><strong>Игнорирование индикатора на панели</strong> — многие водители начинают крутить стартер, не дождавшись гашения спирали, что приводит к холодному пуску без прогрева; необходимо всегда ждать сигнала готовности системы.</li>
+<li><strong>Использование севших аккумуляторов</strong> — при попытке запуска с ЭФУ напряжение в сети падает критически, свечи не успевают прогреться, а стартер еле крутит; требуется полная зарядка АКБ перед зимой.</li>
+<li><strong>Отсутствие проверки сопротивления свечей</strong> — визуально определить неисправность свечи невозможно, она может выглядеть целой, но иметь внутреннее разрушение спирали; обязателен замер омметром.</li>
+<li><strong>Попытка запуска без топлива в баке или при закрытом кране</strong> — в некоторых модификациях топливо для ЭФУ берется из отдельного отстойника или магистрали; отсутствие топлива приведет к работе свечей на сухую и их перегоранию.</li>
+</ol>
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Для продления срока службы свечей ЭФУ рекомендуется после каждого третьего запуска в сильные морозы давать двигателю поработать 2-3 минуты на холостых оборотах перед выключением, чтобы свечи остыли постепенно.</p></div>
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Категорически запрещается подавать напряжение на свечи ЭФУ напрямую от аккумулятора минуя реле или блок управления на время более 5-10 секунд. Это приведет к мгновенному перегоранию нагревательного элемента.</p>
+</blockquote>
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> При замене свечей ЭФУ необходимо использовать только оригинальные изделия или качественные аналоги с идентичными параметрами сопротивления. Установка свечей с другим сопротивлением может привести к некорректной работе реле и пожароопасной ситуации.</p>
+</blockquote>
+
+<h2 id="оптимальная-эксплуатация-в-зимний-период">Оптимальная эксплуатация в зимний период</h2>
+<p>Эффективность работы системы ЭФУ напрямую зависит от общего технического состояния двигателя и топливной системы. Даже самый исправный подогреватель не сможет компенсировать критически низкую компрессию или наличие летнего дизельного топлива в баке при сильном морозе.</p>
+<p>Для владельцев техники с ЭФУ важно иметь в запасе комплект свечей накала, так как их ресурс в условиях постоянной эксплуатации при низких температурах ограничен. Частые циклы нагрева и остывания приводят к термической усталости металла.</p>
+<p>При длительной стоянке в неотапливаемом помещении рекомендуется использовать дополнительные средства утепления, такие как одеяла на двигатель, в сочетании с системой ЭФУ. Это снизит теплопотери и облегчит задачу системе предпускового подогрева.</p>
+<p>Соблюдение регламента обслуживания и понимание принципов работы электрофакельного устройства позволяет обеспечить надежный запуск двигателя КАМАЗ в любых климатических условиях. Грамотное использование этого узла значительно продлевает жизнь мотору и сохраняет мобильность транспортного средства.</p>
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Характеристики и алгоритмы работы ЭБУ могут отличаться в зависимости от года выпуска автомобиля и версии программного обеспечения. Актуальные данные всегда следует проверять в руководстве по эксплуатации конкретной модели или у официального дилера.</p></div></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#конструктивные-особенности-и-устройство-системы">Конструктивные особенности и устройство системы</a></li><li><a href="#алгоритм-работы-и-циклограмма-запуска">Алгоритм работы и циклограмма запуска</a></li><li><a href="#диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</a></li><li><a href="#типичные-ошибки-и-обслуживание-системы">Типичные ошибки и обслуживание системы</a></li><li><a href="#оптимальная-эксплуатация-в-зимний-период">Оптимальная эксплуатация в зимний период</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/k/ka/kakie-dvigateli-stavyat-na-kamaz-k5.html" class="related-card">Двигатели КАМАЗ К5: характеристики Cummins и КАМАЗ-910</a></li><li><a href="/articles/p/po/podkachka-tnnd-kamaz.html" class="related-card">Прокачка ТНВД КамАЗ: Инструкция по устранению завоздушивания</a></li><li><a href="/articles/r/re/regulyator-davleniya-topliva-kamaz-common-rail.html" class="related-card">Регулятор давления топлива Камаз Common Rail: диагностика и ремонт</a></li><li><a href="/articles/z/za/zamena-teploobmennika-kamaz-evro-2.html" class="related-card">Замена теплообменника Камаз Евро 2: инструкция и схемы</a></li><li><a href="/articles/k/ka/kak-proverit-teploobmennik-na-kamaze.html" class="related-card">Как проверить теплообменник на КамАЗе: признаки и методы диагностики</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/k/ka/kakie-dvigateli-stavyat-na-kamaz-k5.html" class="related-bottom-card"><span class="related-bottom-title">Двигатели КАМАЗ К5: характеристики Cummins и КАМАЗ-910</span><span class="related-bottom-desc">Обзор силовых агрегатов КАМАЗ К5. Технические данные Cummins и КАМАЗ-910, ресурс, отличия эко-классо</span></a><a href="/articles/p/po/podkachka-tnnd-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Прокачка ТНВД КамАЗ: Инструкция по устранению завоздушивания</span><span class="related-bottom-desc">Полная инструкция по прокачке ТНВД КамАЗ. Устранение воздушных пробок, проверка давления и правильна</span></a><a href="/articles/r/re/regulyator-davleniya-topliva-kamaz-common-rail.html" class="related-bottom-card"><span class="related-bottom-title">Регулятор давления топлива Камаз Common Rail: диагностика и ремонт</span><span class="related-bottom-desc">Подробная инструкция по проверке регулятора давления топлива (DRV) на Камаз Common Rail. Коды ошибок</span></a><a href="/articles/z/za/zamena-teploobmennika-kamaz-evro-2.html" class="related-bottom-card"><span class="related-bottom-title">Замена теплообменника Камаз Евро 2: инструкция и схемы</span><span class="related-bottom-desc">Подробная инструкция по замене теплообменника Камаз Евро 2. Схемы подключения, моменты затяжки, устр</span></a><a href="/articles/k/ka/kak-proverit-teploobmennik-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как проверить теплообменник на КамАЗе: признаки и методы диагностики</span><span class="related-bottom-desc">Подробная инструкция по проверке теплообменника на грузовиках КамАЗ. Симптомы неисправности, методы </span></a><a href="/articles/p/pr/printsip-raboty-turbiny-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Принцип работы турбины КамАЗ: устройство и диагностика</span><span class="related-bottom-desc">Подробная техническая инструкция по устройству турбокомпрессоров КамАЗ. Разбор схем работы, диагност</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

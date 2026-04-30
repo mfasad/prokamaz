@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>ACU SU на КамАЗ: Настройка и устранение ошибок — Про КАМАЗ</title>
+    <meta name="description" content="Полная инструкция по работе с ACU SU на грузовиках КамАЗ. Подключение, настройка, расшифровка кодов и устранение неисправностей системы.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/a/ac/acu-su-kamaz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="ACU SU на КамАЗ: Настройка и устранение ошибок">
+    <meta property="og:description" content="Полная инструкция по работе с ACU SU на грузовиках КамАЗ. Подключение, настройка, расшифровка кодов и устранение неисправностей системы.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">ACU SU на КамАЗ: Настройка и устранение ошибок</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Диагностика и настройка ACU SU на грузовиках КамАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-системы-acu-su-и-поддерживаемые-эбу">Архитектура системы ACU SU и поддерживаемые ЭБУ</a></li><li><a href="#процесс-подключения-и-первоначальная-настройка">Процесс подключения и первоначальная настройка</a></li><li><a href="#диагностика-и-чтение-кодов-неисправностей">Диагностика и чтение кодов неисправностей</a></li><li><a href="#адаптации-калибровки-и-типичные-проблемы">Адаптации, калибровки и типичные проблемы</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Внезапная остановка грузовика посреди маршрута или невозможность запустить двигатель в морозное утро — это критические ситуации, требующие немедленного вмешательства.</p>
+<p>Водители и механики часто сталкиваются с тем, что штатные индикаторы на приборной панели не дают полной картины происходящего, а двигатель переходит в аварийный режим работы, ограничивая мощность.</p>
+<p>В таких случаях на помощь приходит программно-аппаратный комплекс ACU SU, позволяющий провести глубокую диагностику электронных блоков управления (ЭБУ) двигателя внутреннего сгорания (ДВС).</p>
+
+<h2 id="архитектура-системы-acu-su-и-поддерживаемые-эбу">Архитектура системы ACU SU и поддерживаемые ЭБУ</h2>
+
+<p>Система ACU SU представляет собой специализированный диагностический интерфейс, разработанный для взаимодействия с электронными блоками управления, устанавливаемыми на технику Камского автомобильного завода.</p>
+<p>Основная задача данного программного обеспечения заключается в считывании параметров работы двигателя в реальном времени, а также в доступе к скрытым функциям контроллера.</p>
+<p>На современных моделях КамАЗ, таких как КамАЗ-5490, 6520 или 65117, чаще всего устанавливаются электронные системы управления двигателем семейства <em>Cummins ISBe</em>, <em>Cummins ISLe</em> или отечественные блоки <em>ELC 5</em> и <em>ELC 6</em>.</p>
+<p>Важно понимать, что ACU SU обеспечивает прямой доступ к протоколам обмена данными, минуя стандартные процедуры опроса, что позволяет видеть даже те параметры, которые не отображаются на дисплее бортового компьютера.</p>
+<p>Для корректной работы системы необходимо наличие специализированного адаптера (сканера), который физически подключается к диагностическому разъему грузовика.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Использование нелицензионных клонов адаптеров может привести к выходу из строя электронного блока управления или повреждению бортовой сети автомобиля.</p>
+</blockquote>
+
+<p>Программное обеспечение ACU SU поддерживает работу с различными версиями прошивок, однако совместимость всегда следует проверять перед началом диагностики.</p>
+<p>На практике, инженеры используют данный инструмент не только для поиска неисправностей, но и для точной настройки параметров впрыска топлива и рециркуляции выхлопных газов.</p>
+
+<h3>Совместимость с различными моделями двигателей</h3>
+
+<p>Функционал программы значительно различается в зависимости от типа установленного на грузовике двигателя.</p>
+<p>Для двигателей <em>Cummins</em> система позволяет считывать коды неисправностей (DTC) по стандарту J1939, а также управлять исполнительными механизмами в тестовом режиме.</p>
+<p>Отечественные блоки управления, устанавливаемые на моторы <em>КамАЗ-740</em> последних поколений, требуют выбора соответствующего профиля в меню программы для корректного отображения данных.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип двигателя</th>
+<th>Поддерживаемые функции</th>
+<th>Тип подключения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cummins ISBe/ISLe</td>
+<td>Полная диагностика, калибровка, мониторинг</td>
+<td>OBD-II / J1939</td>
+</tr>
+<tr>
+<td>КамАЗ-740 (ELC 5/6)</td>
+<td>Чтение ошибок, параметры работы</td>
+<td>Специализированный разъем</td>
+</tr>
+<tr>
+<td>ЯМЗ-650</td>
+<td>Базовая диагностика, чтение стоп-кадра</td>
+<td>J1939</td>
+</tr>
+</tbody>
+</table>
+
+<p>Если у вас установлен двигатель с системой нейтрализации выхлопных газов (Евро-4, Евро-5), функционал ACU SU расширяется за счет возможности мониторинга работы мочевины (AdBlue).</p>
+<p>Это позволяет контролировать уровень заполнения бака, работу дозатора и состояние катализатора SCR без необходимости визуального осмотра узлов.</p>
+
+<h2 id="процесс-подключения-и-первоначальная-настройка">Процесс подключения и первоначальная настройка</h2>
+
+<p>Начало работы с диагностическим комплексом требует тщательной подготовки оборудования и программного обеспечения.</p>
+<p>Первым шагом является установка драйверов для диагностического адаптера на ноутбук или планшет, который будет использоваться в качестве терминала.</p>
+<p>После установки драйверов необходимо запустить программное обеспечение ACU SU и выбрать тип подключаемого транспортного средства из выпадающего списка.</p>
+
+<div class="checklist-block"><h4>📋 Подключение к ЭБУ</h4><ol><li><strong>Шаг 1.</strong> Установите драйверы адаптера</li><li><strong>Шаг 2.</strong> Запустите программу ACU SU</li><li><strong>Шаг 3.</strong> Подключите адаптер к диагностическому разъему</li><li><strong>Шаг 4.</strong> Включите зажигание автомобиля</li></ol></div>
+
+<p>Физическое подключение осуществляется через стандартный 9-контактный или 16-контактный разъем, расположенный в кабине водителя, обычно под панелью приборов или в нише бардачка.</p>
+<p>Важно обеспечить надежный контакт штырьков адаптера с гнездом разъема, так как вибрация при работающем двигателе может привести к кратковременному обрыву связи.</p>
+<p>После включения зажигания индикатор на адаптере должен загореться, сигнализируя о наличии питания и готовности к передаче данных.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На автомобилях старше 2015 года выпуска может потребоваться ручной выбор скорости соединения (Baud Rate) в настройках подключения, обычно это 250 kbps или 500 kbps.</p></div>
+
+<p>В окне программы необходимо нажать кнопку «Соединение» или «Connect», после чего начнется процесс рукопожатия между компьютером и блоком управления двигателем.</p>
+<p>Если соединение не устанавливается, следует проверить целостность предохранителей, отвечающих за диагностическую цепь, и качество заземления адаптера.</p>
+<p>Успешное подключение отображается появлением текущих параметров работы двигателя, таких как частота вращения коленчатого вала и температура охлаждающей жидкости.</p>
+
+<h3>Настройка параметров связи</h3>
+
+<p>Для стабильной работы в условиях наведенных помех, характерных для грузовых автомобилей, иногда требуется ручная корректировка таймаутов соединения.</p>
+<p>В настройках программы ACU SU можно увеличить время ожидания ответа от ЭБУ, что помогает при диагностике старых блоков с замедленной реакцией.</p>
+<p>Также стоит обратить внимание на выбор протокола: для большинства современных КамАЗов используется протокол <code>J1939</code>, в то время как для старых модификаций может потребоваться <code>KWP2000</code>.</p>
+
+<pre><code>Config.Protocol = J1939
+<p>Config.Timeout = 500ms</p>
+<p>Config.RetryCount = 3</code></pre></p>
+
+<p>Эти параметры задаются в конфигурационном файле или через графический интерфейс в разделе «Настройки связи».</p>
+<p>Неправильная настройка скорости обмена данными может привести к появлению ошибок связи или искажению считываемых показаний датчиков.</p>
+
+<h2 id="диагностика-и-чтение-кодов-неисправностей">Диагностика и чтение кодов неисправностей</h2>
+
+<p>Основной функцией, ради которой чаще всего используется ACU SU, является считывание и расшифровка кодов ошибок, сохраненных в памяти ЭБУ.</p>
+<p>Система позволяет увидеть не только активные неисправности, мешающие работе прямо сейчас, но и историю ранее возникавших сбоев.</p>
+<p>Каждый код ошибки сопровождается кратким описанием и статусом, что значительно упрощает поиск причины поломки.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка ошибок</h4><label class="check-item"><input type="checkbox"><span>Считать все активные коды</span></label><label class="check-item"><input type="checkbox"><span>Записать коды ошибок</span></label><label class="check-item"><input type="checkbox"><span>Проверить статус «Активно» или «Сохранено»</span></label><label class="check-item"><input type="checkbox"><span>Сбросить ошибки после ремонта</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>При анализе кодов важно обращать внимание на условия возникновения ошибки, которые фиксируются в момент сбоя (так называемый «стоп-кадр»).</p>
+<p>Это может быть температура двигателя, нагрузка, скорость автомобиля или напряжение бортовой сети в момент возникновения неисправности.</p>
+<p>Например, ошибка, связанная с давлением в рампе, может возникать только при высокой нагрузке, что указывает на проблему с топливоподкачивающим насосом, а не с датчиком.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Не производите сброс ошибок до их фиксации и записи. После сброса история исчезнет, и поиск intermittent-неисправностей (плавающих) станет невозможным.</p></div>
+
+<p>Программа ACU SU также позволяет проводить тесты исполнительных механизмов, что является незаменимым инструментом для проверки исправности форсунок, клапанов и реле.</p>
+<p>Запуская тесты в принудительном режиме, можно услышать характерное потрескивание форсунок или почувствовать вибрацию клапанов, подтверждая их механическую исправность.</p>
+
+<h3>Анализ параметров в реальном времени</h3>
+
+<p>Режим мониторинга позволяет выводить на экран доgraphs до 16 параметров одновременно, строя их графики в реальном времени.</p>
+<p>Это особенно полезно для выявления нестабильной работы датчиков, когда показания хаотично меняются без возникновения кода ошибки.</p>
+<p>Следует (обратить внимание) на корреляцию между показаниями разных датчиков, например, между положением педали акселератора и фактическим давлением в топливной рампе.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Нормальное значение</th>
+<th>Критическое отклонение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Давление в рампе (Common Rail)</td>
+<td>200 - 1600 бар</td>
+<td>Отклонение > 10% от заданного</td>
+</tr>
+<tr>
+<td>Температура ОЖ</td>
+<td>80 - 95 °C</td>
+<td>> 105 °C или < 60 °C под нагрузкой</td>
+</tr>
+<tr>
+<td>Напряжение бортсети</td>
+<td>13.5 - 14.5 В</td>
+<td>< 12 В или > 15 В</td>
+</tr>
+</tbody>
+</table>
+
+<p>Если у вас есть возможность записать лог работы двигателя в движении, это даст гораздо больше информации для анализа, чем статичное наблюдение на холостом ходу.</p>
+<p>Запись логов позволяет воспроизвести ситуацию, в которой возникает проблема, и детально изучить поведение системы управления.</p>
+
+<h2 id="адаптации-калибровки-и-типичные-проблемы">Адаптации, калибровки и типичные проблемы</h2>
+
+<p>После замены определенных узлов двигателя или самого ЭБУ часто требуется проведение процедур адаптации.</p>
+<p>Система ACU SU позволяет выполнить сброс адаптаций топливной системы, что заставляет блок управления заново обучиться работе с установленными форсунками.</p>
+<p>Также доступна функция прописки кодов коррекции форсунок (IQA-коды), что критически важно для ровной работы двигателя после замены распылителей.</p>
+
+<div class="attention-box attention-info"><h4>Калибровка через ACU SU</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Точная настройка работы двигателя</li><li>✅ Сброс ошибок без снятия клемм</li><li>✅ Возможность прописки новых компонентов</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требуется опыт работы</li><li>❌ Риск ошибки при прерывании процесса</li><li>❌ Необходимость точных данных от производителя форсунок</li></ul></div></div></div>
+
+<p>Процесс прописки кодов требует внимательности, так как ввод неверного значения может привести к неправильному смесеобразованию и повышенному дымлению.</p>
+<p>Коды коррекции обычно нанесены на корпус самой форсунки или указаны в сопроводительной документации к ремкомплекту.</p>
+<p>После ввода кодов необходимо обязательно выполнить процедуру «Обучение системы», которая занимает несколько минут работы двигателя на холостом ходу.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>При прописке кодов форсунок всегда перепроверяйте введенные значения дважды. Ошибка в одной цифре может привести к прогару поршня или выходу из строя катализатора.</p></div>
+
+<p>Кроме топливной системы, через ACU SU можно регулировать обороты холостого хода и проводить калибровку датчика положения педали акселератора.</p>
+<p>Это бывает необходимо, если после замены педали или ЭБУ двигатель реагирует на нажатие некорректно или «проваливается» при разгоне.</p>
+
+<h3>Типичные ошибки</h3>
+
+<ol>
+<li><strong>Прерывание связи во время записи</strong> — если в процессе прошивки или записи адаптаций пропадет питание или контакт, ЭБУ может перейти в состояние «кирпича», требуя восстановления через BSL-режим.</li>
+<li><strong>Неверный выбор модели двигателя</strong> — попытка применить калибровки от одного мотора к другому (даже в рамках одной линейки) может вызвать некорректную работу системы управления.</li>
+<li><strong>Игнорирование условий проведения адаптации</strong> — многие процедуры требуют прогретого двигателя и отсутствия других активных ошибок; их игнорирование приводит к отрицательному результату.</li>
+<li><strong>Использование устаревшей версии ПО</strong> — старые версии ACU SU могут некорректно работать с новыми блоками управления, выдавая ложные ошибки или не видя новые параметры.</li>
+</ol>
+
+<blockquote>
+<p>⚠️ Внимание: Все изменения в калибровках и адаптациях должны проводиться только квалифицированным персоналом. Некорректные настройки могут привести к повышенному износу двигателя и нарушению экологических норм.</p>
+</blockquote>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>ACU SU — мощный инструмент для глубокой диагностики и настройки КамАЗов, требующий точного соблюдения инструкций и понимания работы дизельных систем.</p></div>
+
+<p>В завершение стоит подчеркнуть, что регулярная диагностика с помощью ACU SU позволяет выявлять скрытые дефекты на ранних стадиях.</p>
+<p>Своевременный анализ параметров работы двигателя помогает избежать дорогостоящих ремонтов и простоев техники в пути.</p>
+<p>Грамотное использование возможностей программы превращает сложный процесс поиска неисправностей в последовательную и понятную процедуру.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-системы-acu-su-и-поддерживаемые-эбу">Архитектура системы ACU SU и поддерживаемые ЭБУ</a></li><li><a href="#процесс-подключения-и-первоначальная-настройка">Процесс подключения и первоначальная настройка</a></li><li><a href="#диагностика-и-чтение-кодов-неисправностей">Диагностика и чтение кодов неисправностей</a></li><li><a href="#адаптации-калибровки-и-типичные-проблемы">Адаптации, калибровки и типичные проблемы</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/r/ra/rasshifrovka-paneli-priborov-kamaz.html" class="related-card">Расшифровка панели приборов КАМАЗ: индикаторы и коды</a></li><li><a href="/articles/5/52/523613-fmi-2-oshibka-kamaz-evro-4.html" class="related-card">Ошибка 523613 FMI 2 КАМАЗ Евро-4: причины и устранение</a></li><li><a href="/articles/p/p1/p1951-oshibka-kamaz.html" class="related-card">Ошибка P1951 КАМАЗ: причины, диагностика и устранение</a></li><li><a href="/articles/d/di/diagnostika-dlya-kamaza.html" class="related-card">Диагностика КАМАЗ: коды ошибок, подключение и расшифровка</a></li><li><a href="/articles/d/di/diagnostika-abs-kamaz-skanmatikom-2.html" class="related-card">Диагностика ABS КАМАЗ Scanmatic 2: Инструкция</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/r/ra/rasshifrovka-paneli-priborov-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Расшифровка панели приборов КАМАЗ: индикаторы и коды</span><span class="related-bottom-desc">Подробная расшифровка значков панели приборов КАМАЗ. Анализ индикаторов, кодов ошибок и алгоритмов д</span></a><a href="/articles/5/52/523613-fmi-2-oshibka-kamaz-evro-4.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка 523613 FMI 2 КАМАЗ Евро-4: причины и устранение</span><span class="related-bottom-desc">Подробный разбор ошибки 523613 FMI 2 на КАМАЗ Евро-4. Методы диагностики, проверка датчиков и провод</span></a><a href="/articles/p/p1/p1951-oshibka-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка P1951 КАМАЗ: причины, диагностика и устранение</span><span class="related-bottom-desc">Подробный разбор ошибки P1951 на КАМАЗ (Евро-2, Евро-3). Диагностика датчика положения дроссельной з</span></a><a href="/articles/d/di/diagnostika-dlya-kamaza.html" class="related-bottom-card"><span class="related-bottom-title">Диагностика КАМАЗ: коды ошибок, подключение и расшифровка</span><span class="related-bottom-desc">Подробная инструкция по диагностике грузовиков КАМАЗ. Подключение сканера, расшифровка кодов ошибок </span></a><a href="/articles/d/di/diagnostika-abs-kamaz-skanmatikom-2.html" class="related-bottom-card"><span class="related-bottom-title">Диагностика ABS КАМАЗ Scanmatic 2: Инструкция</span><span class="related-bottom-desc">Подробное руководство по проверке тормозной системы КАМАЗ сканером Scanmatic 2. Чтение кодов ошибок,</span></a><a href="/articles/r/re/remont-apparatury-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ремонт аппаратуры КАМАЗ: диагностика ЭБУ и устранение неисправностей</span><span class="related-bottom-desc">Подробная инструкция по ремонту электронной аппаратуры грузовиков КАМАЗ. Методы диагностики ЭБУ, уст</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

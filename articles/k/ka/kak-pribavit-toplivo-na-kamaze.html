@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Как прибавить топливо на КамАЗе: настройка ТНВД и ЭБУ — Про КАМАЗ</title>
+    <meta name="description" content="Техническое руководство по увеличению подачи топлива на КамАЗ. Регулировка ТНВД, прошивка ЭБУ, устранение причин перерасхода и настройка режимов.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/k/ka/kak-pribavit-toplivo-na-kamaze.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Как прибавить топливо на КамАЗе: настройка ТНВД и ЭБУ">
+    <meta property="og:description" content="Техническое руководство по увеличению подачи топлива на КамАЗ. Регулировка ТНВД, прошивка ЭБУ, устранение причин перерасхода и настройка режимов.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Как прибавить топливо на КамАЗе: настройка ТНВД и ЭБУ</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Как прибавить топливо на КамАЗе: методы настройки и регулировки</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#механическая-регулировка-подачи-топлива-на-механических-тнвд">Механическая регулировка подачи топлива на механических ТНВД</a></li><li><a href="#программное-увеличение-подачи-на-двигателях-common-rail">Программное увеличение подачи на двигателях Common Rail</a></li><li><a href="#диагностика-и-устранение-причин-нехватки-мощности">Диагностика и устранение причин нехватки мощности</a></li><li><a href="#типичные-ошибки-при-настройке-топливной-системы">Типичные ошибки при настройке топливной системы</a></li><li><a href="#оптимальные-режимы-эксплуатации-после-доработки">Оптимальные режимы эксплуатации после доработки</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Ситуация, когда грузовик перестает тянуть на подъемах, а при полной загрузке чувствуется острая нехватка мощности, является одной из самых распространенных проблем для владельцев техники Камского автозавода. Водители и механики часто сталкиваются с необходимостью увеличить подачу горючего, чтобы компенсировать износ узлов, работу в тяжелых дорожных условиях или просто вернуть автомобилю заводскую резвость, утраченную со временем.</p>
+<p>Проблема дефицита мощности может проявляться по-разному: двигатель дымит, но не тянет, либо, наоборот, работает чисто, но не развивает обороты. В первом случае речь идет о дисбалансе между количеством воздуха и топлива, во втором — о механических ограничениях топливной аппаратуры. Прежде чем вмешиваться в работу топливной системы, важно понимать, что любая корректировка цикла подачи требует точности и понимания физических процессов сгорания.</p>
+<p>Современные методы решения задачи делятся на два основных направления: механическая регулировка топливного насоса высокого давления (ТНВД) и программное изменение параметров работы электронного блока управления (ЭБУ). Выбор конкретного метода зависит от года выпуска автомобиля, типа установленного двигателя и экологических норм, которым он соответствует.</p>
+
+<h2 id="механическая-регулировка-подачи-топлива-на-механических-тнвд">Механическая регулировка подачи топлива на механических ТНВД</h2>
+
+<p>На двигателях серии <em>КамАЗ-740</em> с механическим управлением, таких как <em>Евро-0</em>, <em>Евро-1</em> и <em>Евро-2</em>, увеличение подачи реализуется путем физического изменения положения плунжерных пар или корректировки работы регулятора. Основным элементом, отвечающим за максимальную подачу, является корректор по наддуву и упорный винт скоростного регулятора.</p>
+<p>Если у вас установлен насос серии <em>ЯЗДА</em> или <em>Босх</em> механического типа, первым шагом всегда должна быть проверка состояния плунжерных пар. Износ этих деталей приводит к падению давления, и никакая регулировка винтов не даст результата, если зазоры превышены. <strong>Проверка герметичности</strong> проводится на стенде или визуально через сливные трубки при работающем двигателе.</p>
+
+<h3>Регулировка упорного винта и корректора</h3>
+<p>Для увеличения максимальной подачи на режимах полной нагрузки используется упорный винт скоростного регулятора, который ограничивает ход рейки ТНВД в сторону увеличения подачи. На многих насосах этот винт запломбирован, и его вскрытие требует установки новой пломбы после настройки.</p>
+<p>Корректор по наддуву (ПКН) — это устройство, которое ограничивает подачу топлива при низком давлении наддува, предотвращая дымление на переходных режимах. Если двигатель дымит при резком нажатии на газ, но на режиме не выдает мощности, возможно, мембрана корректора повреждена или пружина подобрана неверно. <strong>Настройка корректора</strong> позволяет изменить характеристику зависимости подачи от давления наддува.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Нарушение пломб на ТНВД может привести к отказу в гарантийном обслуживании и проблемам при прохождении технического осмотра. Все работы проводите на свой страх и риск.</p></div>
+
+<p>Процесс настройки требует соблюдения последовательности действий, так как хаотичное вращение винтов может привести к нестабильной работе холостого хода или даже разносу двигателя.</p>
+
+<div class="checklist-block"><h4>📋 Настройка упорного винта</h4><ol><li><strong>Шаг 1.</strong> Отверните контргайку упорного винта на регуляторе</li><li><strong>Шаг 2.</strong> Выкрутите винт на пол-оборота для увеличения хода рейки</li><li><strong>Шаг 3.</strong> Заверните винт обратно, если обороты холостого хода стали нестабильными</li><li><strong>Шаг 4.</strong> Законтрите гайку и проверьте работу под нагрузкой</li></ol></div>
+
+<p>Важно понимать, что увеличение подачи без соответствующего количества воздуха приведет к перегреву выпускных клапанов и турбокомпрессора. <strong>Баланс смеси</strong> — критический параметр, который нельзя игнорировать. Если после прибавки топлива выхлоп стал черным и густым, а температура газов выросла, настройку следует скорректировать в меньшую сторону.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Стандартное значение</th>
+<th>При увеличенной подаче</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Дымность выхлопа</td>
+<td>Прозрачный или легкий дымок</td>
+<td>Серый или черный дым под нагрузкой</td>
+</tr>
+<tr>
+<td>Температура ОГ</td>
+<td>Норма по паспорту</td>
+<td>Значительно выше нормы (риск прогара)</td>
+</tr>
+<tr>
+<td>Расход топлива</td>
+<td>Базовый</td>
+<td>Увеличен на 10-20%</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Механическая прибавка топлива на старых насосах возможна через упорный винт, но требует контроля дымности и температуры выхлопных газов.</p></div>
+
+<h2 id="программное-увеличение-подачи-на-двигателях-common-rail">Программное увеличение подачи на двигателях Common Rail</h2>
+
+<p>Двигатели <em>КамАЗ-5</em>, <em>КамАЗ-6</em> и современные модификации <em>ЯМЗ</em> оснащаются электронно-управляемой системой топливоподачи <em>Common Rail</em>. Здесь механическая регулировка винтов исключена, а все параметры задаются программно через ЭБУ <em>Bosch EDC7</em> или <em>EDC17</em>.</p>
+<p>Для изменения карт топливоподачи необходимо подключение к диагностическому разъему через адаптер и использование специализированного программного обеспечения. Основными параметрами, подвергаемыми изменению, являются карты основного впрыска, карты дымления и ограничения по наддуву.</p>
+
+<h3>Работа с картами топливоподачи и дымления</h3>
+<p>Карта основного впрыска определяет количество топлива в зависимости от частоты вращения коленвала и положения педали акселератора. Увеличение значений в этой карте напрямую влияет на тягу двигателя. Однако <strong>безопасное увеличение</strong> возможно только в пределах, допускаемых прочностью поршневой группы.</p>
+<p>Карта дымления (Smoke Map) ограничивает подачу топлива на низких оборотах и при резком открытии дросселя, чтобы избежать черного дыма. При чип-тюнинге часто изменяют именно этот параметр, позволяя двигателю подавать больше топлива раньше. Это создает иллюзию резкого отклика, но может привести к закоксовке системы EGR и сажевого фильтра.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях с экологией Евро-4 и выше изменение карт дымления может привести к быстрому выходу из строя сажевого фильтра (DPF) и катализатора.</p></div>
+
+<p>Процесс перепрошивки требует наличия качественного оборудования. Использование дешевых китайских клонов программаторов может привести к «окирпучиванию» блока управления, после чего восстановление будет возможно только в специализированном сервисе.</p>
+
+<pre><code>Пример структуры изменения карты (условно):
+<p>RPM \ Load | 20% | 40% | 60% | 80% | 100%</p>
+<p>1500       | +2  | +3  | +5  | +5  | +3</p>
+<p>2000       | +1  | +2  | +4  | +4  | +2</code></pre></p>
+
+<p>Стоит учитывать, что программное увеличение подачи часто требует отключения или программного удаления систем экологии (EGR, DPF, AdBlue), так как штатная логика работы ЭБУ будет пытаться компенсировать изменения, вызывая ошибки и переход в аварийный режим.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип изменения</th>
+<th>Риск для двигателя</th>
+<th>Влияние на экологию</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage 1 (легкий)</td>
+<td>Минимальный</td>
+<td>Незначительное ухудшение</td>
+</tr>
+<tr>
+<td>Stage 2 (средний)</td>
+<td>Средний (ресурс ТНВД)</td>
+<td>Заметное ухудшение</td>
+</tr>
+<tr>
+<td>Stage 3 (агрессивный)</td>
+<td>Высокий (прогар поршней)</td>
+<td>Критическое</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-info"><h4>Чип-тюнинг КамАЗа</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Возможность точной настройки под конкретные задачи</li><li>✅ Увеличение крутящего момента во всем диапазоне</li><li>✅ Возможность отключения ненужных систем</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Снижение ресурса двигателя при агрессивной настройке</li><li>❌ Потеря гарантии</li><li>❌ Риск нестабильной работы электроники</li></ul></div></div></div>
+
+<h2 id="диагностика-и-устранение-причин-нехватки-мощности">Диагностика и устранение причин нехватки мощности</h2>
+
+<p>Прежде чем добавлять топливо, необходимо убедиться, что двигатель способен его эффективно сжечь. Часто проблема кроется не в нехватке горючего, а в недостатке воздуха или неисправности форсунок. Попытка «задавить» неисправность увеличением подачи лишь усугубит ситуацию.</p>
+<p>Первым делом стоит проверить воздушный фильтр и систему впуска. Забитый фильтр или негерметичные патрубки интеркулера приводят к падению давления наддува. В этом случае ТНВД или ЭБУ сами ограничивают подачу, и ручное вмешательство приведет лишь к чрезмерному дымлению без прироста мощности.</p>
+
+<h3>Проверка форсунок и ТНВД</h3>
+<p>Нарушение факела распыла форсунок — частая причина потери мощности. Если топливо не распыляется, а льет струей, сгорания не происходит. <strong>Дефектовка форсунок</strong> должна проводиться на стенде каждые 100 тысяч километров пробега.</p>
+<p>Также стоит проверить угол опережения впрыска. Слишком ранний впрыск вызывает жесткую работу и стуки, слишком поздний — недожог топлива, перегрев и падение мощности. На механических насосах угол регулируется шайбами под фланцем ТНВД, на электронных — задается программно или датчиком положения ТНВД.</p>
+
+<div class="checklist-block"><h4>☑️ Диагностика перед добавлением топлива</h4><label class="check-item"><input type="checkbox"><span>Проверка состояния воздушного фильтра</span></label><label class="check-item"><input type="checkbox"><span>Замер давления наддува турбиной</span></label><label class="check-item"><input type="checkbox"><span>Проверка герметичности впускного тракта</span></label><label class="check-item"><input type="checkbox"><span>Диагностика форсунок на стенде</span></label><label class="check-item"><input type="checkbox"><span>Проверка угла опережения впрыска</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<p>Если двигатель дымит белым или сизым дымом, это может указывать на попадание масла или антифриза в цилиндры. В таком случае увеличение подачи топлива категорически запрещено, так как это может привести к гидроудару или разрушению поршневой группы.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Эксплуатация двигателя с неисправными форсунками и увеличенной подачей топлива гарантированно приведет к прогару поршня и выходу из строя турбокомпрессора в кратчайшие сроки.</p>
+</blockquote>
+
+<h2 id="типичные-ошибки-при-настройке-топливной-системы">Типичные ошибки при настройке топливной системы</h2>
+
+<p>Неквалифицированное вмешательство в работу топливной аппаратуры часто приводит к плачевным результатам. Водители и мастера, не обладающие достаточным опытом, допускают ряд системных ошибок, которые сводят на нет все усилия по повышению мощности.</p>
+
+<ol>
+<li><strong>Игнорирование состояния турбокомпрессора —</strong> попытка добавить топливо на двигателе с изношенной турбиной, которая не создает нужного давления наддува, приводит к черному дымлению и падению ресурса ЦПГ.</li>
+<li><strong>Чрезмерное выкручивание упорного винта —</strong> на механических насосах это приводит к тому, что двигатель не может сбросить обороты при выключении передачи, что создает аварийную ситуацию и риск разноса.</li>
+<li><strong>Отсутствие контроля температуры —</strong> увеличение подачи без установки индикатора температуры выхлопных газов (EGT) часто приводит к незаметному для водителя перегреву и прогару выпускных клапанов.</li>
+<li><strong>Использование некачественного топлива —</strong> форсированный двигатель гораздо чувствительнее к качеству солярки. Попытка ехать на плохом топливе с увеличенной подачей приведет к быстрому износу плунжерных пар и форсунок.</li>
+</ol>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Для контроля температурного режима после увеличения мощности рекомендуется установить пирометр (датчик температуры выхлопных газов). Это позволит визуально отслеживать нагрузку на двигатель.</p></div>
+
+<p>Следует помнить, что заводские настройки всегда являются компромиссом между мощностью, ресурсом, экологичностью и расходом топлива. Смещение этого баланса в сторону мощности неизбежно сокращает срок службы узлов и агрегатов.</p>
+
+<h2 id="оптимальные-режимы-эксплуатации-после-доработки">Оптимальные режимы эксплуатации после доработки</h2>
+
+<p>После успешной настройки топливной системы важно правильно эксплуатировать автомобиль. Резкие изменения в работе двигателя требуют периода обкатки, даже если это не новый мотор, а просто измененные параметры работы.</p>
+<p>В первые 1000-2000 километров следует избегать работы двигателя на предельных режимах. Необходимо внимательно следить за цветом выхлопа, температурой охлаждающей жидкости и давлением масла. <strong>Контроль параметров</strong> на ранних этапах поможет выявить ошибки настройки до того, как они приведут к поломке.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> При появлении посторонних шумов, вибраций или резкого изменения цвета выхлопа немедленно прекратите эксплуатацию и проведите повторную диагностику.</p>
+</blockquote>
+
+<p>Регулярное обслуживание становится еще более важным. Интервалы замены масла и фильтров после увеличения мощности рекомендуется сократить на 20-30%. Топливный фильтр необходимо менять чаще, так как возросшие нагрузки на ТНВД требуют идеально чистого топлива.</p>
+
+<p>Правильная настройка топливной системы КамАЗа позволяет значительно улучшить тяговые характеристики автомобиля, что особенно актуально для работы с прицепами или в условиях бездорожья. Однако этот процесс требует глубоких технических знаний, специнструмента и понимания термодинамики двигателя.</p>
+<p>Безопасное увеличение мощности возможно только комплексным подходом: исправная турбина, чистый впуск, работающие форсунки и грамотная калибровка подачи. Пренебрежение любым из этих факторов превращает доработку в бомбу замедленного действия.</p>
+<p>В конечном итоге, решение о прибавке топлива должно приниматься взвешенно, с учетом реальных задач и готовности владельца к возможному снижению общего ресурса силового агрегата ради кратковременного выигрыша в динамике.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#механическая-регулировка-подачи-топлива-на-механических-тнвд">Механическая регулировка подачи топлива на механических ТНВД</a></li><li><a href="#программное-увеличение-подачи-на-двигателях-common-rail">Программное увеличение подачи на двигателях Common Rail</a></li><li><a href="#диагностика-и-устранение-причин-нехватки-мощности">Диагностика и устранение причин нехватки мощности</a></li><li><a href="#типичные-ошибки-при-настройке-топливной-системы">Типичные ошибки при настройке топливной системы</a></li><li><a href="#оптимальные-режимы-эксплуатации-после-доработки">Оптимальные режимы эксплуатации после доработки</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/m/mo/moment-zatyazhki-golovki-bloka-kamaz-740.html" class="related-card">Момент затяжки головки блока КамАЗ 740: Схема и порядок</a></li><li><a href="/articles/k/ka/kamaz-zamena-masla-v-dvigatele.html" class="related-card">Замена масла в двигателе КАМАЗ: пошаговая инструкция</a></li><li><a href="/articles/r/re/regulirovka-klapanov-na-kamaze-65115.html" class="related-card">Регулировка клапанов Камаз 65115: порядок, зазоры и моменты</a></li><li><a href="/articles/d/da/davlenie-masla-kamaz-kamminz.html" class="related-card">Давление масла в двигателе КАМАЗ Cummins: нормы, причины падения</a></li><li><a href="/articles/r/re/regulirovka-zazhiganiya-kamaz-evro-1.html" class="related-card">Регулировка зажигания КАМАЗ Евро-1: пошаговая инструкция</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/m/mo/moment-zatyazhki-golovki-bloka-kamaz-740.html" class="related-bottom-card"><span class="related-bottom-title">Момент затяжки головки блока КамАЗ 740: Схема и порядок</span><span class="related-bottom-desc">Техническая инструкция по затяжке ГБЦ КамАЗ 740. Моменты затяжки, схема нумерации болтов, этапы прот</span></a><a href="/articles/k/ka/kamaz-zamena-masla-v-dvigatele.html" class="related-bottom-card"><span class="related-bottom-title">Замена масла в двигателе КАМАЗ: пошаговая инструкция</span><span class="related-bottom-desc">Подробный регламент замены масла в двигателе КАМАЗ. Объемы, допуски, интервалы, порядок действий и т</span></a><a href="/articles/r/re/regulirovka-klapanov-na-kamaze-65115.html" class="related-bottom-card"><span class="related-bottom-title">Регулировка клапанов Камаз 65115: порядок, зазоры и моменты</span><span class="related-bottom-desc">Подробная инструкция по регулировке тепловых зазоров клапанов на двигателе Камаз 740.11. Нормы зазор</span></a><a href="/articles/d/da/davlenie-masla-kamaz-kamminz.html" class="related-bottom-card"><span class="related-bottom-title">Давление масла в двигателе КАМАЗ Cummins: нормы, причины падения</span><span class="related-bottom-desc">Нормы давления масла в двигателе КАМАЗ Cummins ISBe. Причины падения, диагностика датчиков, замена р</span></a><a href="/articles/r/re/regulirovka-zazhiganiya-kamaz-evro-1.html" class="related-bottom-card"><span class="related-bottom-title">Регулировка зажигания КАМАЗ Евро-1: пошаговая инструкция</span><span class="related-bottom-desc">Подробное руководство по настройке угла опережения зажигания на двигателях КАМАЗ 740.10-20 (Евро-1).</span></a><a href="/articles/d/di/diametr-vykhlopnoj-truby-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Диаметр выхлопной трубы КАМАЗ: размеры, допуски и замена</span><span class="related-bottom-desc">Технические параметры выхлопной системы КАМАЗ. Диаметры патрубков, допуски износа, нормы токсичности</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

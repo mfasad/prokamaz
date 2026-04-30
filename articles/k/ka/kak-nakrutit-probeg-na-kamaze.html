@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Диагностика и коррекция показаний пробега на грузовиках КАМАЗ — Про КАМАЗ</title>
+    <meta name="description" content="Техническое руководство по работе с одометром КАМАЗ. Методы аппаратной и программной проверки, анализ ЭБУ и устранение ошибок системы.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/k/ka/kak-nakrutit-probeg-na-kamaze.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Диагностика и коррекция показаний пробега на грузовиках КАМАЗ">
+    <meta property="og:description" content="Техническое руководство по работе с одометром КАМАЗ. Методы аппаратной и программной проверки, анализ ЭБУ и устранение ошибок системы.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Диагностика и коррекция показаний пробега на грузовиках КАМАЗ</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Технологии работы с одометром грузовиков КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-системы-учета-пробега-на-современных-камазах">Архитектура системы учета пробега на современных КАМАЗах</a></li><li><a href="#аппаратные-методы-коррекции-показаний-прибора">Аппаратные методы коррекции показаний прибора</a></li><li><a href="#программная-корректировка-через-диагностический-интерфейс">Программная корректировка через диагностический интерфейс</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Эксплуатация грузового автомобиля в условиях интенсивных грузоперевозок часто приводит к ситуациям, когда показания бортового компьютера перестают соответствовать реальному состоянию узлов и агрегатов. Владельцы техники сталкиваются с необходимостью проведения плановых технических обслуживаний, которые привязаны к моточасам или километражу, и некорректные данные могут нарушить график сервисных работ. Кроме того, при замене приборной панели или электронного блока управления после ремонта возникает рассинхронизация данных, требующая профессионального вмешательства.</p>
+<p>Современные системы управления двигателем, такие как <em>Common Rail</em> или <em>Bosch</em>, фиксируют множество параметров в энергонезависимой памяти, и простая механическая подмотка здесь уже неэффективна. Инженеры и технические специалисты должны понимать архитектуру хранения данных, чтобы грамотно проводить диагностику или восстанавливать корректные показания после замены компонентов. Ошибки в этой сфере могут привести к неверному расчету ресурса двигателя или преждевременному выходу из строя трансмиссии.</p>
+<p>Рассматриваемый процесс требует глубокого понимания цифровых протоколов обмена данными и физической структуры приборов. Любые манипуляции с одометром должны проводиться исключительно в целях калибровки оборудования, устранения неисправностей электроники или восстановления работоспособности системы после замены вышедших из строя узлов, а не для фальсификации истории эксплуатации транспортного средства.</p>
+
+<h2 id="архитектура-системы-учета-пробега-на-современных-камазах">Архитектура системы учета пробега на современных КАМАЗах</h2>
+<p>На грузовиках поколения КАМАЗ-5490 и новее используется сложная электронная архитектура, где данные о пробеге дублируются в нескольких независимых модулях. Основным хранителем информации является электронный блок управления двигателем (ЭБУ), который получает импульсы от датчиков скорости, установленных на коробке передач или раздаточном механизме. Эти данные передаются по CAN-шине на приборную панель, где и отображаются водителю в виде цифрового значения.</p>
+<p>Важно понимать, что в системе <em>Евро-4</em> и <em>Евро-5</em> существует так называемый «пробег в ЭБУ», который практически невозможно изменить без специального оборудования и доступа к заводским алгоритмам шифрования. Приборная панель может показывать одно значение, которое легко корректируется при замене микросхемы памяти, но диагностический сканер будет видеть истинное значение, записанное контроллером двигателя. Это создает ситуацию двойного контроля, исключающую простую фальсификацию.</p>
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На автомобилях с тахографами данные о скорости и пробеге также записываются в защищенный модуль безопасности (КШМ), любые расхождения с которым вызовут ошибку устройства.</p></div>
+<p>Если у вас возникла необходимость замены приборной панели, новый прибор будет показывать либо нулевой пробег, либо пробег, накопленный на заводе-изготовителе. Для приведения документации в соответствие с реальностью требуется считать данные со старого прибора (если он читаем) или из ЭБУ и записать их в новый блок. Этот процесс требует наличия специализированного программатора и знания типа используемой микросхемы памяти, например, <em>24C32</em> или <em>93C86</em>.</p>
+
+<h3>Типы одометров и их особенности</h3>
+<p>На рынке грузовых автомобилей встречаются два основных типа приборов: механические и электронные. Механические одометры, характерные для старых моделей КАМАЗ-5320 или ранних версий 5511, приводились в движение тросом от раздаточной коробки. Коррекция таких устройств производилась исключительно механическим путем — разбором счетного механизма и выставлением нужных цифр вручную, что не оставляло цифрового следа.</p>
+<p>Электронные одометры, устанавливаемые на модели с двигателями <em>Камминз</em> или <em>ЯМЗ-536</em>, используют шаговый двигатель или LCD-дисплей. Данные в них хранятся в EEPROM-памяти, которая сохраняет информацию даже при полном отключении питания. Для работы с такими приборами требуется подключение к контактным площадкам платы через паяльник или использование диагностического разъема OBD-II, если протокол обмена данными не защищен.</p>
+<p>На практике наиболее распространена ситуация, когда при замене щитка приборов новый блок показывает пробег с точностью до километра, отличный от реального. Это требует проведения процедуры адаптации, в ходе которой через диагностический интерфейс вносится корректирующее значение. </p>
+
+<h2 id="аппаратные-методы-коррекции-показаний-прибора">Аппаратные методы коррекции показаний прибора</h2>
+<p>Аппаратный метод является наиболее надежным способом восстановления корректных показаний после замены сгоревшего или разбитого щитка приборов. Он подразумевает физическое извлечение микросхемы памяти из платы приборной панели и чтение её содержимого на программаторе. Этот способ позволяет обойти программные защиты и напрямую редактировать hexadecimal-код, в котором зашифрованы данные о пробеге.</p>
+<p>Для проведения работ потребуется паяльное оборудование, фен для демонтажа микросхем и программатор, поддерживающий работу с EEPROM. Процесс начинается с аккуратного вскрытия корпуса приборной панели и визуального осмотра платы на предмет повреждений. Затем микросхема памяти выпаивается или считывается через специальный адаптер-клипсу, не требующий демонтажа, если компоновка платы это позволяет.</p>
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Неаккуратная пайка может повредить дорожки платы или саму микросхему, что приведет к полному выходу прибора из строя и невозможности восстановления данных.</p></div>
+<p>После считывания дампа памяти файл открывается в HEX-редакторе. Специалист должен найти адрес ячейки, где хранится значение пробега. Это значение часто продублировано в нескольких местах и может быть записано в прямом или инверсном коде, а также иметь контрольную сумму. Изменение одной цифры без пересчета контрольной суммы приведет к тому, что прибор покажет ошибку или сбросится в ноль.</p>
+
+<h3>Процедура перепрошивки микросхемы памяти</h3>
+<p>Работа с дампом требует точности и понимания шестнадцатеричной системы счисления. Допустим, реальный пробег автомобиля составляет 850 000 км, а новый прибор показывает 10 000 км. Необходимо найти в коде последовательность байтов, соответствующую числу 850000, и заменить ею текущее значение. После внесения правок файл записывается обратно в микросхему.</p>
+<div class="checklist-block"><h4>📋 Алгоритм перепрошивки</h4><ol><li><strong>Шаг 1.</strong> Демонтаж приборной панели</li><li><strong>Шаг 2.</strong> Выпаивание микросхемы памяти</li><li><strong>Шаг 3.</strong> Считывание дампа на программаторе</li><li><strong>Шаг 4.</strong> Редактирование HEX-кода</li><li><strong>Шаг 5.</strong> Запись нового дампа и установка микросхемы</li></ol></div>
+<p>Существует таблица соответствия популярных микросхем, используемых в приборах КАМАЗ:</p>
+<table>
+<thead>
+<tr>
+<th>Тип микросхемы</th>
+<th>Объем памяти</th>
+<th>Интерфейс</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>24C32</em></td>
+<td>32 Кбит</td>
+<td>I2C</td>
+</tr>
+<tr>
+<td><em>93C86</em></td>
+<td>16 Кбит</td>
+<td>Microwire</td>
+</tr>
+<tr>
+<td><em>25C64</em></td>
+<td>64 Кбит</td>
+<td>SPI</td>
+</tr>
+</tbody>
+</table>
+<p>После записи микросхема впаивается обратно в плату, и производится сборка прибора. При первом включении важно проверить, совпадают ли показания на табло с расчетными. Если прибор заработал, но показания сбились, значит, была допущена ошибка в расчете контрольной суммы или адреса ячейки. В таком случае процедуру приходится повторять, используя резервную копию оригинального дампа.</p>
+
+<h2 id="программная-корректировка-через-диагностический-интерфейс">Программная корректировка через диагностический интерфейс</h2>
+<p>Более современным и менее трудоемким методом является программная коррекция через диагностический разъем. Этот способ применим не ко всем моделям приборов, но на современных КАМАЗах с электронными блоками управления он становится стандартом. Для работы используется ноутбук с установленным специализированным софтом и интерфейс подключения (адаптер) к CAN-шине автомобиля.</p>
+<p>Процесс выглядит следующим образом: адаптер подключается к разъему OBD-II, обычно расположенному в кабине водителя. После включения зажигания программа сканирует сеть и идентифицирует подключенные блоки. Если приборная панель поддерживает функцию коррекции пробега (Dashboard Correction), в меню появится соответствующая опция. Оператор вводит требуемое значение, и программа отправляет пакет данных в ЭБУ.</p>
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Функция программной коррекции часто заблокирована производителем и требует активации через лицензионные ключи дилерского уровня.</p></div>
+<p>Стоит учитывать, что при программном методе изменяется только значение на панели приборов. В ЭБУ двигателя пробег остается прежним. При последующем подключении дилерского сканера может возникнуть конфликт данных, и система выдаст ошибку рассинхронизации. Поэтому для полноценной коррекции необходимо использовать оборудование, имеющее доступ к защищенным областям памяти самого контроллера двигателя.</p>
+
+<h3>Используемое оборудование и ПО</h3>
+<p>На рынке диагностического оборудования представлено множество устройств, позволяющих работать с пробегами. Лидерами в этом сегменте являются приборы марки <em>Digiprog</em>, <em>Xhorse</em> или специализированные адаптеры для грузовиков типа <em>Jaltest</em> с расширенным функционалом. Каждое устройство имеет свои особенности работы с разными протоколами.</p>
+<p>Вот сравнение основных методов программного воздействия:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Сложность</th>
+<th>Риск ошибок</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OBD-коррекция</td>
+<td>Низкая</td>
+<td>Средний</td>
+</tr>
+<tr>
+<td>Паяльник + Программатор</td>
+<td>Высокая</td>
+<td>Низкий (при опыте)</td>
+</tr>
+<tr>
+<td>Замена блока целиком</td>
+<td>Средняя</td>
+<td>Высокий (нужна привязка)</td>
+</tr>
+</tbody></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-системы-учета-пробега-на-современных-камазах">Архитектура системы учета пробега на современных КАМАЗах</a></li><li><a href="#аппаратные-методы-коррекции-показаний-прибора">Аппаратные методы коррекции показаний прибора</a></li><li><a href="#программная-корректировка-через-диагностический-интерфейс">Программная корректировка через диагностический интерфейс</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/o/os/oshibka-r3513-kamaz.html" class="related-card">Ошибка P3513 КАМАЗ: причины, диагностика и устранение</a></li><li><a href="/articles/1/16/1653-fmi-13-oshibka-kamaz-evro-5.html" class="related-card">Ошибка 1653 FMI 13 КАМАЗ Евро-5: диагностика и устранение</a></li><li><a href="/articles/d/da/datchik-abs-kamaz-4308.html" class="related-card">Датчик АБС КАМАЗ 4308: диагностика, замена, ошибки</a></li><li><a href="/articles/s/sp/spn-3597-fmi-2-cummins-kamaz-chto-za-oshibka.html" class="related-card">Ошибка SPN 3597 FMI 2 Cummins на КАМАЗ: причины и устранение</a></li><li><a href="/articles/k/ko/kody-oshibok-kamaz-kamens.html" class="related-card">Коды ошибок Камаз Cummins: расшифровка и устранение неисправностей</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/o/os/oshibka-r3513-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка P3513 КАМАЗ: причины, диагностика и устранение</span><span class="related-bottom-desc">Подробный разбор ошибки P3513 на КАМАЗ (Евро-4, Евро-5). Причины неисправности, коды ошибок, пошагов</span></a><a href="/articles/1/16/1653-fmi-13-oshibka-kamaz-evro-5.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка 1653 FMI 13 КАМАЗ Евро-5: диагностика и устранение</span><span class="related-bottom-desc">Подробная инструкция по устранению ошибки 1653 FMI 13 на КАМАЗ Евро-5. Причины неисправности, калибр</span></a><a href="/articles/d/da/datchik-abs-kamaz-4308.html" class="related-bottom-card"><span class="related-bottom-title">Датчик АБС КАМАЗ 4308: диагностика, замена, ошибки</span><span class="related-bottom-desc">Пошаговая инструкция по проверке, замене и настройке датчика АБС на КАМАЗ 4308. Схемы, коды ошибок, </span></a><a href="/articles/s/sp/spn-3597-fmi-2-cummins-kamaz-chto-za-oshibka.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка SPN 3597 FMI 2 Cummins на КАМАЗ: причины и устранение</span><span class="related-bottom-desc">Подробный разбор кода SPN 3597 FMI 2 для двигателей Cummins ISBe 6.7 на КАМАЗ. Методы диагностики, п</span></a><a href="/articles/k/ko/kody-oshibok-kamaz-kamens.html" class="related-bottom-card"><span class="related-bottom-title">Коды ошибок Камаз Cummins: расшифровка и устранение неисправностей</span><span class="related-bottom-desc">Полная расшифровка кодов ошибок двигателя Камаз Cummins ISBe, ISLe. Методы диагностики, сброс ошибок</span></a><a href="/articles/o/os/oshibka-v-vcu-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка VCU КАМАЗ: Диагностика, коды и устранение неисправностей</span><span class="related-bottom-desc">Подробный разбор ошибок контроллера VCU на грузовиках КАМАЗ. Причины сбоев, расшифровка кодов, метод</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

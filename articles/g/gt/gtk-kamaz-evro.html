@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>ГТК КАМАЗ Евро: устройство, неисправности и ремонт топливоподачи — Про КАМАЗ</title>
+    <meta name="description" content="Подробный разбор регулятора ГТК КАМАЗ Евро-2 и Евро-3. Диагностика ТНВД, настройка подачи топлива, коды ошибок и устранение типичных поломок.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/g/gt/gtk-kamaz-evro.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="ГТК КАМАЗ Евро: устройство, неисправности и ремонт топливоподачи">
+    <meta property="og:description" content="Подробный разбор регулятора ГТК КАМАЗ Евро-2 и Евро-3. Диагностика ТНВД, настройка подачи топлива, коды ошибок и устранение типичных поломок.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">ГТК КАМАЗ Евро: устройство, неисправности и ремонт топливоподачи</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Регулятор ГТК КАМАЗ Евро: устройство, настройка и диагностика неисправностей</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#устройство-и-принцип-работы-гтк-в-системе-топливоподачи">Устройство и принцип работы ГТК в системе топливоподачи</a></li><li><a href="#симптомы-неисправностей-и-методы-диагностики">Симптомы неисправностей и методы диагностики</a></li><li><a href="#регулировка-и-настройка-топливоподачи">Регулировка и настройка топливоподачи</a></li><li><a href="#типичные-ошибки-при-ремонте-и-обслуживании">Типичные ошибки при ремонте и обслуживании</a></li><li><a href="#поддержание-работоспособности-системы-питания">Поддержание работоспособности системы питания</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>При эксплуатации грузовика серии КАМАЗ, оснащенного дизельным двигателем с экологическим классом Евро-2 или Евро-3, водитель часто сталкивается с потерей тяги на высоких оборотах или, наоборот, с невозможностью снизить обороты холостого хода до нормы.</p>
+<p>Симптомы проявляются внезапно: машина перестает набирать скорость под нагрузкой, дымит черным выхлопом, либо обороты двигателя"плавают" в диапазоне 800–1000 об/мин, что вызывает вибрацию кузова и повышенный расход топлива.</p>
+<p>В большинстве случаев первопричиной таких симптомов становится отказ или некорректная работа ГТК (гидравлического топливного клапана), который интегрирован в систему управления топливоподачей ТНВД или выступает отдельным исполнительным механизмом в зависимости от модификации двигателя.</p>
+
+<h2 id="устройство-и-принцип-работы-гтк-в-системе-топливоподачи">Устройство и принцип работы ГТК в системе топливоподачи</h2>
+
+<p>Гидравлический топливный клапан представляет собой электромеханическое устройство, задачей которого является точное дозирование подачи топлива к форсункам или регулировка давления в системе в зависимости от нагрузки и оборотов двигателя.</p>
+<p>В двигателях КАМАЗ с электронным управлением (Евро-2/Евро-3) этот узел часто работает в связке с электронным блоком управления (ЭБУ), получая сигналы от датчиков положения педали акселератора и датчика частоты вращения коленвала.</p>
+<p>Конструктивно ГТК состоит из электромагнита, клапанной группы, возвратной пружины и корпуса с подводящими и отводящими каналами для дизельного топлива.</p>
+<p>При подаче напряжения на обмотку электромагнита создается магнитное поле, которое преодолевает усилие пружины и перемещает клапан, открывая или перекрывая топливный канал.</p>
+<p><strong>Ключевым параметром</strong> исправности клапана является герметичность его закрытия и быстродействие срабатывания, так как любые задержки приводят к рассинхронизации работы двигателя.</p>
+
+<h3>Отличия ГТК на двигателях Евро-2 и Евро-3</h3>
+
+<p>На моторах экологического класса Евро-2, таких как КАМАЗ-740.30 или 740.31, система управления топливоподачей часто базируется на механическом ТНВД с электронной"педалью" и отдельным электромагнитным клапаном останова или регулятором.</p>
+<p>В этой конфигурации ГТК может выполнять функцию клапана останова двигателя или регулятора опережения впрыска, управляясь простыми сигналами включения/выключения.</p>
+<p>Переход на стандарт Евро-3 (двигатели 740.30-240, 740.31-240 и их модификации) привнес более сложную систему Common Rail или усовершенствованный механический ТНВД с электронным регулятором (РЭТ), где ГТК становится частью сложной цепи управления цикловой подачей.</p>
+<p>Здесь клапан работает в импульсном режиме, и его состояние постоянно мониторится ЭБУ на предмет сопротивления обмотки и фактического положения штока.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях Евро-3 отказ ГТК часто сопровождается загоранием лампы Check Engine и переходом двигателя в аварийный режим работы с ограничением мощности.</p></div>
+
+<p>Точная идентификация типа клапана возможна только по каталожному номеру, выбитому на корпусе, или по VIN-коду автомобиля, так как визуально похожие детали могут иметь разные электрические характеристики.</p>
+
+<h2 id="симптомы-неисправностей-и-методы-диагностики">Симптомы неисправностей и методы диагностики</h2>
+
+<p>Диагностика ГТК начинается с анализа поведения двигателя и визуального осмотра электрических соединений, так как обрыв цепи или окисление контактов являются частой причиной сбоев.</p>
+<p>Если двигатель глохнет сразу после отпускания ключа зажигания или, наоборот, продолжает работать ("дизелит"), это прямой признак залипания или негерметичности клапана останова, который конструктивно схож с ГТК.</p>
+<p>В случае проблем с динамикой разгона и повышенным дымлением следует проверить работу клапана корректора или регулятора мощности, который также относится к классу гидравлических управляющих устройств.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>⚠️ Внимание! Перед началом любых работ с топливной системой высокого давления необходимо сбросить остаточное давление в магистралях во избежание травмирования струей топлива.</p></div>
+
+<p>Первичная проверка осуществляется мультиметром путем замера сопротивления обмотки электромагнита, значение которого должно находиться в строго определенном диапазоне, указанном в технической документации.</p>
+<p>Отклонение сопротивления в большую сторону свидетельствует об обрыве витков, а в меньшую — о межвитковом замыкании, что требует замены узла.</p>
+
+<h3>Проверка электрической цепи и сигналов</h3>
+
+<p>Для глубокой диагностики необходимо проверить наличие управляющего сигнала на разъеме ГТК при включенном зажигании и работающем стартере.</p>
+<p>Использование осциллографа позволяет увидеть форму сигнала и убедиться, что ЭБУ действительно отправляет команды на открытие/закрытие клапана.</p>
+<p>Частой ошибкой является замена исправного клапана при сгоревшем предохранителе или неисправном реле в бортовой сети, поэтому проверка цепи питания обязательна.</p>
+
+<div class="checklist-block"><h4>📋 Первичная диагностика ГТК</h4><ol><li><strong>Шаг 1.</strong> Визуальный осмотр разъема и проводки</li><li><strong>Шаг 2.</strong> Замер сопротивления обмотки мультиметром</li><li><strong>Шаг 3.</strong> Проверка напряжения на контактах при включенном зажигании</li><li><strong>Шаг 4.</strong> Прослушивание характерного щелчка при подаче питания</li><li><strong>Шаг 5.</strong> Проверка герметичности клапана под давлением</li></ol></div>
+
+<p>Если электрическая часть исправна, но двигатель работает некорректно, проблема может крыться в механическом загрязнении плунжерной пары или заедании клапана из-за некачественного топлива.</p>
+
+<h3>Механическая проверка и тестирование под давлением</h3>
+
+<p>Снятый с двигателя ГТК необходимо проверить на специализированном стенде, имитирующем работу топливной системы под высоким давлением.</p>
+<p>В домашних условиях можно проверить только герметичность запирания, подав сжатый воздух или топливо под давлением во входное отверстие и оценив утечку через выходное.</p>
+<p>Наличие даже незначительной струйки или капель через закрытый клапан указывает на износ седла или наличие посторонних частиц в топливе.</p>
+<p><strong>Герметичность системы</strong> критически важна для поддержания правильного давления в рампе или магистрале высокого давления.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр проверки</th>
+<th>Нормальное значение</th>
+<th>Признак неисправности</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сопротивление обмотки</td>
+<td>Зависит от модели (обычно 10-50 Ом)</td>
+<td>Обрыв (бесконечность) или КЗ (близко к 0)</td>
+</tr>
+<tr>
+<td>Герметичность</td>
+<td>Отсутствие утечек при давлении</td>
+<td>Капельная или струйная утечка</td>
+</tr>
+<tr>
+<td>Ход штока</td>
+<td>Свободный, без заеданий</td>
+<td>Заедание, люфт, отсутствие хода</td>
+</tr>
+</tbody>
+</table>
+
+<p>При обнаружении механических дефектов ремонт клапана в гаражных условиях, как правило, нецелесообразен из-за необходимости прецизионной притирки деталей.</p>
+
+<h2 id="регулировка-и-настройка-топливоподачи">Регулировка и настройка топливоподачи</h2>
+
+<p>Регулировка ГТК и связанных с ним систем топливоподачи требуется после замены клапана, ремонта ТНВД или при появлении симптомов неравномерной работы двигателя.</p>
+<p>Процесс настройки включает в себя установку правильных зазоров, проверку хода рейки ТНВД и калибровку положения датчиков, если система электронная.</p>
+<p>На двигателях КАМАЗ с механическим ТНВД (Евро-2) настройка часто сводится к регулировке винтов ограничения максимальной подачи и корректора по наддуву.</p>
+<p>Для двигателей Евро-3 с электронным управлением требуется подключение диагностического сканера для проведения адаптации и сброса коррекций.</p>
+
+<div class="checklist-block"><h4>☑️ Чек-лист перед регулировкой</h4><label class="check-item"><input type="checkbox"><span>Двигатель прогрет до рабочей температуры</span></label><label class="check-item"><input type="checkbox"><span>Воздушный фильтр чист и исправен</span></label><label class="check-item"><input type="checkbox"><span>Топливные фильтры заменены</span></label><label class="check-item"><input type="checkbox"><span>Отсутствуют подсосы воздуха в магистрали</span></label><label class="check-item"><input type="checkbox"><span>Давление в цилиндрах двигателя в норме</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<p>Важно понимать, что неправильная регулировка может привести к перегреву двигателя, прогару поршней или, наоборот, к невозможности развить полную мощность.</p>
+
+<h3>Настройка на двигателях Евро-2</h3>
+
+<p>На этих моторах основным параметром является ход рейки ТНВД, который контролируется регулятором, связанным с ГТК.</p>
+<p>Регулировка производится путем вращения ограничительных винтов на корпусе ТНВД, однако делать это следует только после проверки состояния самого клапана.</p>
+<p>Частым требованием является установка номинальной частоты вращения холостого хода и проверка максимальных оборотов под нагрузкой.</p>
+<p>Если ГТК выполняет функцию регулятора опережения, проверяется угол опережения впрыска при различных режимах работы двигателя.</p>
+
+<h3>Адаптация на двигателях Евро-3</h3>
+
+<p>В современных системах настройка производится программным путем через диагностический разъем.</p>
+<p>Оператор считывает текущие параметры работы форсунок и регуляторов, после чего запускает процедуру автоматической калибровки.</p>
+<p>ЭБУ самостоятельно определяет положение нуля и максимума хода исполнительных механизмов, записывая новые значения в память.</p>
+<p><strong>Корректная адаптация</strong> невозможна без исправных датчиков положения педали и коленчатого вала.</p>
+
+<div class="attention-box attention-info"><h4>Регулировка своими руками</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Полный контроль над процессом</li><li>✅ Экономия на услугах сервиса</li><li>✅ Возможность оперативной правки</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Высокий риск ошибки без стенда</li><li>❌ Необходимость дорогого оборудования</li><li>❌ Трудоемкость процесса</li></ul></div></div></div>
+
+<p>После проведения всех регулировочных работ обязательно проводится пробный выезд для проверки динамики и отсутствия дымления на всех режимах.</p>
+
+<h2 id="типичные-ошибки-при-ремонте-и-обслуживании">Типичные ошибки при ремонте и обслуживании</h2>
+
+<p>Ремонт системы топливоподачи КАМАЗ требует высокой квалификации, и даже опытные механики допускают ошибки, которые приводят к повторным поломкам.</p>
+<p>Одной из самых распространенных проблем является игнорирование качества топлива, которое является главной причиной выхода из строя прецизионных пар ГТК.</p>
+
+<ol>
+<li><strong>Игнорирование замены топливных фильтров</strong> — попытка промыть старый клапан без замены фильтров тонкой очистки приведет к быстрому повторному загрязнению и заклиниванию новой детали.</li>
+<li><strong>Неправильная установка уплотнений</strong> — использование неподходящих резинок или перетяжка болтов крепления вызывает деформацию корпуса ГТК и потерю герметичности.</li>
+<li><strong>Отсутствие проверки электрики</strong> — замена ГТК без проверки проводки и ЭБУ часто не решает проблему, если причина кроется в плохом контакте или скачках напряжения в бортовой сети.</li>
+<li><strong>Попытка разборки неразборных узлов</strong> — многие современные ГТК выполнены в герметичном корпусе и не подлежат ремонту, их вскрытие нарушает геометрию и работоспособность.</li>
+</ol>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>⚠️ Внимание! Использование герметиков или посторонних веществ для"ремонта" уплотнений ГТК категорически запрещено, так как они могут раствориться в топливе и вывести из строя форсунки.</p></div>
+
+<p>Соблюдение чистоты при работе с топливной аппаратурой является главным правилом, так как пыли размером в несколько микрон может заклинить плунжерную пару.</p>
+<p>Использование оригинальных запчастей или проверенных аналогов от известных производителей значительно снижает риск повторных отказов системы.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Полезный совет: При замене ГТК всегда меняйте и топливные фильтры, даже если они были заменены недавно, чтобы гарантировать чистоту системы после вскрытия.</p></div>
+
+<h2 id="поддержание-работоспособности-системы-питания">Поддержание работоспособности системы питания</h2>
+
+<p>Долговечность ГТК и всей топливной системы КАМАЗ напрямую зависит от регулярности технического обслуживания и качества используемых расходных материалов.</p>
+<p>Своевременная замена фильтров, слив отстоя из топливных баков и использование качественных присадок в зимний период помогают избежать дорогостоящих ремонтов.</p>
+<p>Регулярная компьютерная диагностика позволяет выявить отклонения в работе клапана на ранней стадии, до того как они приведут к серьезным поломкам двигателя.</p>
+<p>Водителям следует обращать внимание на любые изменения в работе мотора, так как раннее обнаружение проблемы экономит время и деньги.</p>
+<p>Система питания дизельного двигателя КАМАЗ Евро — это сложный механизм, требующий грамотного подхода и понимания принципов его работы для обеспечения надежной эксплуатации автомобиля.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>ГТК является критическим узлом системы топливоподачи, и его исправность гарантирует стабильную работу двигателя, экономичный расход топлива и отсутствие вредных выбросов.</p></div>
+
+<p>Понимание устройства и принципов диагностики ГТК позволяет эффективно решать проблемы с тягой и запуском двигателя, обеспечивая бесперебойную работу грузовика в любых условиях.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#устройство-и-принцип-работы-гтк-в-системе-топливоподачи">Устройство и принцип работы ГТК в системе топливоподачи</a></li><li><a href="#симптомы-неисправностей-и-методы-диагностики">Симптомы неисправностей и методы диагностики</a></li><li><a href="#регулировка-и-настройка-топливоподачи">Регулировка и настройка топливоподачи</a></li><li><a href="#типичные-ошибки-при-ремонте-и-обслуживании">Типичные ошибки при ремонте и обслуживании</a></li><li><a href="#поддержание-работоспособности-системы-питания">Поддержание работоспособности системы питания</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/k/ka/kamaz-evro-2-davlenie-v-forsunkakh.html" class="related-card">Давление в форсунках Камаз Евро 2: нормы, регулировка, диагностика</a></li><li><a href="/articles/k/ka/kak-snyat-golovku-na-kamaze-740.html" class="related-card">Как снять головку на КамАЗ 740: пошаговая инструкция</a></li><li><a href="/articles/p/po/podkachka-tnvd-kamaz.html" class="related-card">Прокачка ТНВД КамАЗ: пошаговая инструкция по удалению воздуха</a></li><li><a href="/articles/f/fo/forsunka-kamaz-740-evro-5.html" class="related-card">Форсунка Камаз Евро 5: диагностика, параметры и замена</a></li><li><a href="/articles/k/ka/kak-schitayutsya-tsilindry-na-kamaze.html" class="related-card">Как посчитать цилиндры на КАМАЗе: порядок работы и маркировка</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/k/ka/kamaz-evro-2-davlenie-v-forsunkakh.html" class="related-bottom-card"><span class="related-bottom-title">Давление в форсунках Камаз Евро 2: нормы, регулировка, диагностика</span><span class="related-bottom-desc">Нормы давления впрыска форсунок Камаз Евро 2. Инструкция по проверке, регулировке и замене распылите</span></a><a href="/articles/k/ka/kak-snyat-golovku-na-kamaze-740.html" class="related-bottom-card"><span class="related-bottom-title">Как снять головку на КамАЗ 740: пошаговая инструкция</span><span class="related-bottom-desc">Подробная инструкция по снятию ГБЦ КамАЗ 740. Моменты затяжки, порядок работы, дефектовка плоскости </span></a><a href="/articles/p/po/podkachka-tnvd-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Прокачка ТНВД КамАЗ: пошаговая инструкция по удалению воздуха</span><span class="related-bottom-desc">Подробная техническая инструкция по прокачке топливного насоса КамАЗ. Удаление воздуха, проверка гер</span></a><a href="/articles/f/fo/forsunka-kamaz-740-evro-5.html" class="related-bottom-card"><span class="related-bottom-title">Форсунка Камаз Евро 5: диагностика, параметры и замена</span><span class="related-bottom-desc">Технический обзор топливных форсунок Камаз Евро 5 Common Rail. Параметры впрыска, коды ошибок, диагн</span></a><a href="/articles/k/ka/kak-schitayutsya-tsilindry-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как посчитать цилиндры на КАМАЗе: порядок работы и маркировка</span><span class="related-bottom-desc">Подробная инструкция по определению нумерации цилиндров и порядку работы двигателя КАМАЗ. Схемы, таб</span></a><a href="/articles/d/dv/dvigatel-cummins-na-kamaz-6-tsilindrovyj.html" class="related-bottom-card"><span class="related-bottom-title">Cummins ISBe на КАМАЗ: характеристики, ошибки и ремонт</span><span class="related-bottom-desc">Полный гид по двигателю Cummins ISBe на КАМАЗ 6 цилиндров. Технические параметры, коды ошибок, причи</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

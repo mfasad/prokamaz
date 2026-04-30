@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Почему скачет КамАЗ: диагностика и устранение скачков оборотов — Про КАМАЗ</title>
+    <meta name="description" content="Технический анализ причин скачков оборотов двигателя КамАЗ. Диагностика ТНВД, регулятора, подсоса воздуха и неисправностей акселератора.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/p/po/pochemu-kamaz-skachet.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Почему скачет КамАЗ: диагностика и устранение скачков оборотов">
+    <meta property="og:description" content="Технический анализ причин скачков оборотов двигателя КамАЗ. Диагностика ТНВД, регулятора, подсоса воздуха и неисправностей акселератора.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Почему скачет КамАЗ: диагностика и устранение скачков оборотов</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Диагностика и устранение скачков оборотов двигателя КамАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#механические-неисправности-топливного-насоса-высокого-давления">Механические неисправности топливного насоса высокого давления</a></li><li><a href="#подсос-воздуха-и-проблемы-впускной-системы">Подсос воздуха и проблемы впускной системы</a></li><li><a href="#неисправности-акселератора-и-электронной-педали">Неисправности акселератора и электронной педали</a></li><li><a href="#типичные-ошибки-при-диагностике-и-ремонте">Типичные ошибки при диагностике и ремонте</a></li><li><a href="#стабилизация-работы-силовой-установки">Стабилизация работы силовой установки</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Водитель большегрузного автомобиля сталкивается с ситуацией, когда стрелка тахометра начинает хаотично двигаться, а тяга на колесах пропадает или становится неконтролируемой. Вместо ровного гудения дизеля слышны резкие провалы или внезапные взрывы мощности, когда мотор самовольно выходит на высокие обороты. Это явление, известное как «скачки», возникает в самый неподходящий момент, например, при обгоне или движении в гору, создавая аварийную ситуацию на дороге.</p>
+
+<p>Подобное поведение силовой установки свидетельствует о серьезном разбалансе в системе топливоподачи или нарушении подачи воздуха. Двигатель семейства КамАЗ, будь то атмосферный 740-й или турбированный Cummins, требует строгой дозировки топлива. Любое отклонение в работе топливной аппаратуры высокого давления или появление неучтенного воздуха во впускном тракте приводит к тому, что электроника или механический регулятор перестают корректно управлять цикловой подачей.</p>
+
+<p>Игнорирование первых признаков нестабильной работы может привести к выходу из строя дорогостоящих узлов, включая плунжерные пары, форсунки и сам турбокомпрессор. Ремонт в полевых условиях часто невозможен без специализированного оборудования, однако первичная диагностика позволяет локализовать неисправность и принять решение о дальнейших действиях. Ниже представлен детальный разбор причин и методов устранения данной неисправности.</p>
+
+<h2 id="механические-неисправности-топливного-насоса-высокого-давления">Механические неисправности топливного насоса высокого давления</h2>
+
+<p>Основным источником проблемы в подавляющем большинстве случаев является топливный насос высокого давления (ТНВД). <strong>Регулятор частоты вращения вала</strong> отвечает за поддержание стабильных оборотов холостого хода и ограничение максимальных оборотов. Если пружины регулятора ослабли, потеряли упругость или загрязнились продукты износа, система управления начинает «плавать», вызывая ритмичные скачки мощности.</p>
+
+<p>В механических насосах серии ЯЗДА износ плунжерных пар и нагнетательных клапанов приводит к неравномерной подаче топлива. Плунжер, который должен двигаться с микронной точностью, при износе начинает подклинивать или пропускать топливо, создавая пульсации давления. Это особенно заметно при работе на холостом ходу, когда амплитуда движения рейки насоса минимальна, и любой люфт становится критичным.</p>
+
+<p>Отдельное внимание стоит уделить состоянию кулачкового вала и толкателей. При выработке на кулачках привода плунжеров нарушается закон движения плунжера, что ведет к изменению момента начала впрыска и его длительности. Двигатель реагирует на это рывками, так как сгорание смеси происходит не в оптимальный момент такта сжатия.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Категорически запрещается вскрывать ТНВД и регулировать подачу топлива без использования стенда. Самостоятельная регулировка может привести к «разносу» двигателя и его полному разрушению.</p></div>
+
+<h3>Диагностика регулятора и сервопривода</h3>
+
+<p>Для двигателей с электронным управлением (Euro-2, Euro-3, Euro-4) критическим элементом становится электромагнитный регулятор или сервопривод (РСА). Если шток регулятора загрязнен смолистыми отложениями, он начинает двигаться рывками. Электронный блок управления (ЭБУ) подает сигнал на открытие, но механическое сопротивление не дает рейке сдвинуться, затем накопленная энергия резко срывает шток, и происходит мощный впрыск.</p>
+
+<div class="checklist-block"><h4>📋 Проверка подвижности регулятора</h4><ol><li><strong>Шаг 1.</strong> Снимите крышку ТНВД или доступ к рычагу регулятора</li><li><strong>Шаг 2.</strong> Попросите помощника плавно нажать на педаль газа, пока вы держите рычаг</li><li><strong>Шаг 3.</strong> Оцените плавность хода рычага и штока</li><li><strong>Шаг 4.</strong> Проверьте отсутствие люфтов в местах сочленения</li></ol></div>
+
+<p>Визуальный осмотр рычажной системы часто выявляет задиры или отсутствие смазки. В некоторых случаях проблема кроется в неправильной установке тяги управления после ремонта. Если длина тяги не отрегулирована, рычаг регулятора может упираться в ограничитель или не доходить до упора, создавая мертвую зону, в которой управление становится нелинейным и дерганым.</p>
+
+<p>Таблица ниже демонстрирует основные симптомы и вероятные причины механических сбоев в ТНВД:</p>
+
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Вероятная причина</th>
+<th>Метод устранения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ритмичные скачки на ХХ</td>
+<td>Загрязнение регулятора, износ пружин</td>
+<td>Промывка, замена пружин на стенде</td>
+</tr>
+<tr>
+<td>Рывки под нагрузкой</td>
+<td>Износ плунжерной пары</td>
+<td>Замена плунжерной пары</td>
+</tr>
+<tr>
+<td>Самопроизвольное повышение оборотов</td>
+<td>Заклинивание рейки в крайнем положении</td>
+<td>Дефектовка корпуса и втулок ТНВД</td>
+</tr>
+</tbody>
+</table>
+
+<p>Своевременное обслуживание топливной аппаратуры позволяет избежать критических ситуаций. Использование присадок-лубрикантов в современном топливе с низким содержанием серы является обязательным условием для продления жизни ТНВД.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Стабильность работы ТНВД зависит от чистоты топлива и состояния пружинно-рычажного механизма регулятора.</p></div>
+
+<h2 id="подсос-воздуха-и-проблемы-впускной-системы">Подсос воздуха и проблемы впускной системы</h2>
+
+<p>Дизельный двигатель работает по принципу самовоспламенения от сжатия, и количество сжигаемого топлива напрямую зависит от количества поступившего воздуха. Если в систему впуска попадает неучтенный воздух, соотношение «топливо-воздух» нарушается. Двигатель начинает «задыхаться» или, наоборот, резко увеличивать обороты, пытаясь компенсировать нехватку кислорода или избыток топливной смеси.</p>
+
+<p>Наиболее частой причиной скачков на двигателях с турбонаддувом (Cummins, КАМАЗ-740.30 и новее) является неисправность системы вентиляции картерных газов. Клапан <em>сапуна</em> может заклинить в открытом положении, из-за чего картерные газы, насыщенные масляным туманом, начинают активно засасываться во впускной коллектор. Масло, попадая в камеру сгорания, действует как дополнительное топливо, вызывая неконтролируемый разгон — «разнос».</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях Cummins ISBe часто встречается трещина в пластиковом впускном коллекторе в районе 4-го или 5-го цилиндра. Трещина может открываться только под давлением, вызывая нестабильность работы.</p></div>
+
+<p>Проверка герметичности впускного тракта должна начинаться с визуального осмотра всех патрубков, интеркулера и соединений. Даже микроскопическая трещина в патрубке между турбиной и впускным коллектором способна создать существенный подсос. На холостых оборотах во впуске создается разрежение, и через негерметичность засасывается грязный воздух, который не учитывается датчиком массового расхода (ДМРВ) или датчиком давления наддува.</p>
+
+<h3>Проверка герметичности патрубков и интеркулера</h3>
+
+<p>Для точной диагностики часто требуется создание искусственного давления в системе впуска. Если на слух определить место шипения не удается, применяют метод обмыливания стыков при работающем двигателе. Появление пузырей укажет на место утечки. Особое внимание уделяют хомутам — от вибрации они ослабевают, и резиновые уплотнения теряют эластичность.</p>
+
+<ol>
+<li>Заглушите выходное отверстие компрессора или создайте давление через штуцер.</li>
+<li>Внимательно осмотрите все соединения патрубков интеркулера.</li>
+<li>Проверьте состояние уплотнительных колец в местах подключения датчиков.</li>
+<li>Обратитесь к мануалу для проверки допустимого давления при продувке, чтобы не повредить сальники.</li>
+</ol>
+
+<p>Еще одной скрытой причиной может быть неисправность клапана рециркуляции выхлопных газов (EGR). Если клапан заклинивает в открытом положении, выхлопные газы постоянно поступают во впуск, снижая концентрацию кислорода. ЭБУ пытается компенсировать падение мощности, увеличивая подачу топлива, что приводит к колебаниям оборотов. В зимний период конденсат в системе EGR может замерзать, вызывая периодические блокировки и скачки.</p>
+
+<div class="attention-box attention-info"><h4>Диагностика подсоса воздуха</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Позволяет найти скрытые дефекты без разбора двигателя</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требует наличия компрессора или дымогенератора для точного поиска</li></ul></div></div></div>
+
+<h2 id="неисправности-акселератора-и-электронной-педали">Неисправности акселератора и электронной педали</h2>
+
+<p>В современных грузовиках механическая тяга от педали газа к ТНВД заменена электронной системой управления (E-Gas). Педаль акселератора представляет собой потенциометр, передающий сигнал о желаемой мощности на ЭБУ. Если контакт внутри потенциометра нарушен или «дорожка» стерлась в часто используемом положении, сигнал становится прерывистым.</p>
+
+<p>ЭБУ, получая скачкообразный сигнал о положении педали, мгновенно меняет команду на регулятор ТНВД. Водитель в этот момент может даже не двигать ногой, но двигатель будет реагировать резкими провалами или всплесками тяги. Это создает опасную ситуацию, особенно при маневрировании в ограниченном пространстве или движении по скользкой дороге.</p>
+
+<p>Диагностика электронной педали возможна с помощью диагностического сканера. Необходимо отслеживать график изменения напряжения или процентов открытия дроссельной заслонки (в процентах от педали). Плавное нажатие должно вызывать плавное, линейное изменение показаний. Любые «провалы» или резкие скачки на графике при неподвижной педали свидетельствуют о неисправности датчика.</p>
+
+<h3>Проверка контактов и проводки</h3>
+
+<p>Проблема может крыться не в самой педали, а в жгуте проводов, идущем к ней. Вибрации кабины КамАЗа известны своей разрушительной силой. Провода перетираются, окисляются контакты в фишках, особенно если туда попадает влага или антифриз. Окисление создает переходное сопротивление, которое меняется при нагреве или тряске, вызывая хаотичное поведение мотора.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка электрической цепи педали</h4><label class="check-item"><input type="checkbox"><span>Визуальный осмотр фишки на наличие окислов</span></label><label class="check-item"><input type="checkbox"><span>Проверка целостности проводов на излом</span></label><label class="check-item"><input type="checkbox"><span>Замер сопротивления потенциометра мультиметром</span></label><label class="check-item"><input type="checkbox"><span>Сравнение показаний сканера с эталонными значениями</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Также стоит проверить «массу» двигателя и кабины. Плохой контакт минусового провода может приводить к тому, что токи управления идут через датчики, искажая их показания. Скачки напряжения в бортовой сети также способны дестабилизировать работу ЭБУ, вызывая хаотичные команды исполнительным механизмам.</p>
+
+<p>Ниже приведена таблица совместимости и типичных проблем для разных типов акселераторов:</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип педали</th>
+<th>Характер неисправности</th>
+<th>Решение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Механическая (ТНВД ЯЗДА)</td>
+<td>Заедание троса, износ втулок</td>
+<td>Смазка, замена троса</td>
+</tr>
+<tr>
+<td>Электронная (Bosch)</td>
+<td>Износ дорожек потенциометра</td>
+<td>Замена педали в сборе</td>
+</tr>
+<tr>
+<td>Электронная (Cummins)</td>
+<td>Окисление контактов разъема</td>
+<td>Чистка контактов, замена фишки</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>При замене электронной педали акселератора часто требуется процедура адаптации через диагностический сканер для корректной работы холостого хода.</p></div>
+
+<h2 id="типичные-ошибки-при-диагностике-и-ремонте">Типичные ошибки при диагностике и ремонте</h2>
+
+<p>Попытка устранить скачки оборотов без глубокого понимания процессов часто приводит к усугублению ситуации. Механики и водители часто совершают ряд стандартных ошибок, которые лишь маскируют проблему или выводят из строя исправные узлы.</p>
+
+<ol>
+<li><strong>Регулировка ТНВД «на слух» без стенда</strong> — попытка завернуть винт мощности или регулятора на работающем двигателе часто приводит к тому, что насос начинает работать в нештатном режиме, вызывая дымление и еще более сильные скачки из-за рассинхронизации цилиндров.</li>
+<li><strong>Игнорирование системы фильтрации воздуха</strong> — замена топливных фильтров без проверки воздушного фильтра. Если воздушный фильтр забит, в цилиндры поступает мало воздуха, смесь переобогащается, и двигатель работает нестабильно, а владелец меняет ТНВД.</li>
+<li><strong>Установка некалиброванных форсунок</strong> — при ремонте часто меняют распылители, не проверяя их на стенде на давление начала впрыска и факел распыла. Разница в производительности форсунок вызывает неравномерную работу двигателя и вибрации, воспринимаемые как скачки.</li>
+<li><strong>Неучет качества топлива</strong> — диагностика и регулировка аппаратуры на грязном или водосодержащем топливе дает ложные результаты. После заправки качественным топливом картина работы двигателя изменится, и регулировка собьется.</li>
+</ol>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Использование «быстрозапускателей» (эфиров) для проверки работы двигателя при нестабильных оборотах категорически запрещено. Это может привести к гидроудару или поломке поршневой группы.</p></div>
+
+<h2 id="стабилизация-работы-силовой-установки">Стабилизация работы силовой установки</h2>
+
+<p>Устранение скачков оборотов на КамАЗе требует комплексного подхода, начиная от проверки самых простых элементов, таких как фильтры и патрубки, до сложной диагностики топливной аппаратуры на специализированных стендах. <strong>Систематическое обслуживание</strong> и использование качественных расходных материалов являются лучшей профилактикой подобных неисправностей.</p>
+
+<p>Важно понимать, что двигатель — это сложный агрегат, где все системы взаимосвязаны. Проблема в турбине может имитировать неисправность ТНВД, а плохой контакт в проводке — поломку электроники. Грамотная диагностика, основанная на последовательном исключении факторов, позволяет быстро и эффективно вернуть грузовику его тяговые характеристики.</p>
+
+<p>Соблюдение регламентных работ, своевременная замена фильтрующих элементов и внимательное отношение к первым признакам нестабильной работы позволят избежать дорогостоящего ремонта в пути и обеспечат безопасность вождения. Помните, что исправный грузовик — это не только экономия топлива, но и гарантия того, что груз будет доставлен в срок без происшествий.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#механические-неисправности-топливного-насоса-высокого-давления">Механические неисправности топливного насоса высокого давления</a></li><li><a href="#подсос-воздуха-и-проблемы-впускной-системы">Подсос воздуха и проблемы впускной системы</a></li><li><a href="#неисправности-акселератора-и-электронной-педали">Неисправности акселератора и электронной педали</a></li><li><a href="#типичные-ошибки-при-диагностике-и-ремонте">Типичные ошибки при диагностике и ремонте</a></li><li><a href="#стабилизация-работы-силовой-установки">Стабилизация работы силовой установки</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/k/ka/kak-pomenyat-toplivnyj-filtr-na-kamaze.html" class="related-card">Замена топливного фильтра КАМАЗ: пошаговая инструкция</a></li><li><a href="/articles/s/si/sistema-kommon-rejl-kamaz.html" class="related-card">Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт</a></li><li><a href="/articles/k/kl/klyuch-podkachki-kamaz.html" class="related-card">Ключ подкачки КАМАЗ: устройство, регулировка и неисправности</a></li><li><a href="/articles/k/kr/kryshka-rasshiritelnogo-bachka-kamaz-s-klapanom.html" class="related-card">Крышка расширительного бачка КАМАЗ с клапаном: устройство и замена</a></li><li><a href="/articles/d/da/davlenie-masla-kamaz-5490.html" class="related-card">Давление масла Камаз 5490: нормы, датчики и диагностика</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/k/ka/kak-pomenyat-toplivnyj-filtr-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Замена топливного фильтра КАМАЗ: пошаговая инструкция</span><span class="related-bottom-desc">Подробный гид по замене топливных фильтров на КАМАЗ. Схемы прокачки, виды фильтров, частые ошибки и </span></a><a href="/articles/s/si/sistema-kommon-rejl-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт</span><span class="related-bottom-desc">Полная техническая инструкция по системе Common Rail КАМАЗ. Диагностика, коды ошибок Bosch, регулиро</span></a><a href="/articles/k/kl/klyuch-podkachki-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ключ подкачки КАМАЗ: устройство, регулировка и неисправности</span><span class="related-bottom-desc">Полное руководство по ключу подкачки КАМАЗ. Устройство, принцип работы, регулировка давления, типичн</span></a><a href="/articles/k/kr/kryshka-rasshiritelnogo-bachka-kamaz-s-klapanom.html" class="related-bottom-card"><span class="related-bottom-title">Крышка расширительного бачка КАМАЗ с клапаном: устройство и замена</span><span class="related-bottom-desc">Полный разбор конструкции крышки расширительного бачка КАМАЗ. Устройство двухклапанной системы, давл</span></a><a href="/articles/d/da/davlenie-masla-kamaz-5490.html" class="related-bottom-card"><span class="related-bottom-title">Давление масла Камаз 5490: нормы, датчики и диагностика</span><span class="related-bottom-desc">Технические нормы давления масла в двигателе Камаз 5490. Диагностика неисправностей, замена датчиков</span></a><a href="/articles/k/ka/kak-glushitsya-kamaz-evro-4.html" class="related-bottom-card"><span class="related-bottom-title">Как отключить мочевину и сажевый фильтр на КамАЗ Евро-4</span><span class="related-bottom-desc">Техническая инструкция по программному и физическому удалению SCR и DPF на грузовиках КамАЗ с двигат</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

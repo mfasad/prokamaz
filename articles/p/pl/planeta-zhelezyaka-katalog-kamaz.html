@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Каталог запчастей КАМАЗ: работа с Planet Parts и Железяка — Про КАМАЗ</title>
+    <meta name="description" content="Техническое руководство по поиску и каталогизации узлов КАМАЗ. Работа с базами Planet Parts, сервисом Железяка и кросс-кодами.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/p/pl/planeta-zhelezyaka-katalog-kamaz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Каталог запчастей КАМАЗ: работа с Planet Parts и Железяка">
+    <meta property="og:description" content="Техническое руководство по поиску и каталогизации узлов КАМАЗ. Работа с базами Planet Parts, сервисом Железяка и кросс-кодами.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Каталог запчастей КАМАЗ: работа с Planet Parts и Железяка</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Работа с электронными каталогами запчастей КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-электронных-каталогов-и-баз-данных">Архитектура электронных каталогов и баз данных</a></li><li><a href="#алгоритмы-поиска-и-верификации-данных">Алгоритмы поиска и верификации данных</a></li><li><a href="#технические-особенности-каталогизации-основных-узлов">Технические особенности каталогизации основных узлов</a></li><li><a href="#анализ-совместимости-и-типичные-ошибки">Анализ совместимости и типичные ошибки</a></li><li><a href="#оптимизация-процессов-снабжения">Оптимизация процессов снабжения</a></li><li><a href="#стратегия-управления-складом-на-основе-каталожных-данных">Стратегия управления складом на основе каталожных данных</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Ситуация, когда тяжелая техника встает из-за отсутствия нужной детали, является критической для любого логистического предприятия. Механик или снабженец сталкивается с проблемой точной идентификации узла, особенно когда на руках есть только заводской номер агрегата или, что еще хуже, только визуальное описание неисправной детали.</p>
+<p>В условиях высокой плотности технического парка, где эксплуатируются машины разных поколений от классических моделей до современных КАМАЗ-54901, ручной перебор бумажных каталогов становится неэффективным. Ошибка в определении модификации двигателя или типа коробки передач ведет к простоям и финансовым потерям.</p>
+<p>Использование специализированных цифровых ресурсов, таких как база Planet Parts или сервис Железяка, позволяет сократить время поиска на 80%. Грамотное применение этих инструментов требует понимания структуры каталожных номеров и логики построения электронных схем.</p>
+
+<h2 id="архитектура-электронных-каталогов-и-баз-данных">Архитектура электронных каталогов и баз данных</h2>
+
+<p>Современные системы каталогизации строятся на принципах иерархического дробления узлов и агрегатов. При входе в систему пользователь сначала выбирает модель автомобиля, затем основную группу, подгруппу и конкретную деталь. В базах данных, подобных Planet Parts, эта структура жестко привязана к VIN-коду или заводскому номеру шасси.</p>
+<p>Важно понимать, что каталоги делятся на оригинальные (OEM) и кросс-каталоги заменителей. Оригинальные данные базируются на спецификациях завода-производителя, где каждой позиции присвоен уникальный артикул. Сервисы-агрегаторы, такие как Железяка, часто используют эти данные для подбора аналогов от сторонних производителей.</p>
+
+<h3>Структура каталожных номеров</h3>
+<p>Каталожный номер запчасти КАМАЗ имеет строго регламентированную структуру, знание которой необходимо для верификации данных в электронных системах. Номер состоит из одиннадцати цифр, разделенных на группы, каждая из которых несет смысловую нагрузку относительно принадлежности детали к определенной системе автомобиля.</p>
+<p>Первые три цифры обозначают базовую модель автомобиля, для которой предназначена деталь. Например, комбинация 5320 указывает на семейство бортовых автомобилей, а 740 — на семейство двигателей. Это ключевой параметр при фильтрации выдачи в каталоге, позволяющий отсечь неподходящие модификации.</p>
+<p>Следующие две цифры указывают на номер группы узлов по классификатору. Далее следует номер подгруппы и порядковый номер детали. Последние две или три цифры могут обозначать индекс изменения конструкции или исполнение. В системах типа <em>Planet Parts</em> эти данные используются для построения связей между модификациями.</p>
+
+<p>При работе с электронными каталогами часто возникает ситуация несовпадения номеров из-за модернизации производства. Завод может изменить конструкцию узла, сохранив функциональность, но изменив артикул. В таких случаях система может предлагать замену старого номера на новый, что требует внимательной проверки совместимости.</p>
+
+<h2 id="алгоритмы-поиска-и-верификации-данных">Алгоритмы поиска и верификации данных</h2>
+
+<p>Процесс поиска детали в цифровом каталоге начинается с ввода исходных данных. Наиболее надежным методом является поиск по VIN-коду, который позволяет системе автоматически определить комплектацию автомобиля. Однако, если VIN-код не читается или база не содержит данных по конкретному году выпуска, применяется поиск по номеру узла.</p>
+<p>При использовании сервиса Железяка или аналогичных платформ, важно правильно интерпретировать результаты выдачи. Система может предложить несколько вариантов исполнения одной и той же детали, различающихся производителем или годом выпуска. Критически важно сверять геометрические размеры и точки крепления.</p>
+
+<div class="checklist-block"><h4>📋 Поиск по VIN-коду</h4><ol><li><strong>Шаг 1.</strong> Введите VIN в поисковую строку</li><li><strong>Шаг 2.</strong> Выберите модель из выпадающего списка</li><li><strong>Шаг 3.</strong> Перейдите в раздел «Схемы узлов»</li><li><strong>Шаг 4.</strong> Найдите нужный агрегат по номеру группы</li></ol></div>
+
+<p>Если поиск по номеру не дает результатов, следует воспользоваться функцией поиска по названию или графическим схемам. Визуальная идентификация на чертежах часто помогает понять, в какой именно узел входит искомая деталь. Это особенно актуально для крепежных элементов и уплотнений.</p>
+
+<h3>Работа с кросс-кодами и аналогами</h3>
+<p>Одной из ключевых функций современных каталогов является возможность подбора аналогов. Оригинальные запчасти КАМАЗ часто имеют прямые замены от сторонних производителей, таких как <em>ZF</em>, <em>Cummins</em> или <em>Bosch</em>. Каталог позволяет найти эти соответствия, используя таблицу кросс-кодов.</p>
+<p>При подборе аналога необходимо обращать внимание на страну происхождения и сертификацию. Не все замены имеют полный ресурс оригинала, особенно в условиях тяжелых нагрузок. В технических спецификациях каталога обычно указывается класс качества детали.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>При подборе аналогов для двигателей экологического класса Евро-4 и выше убедитесь, что фильтр или датчик соответствует требованиям системы Common Rail.</p></div>
+
+<p>Использование кросс-кодов позволяет оптимизировать складские запасы, заменяя несколько оригинальных номеров одним универсальным аналогом. Однако для гарантийной техники такой подход может быть неприемлем, так как требует использования только оригинальных комплектующих.</p>
+
+<h2 id="технические-особенности-каталогизации-основных-узлов">Технические особенности каталогизации основных узлов</h2>
+
+<p>Различные системы автомобиля требуют разного подхода к каталогизации. Двигатель, трансмиссия и электрооборудование имеют свои специфические коды и правила замены. Понимание этих нюансов позволяет быстрее ориентироваться в огромных массивах данных электронных каталогов.</p>
+
+<h3>Двигатель и топливная аппаратура</h3>
+<p>Каталогизация двигателей семейства <em>КАМАЗ-740</em> и их модификаций является одной из самых сложных задач. Разнообразие исполнений (турбо, интеркулер, разные экологические классы) приводит к тому, что внешне похожие детали могут быть несовместимы. В электронных базах данные группируются по номеру двигателя.</p>
+<p>Особое внимание следует уделять топливной аппаратуре. Для двигателей с системой <code>Common Rail</code> каталоги содержат отдельные разделы для форсунок, насосов высокого давления и рамп. Ошибка в подборе даже одного уплотнительного кольца может привести к серьезной поломке.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип системы</th>
+<th>Ключевой параметр поиска</th>
+<th>Особенности каталога</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Механический ТНВД</td>
+<td>Номер секции насоса</td>
+<td>Высокая взаимозаменяемость плунжерных пар</td>
+</tr>
+<tr>
+<td>Common Rail</td>
+<td>Код форсунки</td>
+<td>Требуется точное соответствие калибровочному коду</td>
+</tr>
+</tbody>
+</table>
+
+<p>При работе с каталогами по двигателям часто встречается ситуация, когда один и тот же блок цилиндров может комплектоваться разными поршневыми группами. Электронные схемы позволяют увидеть состав конкретного двигателя по заводскому номеру, что исключает ошибку.</p>
+
+<h3>Трансмиссия и сцепление</h3>
+<p>Коробки передач КАМАЗ, особенно модели с делителем и КП ZF, имеют сложную внутреннюю структуру. В каталогах они разбиты на секции: картер, валы, синхронизаторы, управление. При заказе деталей важно указывать не только модель КП, но и ее модификацию, указанную на бирке.</p>
+<p>Сцепление также требует внимательного подхода. Диаметр диска, количество шлицов и тип нажимного механизма могут отличаться даже в пределах одной модели автомобиля. Сервис Железяка позволяет фильтровать результаты по диаметру диска и типу корзины.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Замена деталей сцепления без замены выжимного подшипника и проверки состояния маховика может привести к повторной поломке через короткий промежуток времени.</p></div>
+
+<h2 id="анализ-совместимости-и-типичные-ошибки">Анализ совместимости и типичные ошибки</h2>
+
+<p>Несмотря на развитость цифровых инструментов, человеческий фактор остается источником большинства ошибок. Неправильная интерпретация данных каталога или игнорирование примечаний системы приводит к закупке неликвидных запасных частей.</p>
+<p>Частой проблемой является игнирование даты производства детали. Резинотехнические изделия и жидкости имеют срок годности, который должен контролироваться. В каталогах иногда встречаются позиции, снятые с производства, но оставшиеся в базе.</p>
+
+<h3>Типичные ошибки при работе с каталогами</h3>
+<ol>
+<li><strong>Игнорирование модификаций двигателя</strong> — заказ деталей ГРМ или фильтрации без учета экологического класса (Евро-2, Евро-3, Евро-4), что приводит к несовместимости посадочных мест.</li>
+<li><strong>Путаница в сторонах установки</strong> — при заказе деталей подвески или тормозной системы (левый/правый суппорт, лонжерон) часто забывают уточнить сторону, ориентируясь только на картинку.</li>
+<li><strong>Неверное чтение номера</strong> — ошибки при вводе каталожного номера (цифра 0 вместо буквы О, пропуск знака тире), из-за чего система выдает результат для другой детали или ничего не находит.</li>
+<li><strong>Отсутствие проверки на взаимозаменяемость</strong> — belief that "similar looks" means compatibility, ignoring the catalog note about "supersedes" or "replaced by".</li>
+</ol>
+
+<div class="checklist-block"><h4>☑️ Проверка перед заказом</h4><label class="check-item"><input type="checkbox"><span>Совпадает ли номер двигателя с каталогом?</span></label><label class="check-item"><input type="checkbox"><span>Проверена ли сторона установки (левая/правая)?</span></label><label class="check-item"><input type="checkbox"><span>Есть ли примечание о замене номера?</span></label><label class="check-item"><input type="checkbox"><span>Указан ли правильный экологический класс?</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Еще одной распространенной ошибкой является reliance on visual similarity in photos provided by online catalogs. Photos can be generic or show a previous version of the part. Always cross-reference dimensions and part numbers.</p>
+
+<h2 id="оптимизация-процессов-снабжения">Оптимизация процессов снабжения</h2>
+
+<p>Эффективное использование каталогов КАМАЗ, Planet Parts и Железяка позволяет не только находить детали, но и планировать их закупку. Анализ частоты отказов узлов помогает сформировать оптимальный список неснижаемого запаса (НЗ) для автопарка.</p>
+<p>Интеграция каталожных данных с системами учета (1С, ERP) позволяет автоматизировать процесс заказа. При падении остатка ниже критического уровня система может сама инициировать поиск по каталогу и формировать заявку поставщику.</p>
+
+<div class="attention-box attention-info"><h4>Автоматизация поиска</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Скорость обработки запроса</li><li>✅ Снижение человеческих ошибок</li><li>✅ Возможность поиска аналогов</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Зависимость от актуальности базы</li><li>❌ Необходимость обучения персонала</li><li>❌ Риски при сбоях в работе сервера</li></ul></div></div></div>
+
+<p>Важным аспектом является ведение собственной базы часто заменяемых деталей с привязкой к конкретным VIN-ам автомобилей парка. Это позволяет мгновенно реагировать на поломки, имея под рукой точные номера необходимых компонентов.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Данные в электронных каталогах могут обновляться с задержкой. Всегда проверяйте актуальность информации у официального дилера или на сайте производителя перед оформлением крупного заказа.</p>
+</blockquote>
+
+<p>Использование мобильных версий каталогов позволяет механикам в поле быстро получать информацию о детали. Это сокращает время простоя техники, так как не требуется возвращаться в офис для работы с стационарной базой данных.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> При работе с каталогами электрооборудования убедитесь, что схема соответствует году выпуска автомобиля. Проводка и блоки управления часто меняются при рестайлинге модели.</p>
+</blockquote>
+
+<h2 id="стратегия-управления-складом-на-основе-каталожных-данных">Стратегия управления складом на основе каталожных данных</h2>
+
+<p>Грамотное использование каталогов трансформируется в эффективное управление складом. Понимание структуры узлов позволяет группировать запчасти не хаотично, а по функциональным системам, что ускоряет их поиск и выдачу.</p>
+<p>Регулярный аудит складских остатков через сверку с актуальными каталогами помогает выявлять неликвиды. Детали, которые больше не подходят к эксплуатируемым моделям или заменены новыми артикулами, должны быть своевременно реализованы или утилизированы.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Создавайте QR-коды для основных узлов автомобиля, содержащие ссылку на страницу в электронном каталоге. Это упростит жизнь механикам при проведении ТО.</p></div>
+
+<p>Внедрение культуры работы с электронными каталогами требует времени и обучения персонала. Однако результат в виде снижения количества ошибок при заказе и сокращения времени ремонта полностью окупает затраты на внедрение таких систем.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Эффективная работа с каталогами КАМАЗ требует понимания структуры номеров, внимательной проверки совместимости и регулярного обновления баз данных.</p></div></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-электронных-каталогов-и-баз-данных">Архитектура электронных каталогов и баз данных</a></li><li><a href="#алгоритмы-поиска-и-верификации-данных">Алгоритмы поиска и верификации данных</a></li><li><a href="#технические-особенности-каталогизации-основных-узлов">Технические особенности каталогизации основных узлов</a></li><li><a href="#анализ-совместимости-и-типичные-ошибки">Анализ совместимости и типичные ошибки</a></li><li><a href="#оптимизация-процессов-снабжения">Оптимизация процессов снабжения</a></li><li><a href="#стратегия-управления-складом-на-основе-каталожных-данных">Стратегия управления складом на основе каталожных данных</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/g/gt/gtss-kamaz-65115.html" class="related-card">ГЦС КАМАЗ 65115: диагностика, коды ошибок и ремонт</a></li><li><a href="/articles/r/ra/raspinovka-edc7-kamaz.html" class="related-card">Распиновка EDC7 Камаз: схемы, контакты и диагностика</a></li><li><a href="/articles/a/al/alisa-kak-pochinit-kamaz.html" class="related-card">Как починить КАМАЗ: диагностика и устранение неисправностей</a></li><li><a href="/articles/5/52/523613-fmi-5-oshibka-kamaz.html" class="related-card">Ошибка 523613 FMI 5 КАМАЗ: расшифровка и методы устранения</a></li><li><a href="/articles/k/ka/kak-snyat-blokirovku-na-kamaze.html" class="related-card">Как снять блокировку на КАМАЗе: диагностика и разблокировка систем</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/g/gt/gtss-kamaz-65115.html" class="related-bottom-card"><span class="related-bottom-title">ГЦС КАМАЗ 65115: диагностика, коды ошибок и ремонт</span><span class="related-bottom-desc">Полная инструкция по ГЦС КАМАЗ 65115: расшифровка кодов ошибок, диагностика датчиков, устранение неи</span></a><a href="/articles/r/ra/raspinovka-edc7-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Распиновка EDC7 Камаз: схемы, контакты и диагностика</span><span class="related-bottom-desc">Подробная распиновка ЭБУ EDC7 для Камаз. Таблицы контактов, цвета проводов, схемы диагностики и устр</span></a><a href="/articles/a/al/alisa-kak-pochinit-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Как починить КАМАЗ: диагностика и устранение неисправностей</span><span class="related-bottom-desc">Подробная инструкция по ремонту КАМАЗа своими руками. Диагностика двигателя, устранение ошибок и тип</span></a><a href="/articles/5/52/523613-fmi-5-oshibka-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка 523613 FMI 5 КАМАЗ: расшифровка и методы устранения</span><span class="related-bottom-desc">Полная расшифровка кода ошибки 523613 FMI 5 на грузовиках КАМАЗ. Причины обрыва цепи, диагностика фо</span></a><a href="/articles/k/ka/kak-snyat-blokirovku-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как снять блокировку на КАМАЗе: диагностика и разблокировка систем</span><span class="related-bottom-desc">Подробная инструкция по снятию блокировок двигателя КАМАЗ. Методы сброса ошибок, разблокировки ЭБУ и</span></a><a href="/articles/d/di/diagnostika-na-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Диагностика КАМАЗ: коды ошибок, сканеры и расшифровка</span><span class="related-bottom-desc">Полная инструкция по диагностике грузовиков КАМАЗ. Подключение сканера, расшифровка кодов ошибок, ра</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

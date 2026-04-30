@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт — Про КАМАЗ</title>
+    <meta name="description" content="Полная техническая инструкция по системе Common Rail КАМАЗ. Диагностика, коды ошибок Bosch, регулировка клапанов, устранение утечек и настройка форсунок.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/s/si/sistema-kommon-rejl-kamaz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт">
+    <meta property="og:description" content="Полная техническая инструкция по системе Common Rail КАМАЗ. Диагностика, коды ошибок Bosch, регулировка клапанов, устранение утечек и настройка форсунок.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Система Common Rail КАМАЗ: Диагностика, Ошибки и Ремонт</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-и-принцип-работы-топливной-системы">Архитектура и принцип работы топливной системы</a></li><li><a href="#диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</a></li><li><a href="#регулировка-тепловых-зазоров-клапанов">Регулировка тепловых зазоров клапанов</a></li><li><a href="#методы-проверки-и-восстановления-форсунок">Методы проверки и восстановления форсунок</a></li><li><a href="#типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Внезапный переход двигателя в аварийный режим, потеря мощности при полной загрузке или характерный металлический стук на холостых оборотах — именно с такими симптомами чаще всего сталкиваются водители и механики при неисправностях топливной аппаратуры.</p>
+<p>Игнорирование первых признаков нестабильной работы топливной системы высокого давления может привести к дорогостоящему ремонту, вплоть до замены плунжерных пар или всего топливного насоса.</p>
+<p>Современные двигатели КАМАЗ, оснащенные системой <em>Bosch Common Rail</em>, требуют точной диагностики и соблюдения строгих технологических норм при обслуживании.</p>
+
+<h2 id="архитектура-и-принцип-работы-топливной-системы">Архитектура и принцип работы топливной системы</h2>
+
+<p>Фундаментальное отличие системы <em>Common Rail</em> от классических рядных насосов заключается в разделении процессов генерации давления и впрыска топлива.</p>
+<p>Высокое давление создается независимо от частоты вращения коленчатого вала и режима работы двигателя, что позволяет обеспечить многократный впрыск и точное дозирование.</p>
+<p>Основными элементами контура высокого давления являются топливный насос, рампа (аккумулятор), форсунки и блок управления двигателем <em>EDC7UC31</em> или <em>EDC17</em>.</p>
+
+<h3>Функционал топливного насоса высокого давления</h3>
+
+<p>На двигателях КАМАЗ преимущественно используются насосы серии <em>Bosch CP3.3</em> или <em>CP1H</em>, которые обеспечивают подачу топлива в рампу под давлением до 1600 бар.</p>
+<p>Конструкция насоса включает в себя плунжерную секцию, регулятор давления и подкачивающий насос низкого давления, интегрированный в корпус.</p>
+<p>Важно понимать, что смазка трущихся пар насоса осуществляется исключительно дизельным топливом, поэтому чистота солярки является критическим параметром.</p>
+<p>При выходе из строя регулятора давления насос может не развивать требуемое давление, что фиксируется ЭБУ как аварийная ситуация.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Эксплуатация двигателя с загрязненными топливными фильтрами приводит к быстрому износу плунжерных пар и выходу из строя форсунок.</p>
+</blockquote>
+
+<h3>Устройство и работа электромагнитных форсунок</h3>
+
+<p>Форсунки системы <em>Common Rail</em> являются исполнительными механизмами, управляемыми электронным блоком с высокой точностью.</p>
+<p>Внутри форсунки находится мультипликатор, который усиливает давление топлива перед впрыском в камеру сгорания.</p>
+<p>Управление иглой форсунки осуществляется электромагнитным клапаном, открывающим сливной канал и создающим перепад давления.</p>
+<p>Время отклика клапана составляет доли миллисекунды, что позволяет реализовать до 5 фаз впрыска за один рабочий цикл.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях КАМАЗ-540 и 740.63 чаще всего применяются форсунки Bosch с кодами 0 445 110 263 или 0 445 110 276.</p></div>
+
+<p>Герметичность распылителя напрямую влияет на качество смесеобразования и дымность выхлопа.</p>
+
+<h2 id="диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</h2>
+
+<p>Процесс выявления дефектов в системе топливоподачи начинается со считывания кодов неисправностей, сохраненных в памяти контроллера.</p>
+<p>Для двигателей КАМАЗ стандартом является использование диагностических сканеров, поддерживающих протокол <em>KWP2000</em> или <em>UDS</em>.</p>
+<p>Анализировать следует не только статические ошибки, но и параметры в реальном времени, такие как коррекции по цилиндрам и давление в рампе.</p>
+
+<h3>Интерпретация параметров в реальном времени</h3>
+
+<p>При подключении диагностического оборудования в первую очередь проверяется соответствие фактического давления в рампе заданному.</p>
+<p>Разница между этими параметрами не должна превышать 50 бар в установившемся режиме работы.</p>
+<p>Также параметр «коррекция топливоподачи по цилиндрам», который показывает отклонение работы каждой форсунки от эталонной.</p>
+<p>Если коррекция выходит за пределы ±2.0 мг/ход, это свидетельствует о механическом износе распылителя или загрязнении клапана.</p>
+
+<div class="checklist-block"><h4>📋 Первичная диагностика системы</h4><ol><li><strong>Шаг 1.</strong> Подключите диагностический сканер к разъему OBD-II</li><li><strong>Шаг 2.</strong> Запустите двигатель и прогрейте до рабочей температуры</li><li><strong>Шаг 3.</strong> Считайте сохраненные коды ошибок</li><li><strong>Шаг 4.</strong> Проверьте параметры «Давление в рампе» и «Коррекции»</li></ol></div>
+
+<p>Нестабильные показания датчика давления могут указывать на проблемы с проводкой или самим сенсором.</p>
+
+<h3>Типичные коды ошибок и их значение</h3>
+
+<p>Система самодиагностики генерирует коды, начинающиеся с буквы P, которые указывают на конкретный узел.</p>
+<p>Наиболее часто встречающиеся ошибки связаны с достижением предельных значений давления или рассогласованием сигналов.</p>
+
+<table>
+<thead>
+<tr>
+<th>Код ошибки</th>
+<th>Описание неисправности</th>
+<th>Вероятная причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0087</td>
+<td>Низкое давление в топливной рампе</td>
+<td>Засорен фильтр, неисправен насос или регулятор</td>
+</tr>
+<tr>
+<td>P0088</td>
+<td>Слишком высокое давление в рампе</td>
+<td>Неисправность регулятора давления или проводки</td>
+</tr>
+<tr>
+<td>P0191</td>
+<td>Нестабильный сигнал датчика давления</td>
+<td>Обрыв цепи, окисление контактов, неисправность датчика</td>
+</tr>
+</tbody>
+</table>
+
+<p>Наличие ошибки P0087 часто сопровождается переходом двигателя в режим «Limp Home» с ограничением мощности.</p>
+<p>Ошибка P0191 может возникать при повреждении жгута проводки, идущего к рампе, из-за вибрации.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Сброс ошибок без устранения физической причины неисправности приведет к их повторному появлению через несколько циклов работы двигателя.</p></div>
+
+<h2 id="регулировка-тепловых-зазоров-клапанов">Регулировка тепловых зазоров клапанов</h2>
+
+<p>Правильная настройка тепловых зазоров в газораспределительном механизме критически важна для стабильной работы двигателя.</p>
+<p>Нарушение зазоров приводит к изменению фаз газораспределения, что напрямую влияет на эффективность работы системы <em>Common Rail</em>.</p>
+<p>Процедура регулировки проводится на холодном двигателе, когда температура охлаждающей жидкости не превышает 30-40 градусов.</p>
+
+<h3>Порядок проведения работ</h3>
+
+<p>Для доступа к клапанному механизму необходимо демонтировать крышку головки блока цилиндров.</p>
+<p>Поворотом коленчатого вала совмещают метки на маховике и картере сцепления, устанавливая поршень первого цилиндра в ВМТ такта сжатия.</p>
+<p>Регулировка производится подбором регулировочных шайб, толщина которых определяет величину зазора.</p>
+<p>После установки новых шайб необходимо провернуть коленчатый вал на несколько оборотов и повторно проверить зазоры.</p>
+
+<div class="checklist-block"><h4>☑️ Контрольный список регулировки клапанов</h4><label class="check-item"><input type="checkbox"><span>Проверка температуры двигателя (только холодный)</span></label><label class="check-item"><input type="checkbox"><span>Очистка поверхности головки от грязи перед снятием крышки</span></label><label class="check-item"><input type="checkbox"><span>Использование только новых прокладок крышки ГБЦ</span></label><label class="check-item"><input type="checkbox"><span>Проверка зазоров щупом с усилием не более 0.1 кгс</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Для впускных клапанов номинальный зазор составляет 0.3 мм, а для выпускных — 0.4 мм (значения могут отличаться для модификаций <em>Евро-4</em> и <em>Евро-5</em>).</p>
+
+<h3>Влияние зазоров на работу топливной системы</h3>
+
+<p>Слишком малый зазор впускных клапанов может приводить к неполному сгоранию топлива и повышенному нагарообразованию.</p>
+<p>Увеличенный зазор выпускных клапанов вызывает характерный цокающий звук и может привести к прогоранию кромки клапана.</p>
+<p>В обоих случаях ЭБУ получает некорректные данные от датчиков кислорода и пытается компенсировать это изменением топливоподачи.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Регулировка клапанов на прогретом двигателе приведет к неправильным данным и последующему стуку клапанов после остывания.</p>
+</blockquote>
+
+<h2 id="методы-проверки-и-восстановления-форсунок">Методы проверки и восстановления форсунок</h2>
+
+<p>Проверка работоспособности форсунок может производиться как на двигателе, так и на специализированном стенде.</p>
+<p>Наиболее точным методом является диагностика на стенде, где имитируются различные режимы работы и измеряется производительность.</p>
+<p>В условиях сервиса часто применяется метод проверки по возврату топлива («обратке»), который позволяет выявить негерметичность клапана.</p>
+
+<h3>Диагностика по сливу топлива</h3>
+
+<p>Суть метода заключается в измерении объема топлива, перетекающего в сливную магистраль за определенное время работы.</p>
+<p>Если через одну из форсунок сливается значительно больше топлива, чем через другие, значит, ее запорный клапан не держит давление.</p>
+<p>Для проведения теста отсоединяют сливные трубки от каждой форсунки и подключают мерные емкости.</p>
+<p>Двигатель запускают и дают поработать на холостом ходу в течение одной минуты, после чего сравнивают объемы.</p>
+
+<div class="attention-box attention-info"><h4>Сравнение методов диагностики</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Точность стендовой диагностики</li><li>✅ Возможность проверки всех режимов впрыска</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Необходимость дорогостоящего оборудования</li><li>❌ Длительное время демонтажа</li></ul></div></div></div>
+
+<p>Разница в объемах слива более 30-40% между цилиндрами считается критической и требует замены или ремонта узла.</p>
+
+<h3>Восстановление распылителей</h3>
+
+<p>Восстановление форсунок возможно только в специализированных условиях с использованием ультразвуковых ванн и испытательных стендов.</p>
+<p>Замене подлежат распылители, иглы и электромагнитные клапаны, выработавшие свой ресурс.</p>
+<p>После сборки каждая форсунка проходит кодировку, и новый код вносится в память ЭБУ.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Норма</th>
+<th>Критическое значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Давление начала впрыска</td>
+<td>Зависит от модели (обычно 250-300 бар)</td>
+<td>Отклонение более 10%</td>
+</tr>
+<tr>
+<td>Герметичность иглы</td>
+<td>Каплепадение отсутствует</td>
+<td>Наличие струйки или частые капли</td>
+</tr>
+<tr>
+<td>Форма факела</td>
+<td>Конусообразный, симметричный</td>
+<td>Наличие «языков» или смещение в сторону</td>
+</tr>
+</tbody>
+</table>
+
+<p>Качество распыла топлива напрямую определяет экологичность выхлопа и ресурс поршневой группы.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>При замене форсунок обязательно меняйте медные шайбы и уплотнительные кольца, смазывая их чистым дизельным топливом перед установкой.</p></div>
+
+<h2 id="типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</h2>
+
+<p>В процессе эксплуатации и ремонта системы <em>Common Rail</em> часто допускаются ошибки, которые сокращают ресурс дорогостоящих узлов.</p>
+<p>Одной из распространенных проблем является использование некачественных уплотнителей или их повторное применение.</p>
+<p>Также часто игнорируется состояние топливных магистралей низкого давления, через которые может подсасываться воздух.</p>
+
+<ol>
+<li><strong>Попытка промывки форсунок «вслепую»</strong> — добавление чистящих присадок в бак без предварительной диагностики может привести к отслоению отложений и полному заклиниванию клапанов.</li>
+<li><strong>Использование герметиков при монтаже</strong> — применение силиконовых герметиков в местах соединения топливных трубок высокого давления категорически запрещено, так как частицы герметика выведут насос из строя.</li>
+<li><strong>Игнорирование замены фильтров</strong> — установка фильтров сомнительного происхождения с низким качеством фильтрации (выше 5 микрон) убивает прецизионные пары за 10-20 тысяч километров.</li>
+<li><strong>Некорректное кодирование</strong> — отказ от прописки кодов новых форсунок в ЭБУ приводит к некорректной работе двигателя и повышенному расходу топлива.</li>
+</ol>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Соблюдение чистоты при работе с топливной аппаратурой и использование оригинальных запчастей — ключ к долгой службе системы Common Rail.</p></div>
+
+<p>Соблюдение регламентных работ и использование качественных расходных материалов позволяет значительно продлить жизнь двигателю.</p>
+<p>Своевременная диагностика позволяет выявить проблемы на ранней стадии, избегая catastrophic failure основных узлов.</p>
+<p>Система <em>Common Rail</em> на КАМАЗах зарекомендовала себя как надежный агрегат при условии грамотного технического обслуживания.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Всегда используйте только сертифицированное дизельное топливо, соответствующее сезону, чтобы избежать парафинизации фильтров зимой.</p></div>
+
+<p>Понимание принципов работы и взаимодействия компонентов системы позволяет эффективно устранять неисправности.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-и-принцип-работы-топливной-системы">Архитектура и принцип работы топливной системы</a></li><li><a href="#диагностика-неисправностей-и-коды-ошибок">Диагностика неисправностей и коды ошибок</a></li><li><a href="#регулировка-тепловых-зазоров-клапанов">Регулировка тепловых зазоров клапанов</a></li><li><a href="#методы-проверки-и-восстановления-форсунок">Методы проверки и восстановления форсунок</a></li><li><a href="#типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/s/sa/sazhevyj-filtr-kamaz.html" class="related-card">Сажевый фильтр КАМАЗ: устройство, диагностика и методы регенерации</a></li><li><a href="/articles/z/za/zamena-viskomufty-kamaz-kamminz.html" class="related-card">Замена вискомуфты Камаз Камминз: инструкция и диагностика</a></li><li><a href="/articles/p/po/podklyuchenie-datchika-davleniya-masla-kamaz.html" class="related-card">Замена датчика давления масла Камаз: пошаговая инструкция</a></li><li><a href="/articles/r/ra/razborka-dvigatelya-kamaz.html" class="related-card">Разборка двигателя КАМАЗ 740: пошаговая инструкция и дефектовка</a></li><li><a href="/articles/s/sa/sapunit-dvigatel-kamaz.html" class="related-card">Сапунит двигатель КамАЗ: причины, диагностика и ремонт</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/s/sa/sazhevyj-filtr-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Сажевый фильтр КАМАЗ: устройство, диагностика и методы регенерации</span><span class="related-bottom-desc">Полная инструкция по сажевому фильтру КАМАЗ: признаки неисправности, коды ошибок, удаление, методы п</span></a><a href="/articles/z/za/zamena-viskomufty-kamaz-kamminz.html" class="related-bottom-card"><span class="related-bottom-title">Замена вискомуфты Камаз Камминз: инструкция и диагностика</span><span class="related-bottom-desc">Техническое руководство по замене вискомуфты Камаз с двигателем Cummins. Признаки неисправности, выб</span></a><a href="/articles/p/po/podklyuchenie-datchika-davleniya-masla-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Замена датчика давления масла Камаз: пошаговая инструкция</span><span class="related-bottom-desc">Техническое руководство по установке датчика давления масла на Камаз. Схема подключения, проверка це</span></a><a href="/articles/r/ra/razborka-dvigatelya-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Разборка двигателя КАМАЗ 740: пошаговая инструкция и дефектовка</span><span class="related-bottom-desc">Полная инструкция по разборке дизельного двигателя КАМАЗ. Моменты затяжки, схемы демонтажа, правила </span></a><a href="/articles/s/sa/sapunit-dvigatel-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Сапунит двигатель КамАЗ: причины, диагностика и ремонт</span><span class="related-bottom-desc">Подробный разбор причин, почему сапунит двигатель КамАЗ. Методы диагностики ЦПГ, проверка компрессии</span></a><a href="/articles/d/dv/dvigatel-libkher-na-kamaz-k5.html" class="related-bottom-card"><span class="related-bottom-title">Двигатель Liebherr на КамАЗ К5: характеристики, устройство, настройка</span><span class="related-bottom-desc">Полный обзор двигателя Liebherr на грузовике КамАЗ К5. Технические параметры, устройство системы Com</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

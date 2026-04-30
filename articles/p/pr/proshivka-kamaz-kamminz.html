@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Прошивка КАМАЗ Cummins: настройка и калибровка ЭБУ — Про КАМАЗ</title>
+    <meta name="description" content="Инструкция по перепрошивке и калибровке ЭБУ Cummins ISF 2.8 и ISBe. Методы OBD2 и Bench, софт Insite, устранение ошибок.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/p/pr/proshivka-kamaz-kamminz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Прошивка КАМАЗ Cummins: настройка и калибровка ЭБУ">
+    <meta property="og:description" content="Инструкция по перепрошивке и калибровке ЭБУ Cummins ISF 2.8 и ISBe. Методы OBD2 и Bench, софт Insite, устранение ошибок.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Прошивка КАМАЗ Cummins: настройка и калибровка ЭБУ</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Прошивка двигателя Cummins на КАМАЗ: методы и программное обеспечение</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#подготовка-оборудования-и-выбор-интерфейса">Подготовка оборудования и выбор интерфейса</a></li><li><a href="#программное-обеспечение-для-калибровки-и-прошивки">Программное обеспечение для калибровки и прошивки</a></li><li><a href="#технология-прошивки-через-obd2-и-bench-метод">Технология прошивки через OBD2 и Bench-метод</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Владельцы и обслуживающий персонал автомобилей КАМАЗ, оснащенных двигателями Cummins серий ISF 2.8 или ISBe 6.7, часто сталкиваются с необходимостью программного вмешательства в работу электронного блока управления (ЭБУ). Ситуации могут быть различными: от критического выхода из строя контроллера после скачка напряжения или неудачной попытки чип-тюнинга до необходимости активации скрытых функций, таких как отключение EGR, или восстановления заводских параметров после замены форсунок. Проблема усугубляется тем, что стандартные диагностические сканеры часто не имеют доступа к полному функционалу перепрограммирования, требуя специализированного оборудования.</p>
+
+<p>Процесс записи программного обеспечения (ПО) в память ЭБУ требует высокой точности, так как прерывание передачи данных на любом этапе может привести к полной неработоспособности двигателя. В отличие от механического ремонта, здесь ошибки не терпят компромиссов: неверная контрольная сумма (checksum) или обрыв связи по шине CAN/J1939 превращают блок в «кирпич». Поэтому перед началом любых манипуляций необходимо четко понимать архитектуру системы и иметь под рукой надежный источник питания, способный поддерживать напряжение в строго заданных пределах.</p>
+
+<p>На практике подготовка рабочего места занимает больше времени, чем сама процедура прошивки. Требуется обеспечить стабильное соединение между ноутбуком и диагностическим интерфейсом, а также между интерфейсом и ЭБУ двигателя. Любые помехи в бортовой сети, работающие потребители энергии (фары, печка, стеклоочистители) должны быть исключены, так как падение напряжения ниже 11.5 В во время записи флеш-памяти гарантированно приводит к повреждению загрузчика. Если процедура проводится вне автомобиля (на столе), имитация сигналов датчиков коленвала и распредвала становится обязательным условием для запуска двигателя после прошивки.</p>
+
+<h2 id="подготовка-оборудования-и-выбор-интерфейса">Подготовка оборудования и выбор интерфейса</h2>
+
+<p>Первым этапом является выбор аппаратного обеспечения, способного обеспечить стабильный канал связи с контроллером Cummins. Стандартные OBD2-адаптеры, используемые для чтения ошибок, часто не подходят для записи больших объемов данных из-за низкой скорости и отсутствия поддержки специфических протоколов безопасности, требуемых при перепрошивке. Для профессиональной работы применяются специализированные интерфейсы, такие как <em>MXPA</em>, <em>OpenPort 2.0</em> или оригинальный дилерский адаптер <em>Cummins INSITE</em> (ранее Nexiq). Важно убедиться, что драйверы устройства корректно установлены в диспетчере задач Windows и не конфликтуют с другим ПО.</p>
+
+<p>Качество соединения определяется не только адаптером, но и состоянием диагностического разъема автомобиля. На грузовиках КАМАЗ контакты в разъеме OBD2 часто окисляются или имеют плохой контакт из-за вибраций. Перед подключением ноутбука рекомендуется зачистить контакты и проверить наличие напряжения на пинах питания диагностической линии. Если используется метод прошивки «на столе» (Bench), необходимо собрать жгут проводов, соответствующий распиновке конкретного ЭБУ, будь то <em>Bosch</em> или <em>Continental</em>, так как pinout у них различается.</p>
+
+<p>Критически важным элементом является источник питания. При прошивке через разъем автомобиля штатного аккумулятора может быть недостаточно, особенно если он старый или разряжен. Профессионалы используют блок питания с функцией стабилизации, выставив напряжение 13.5–14.0 В и ток не менее 10–15 Ампер. Это компенсирует работу топливного насоса и форсунок в момент попыток запуска или калибровки, предотвращая просадки, которые могут фатально сказаться на процессе записи ПО.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Использование нестабильного источника питания во время записи прошивки в 90% случаев приводит к повреждению загрузочной области ЭБУ, восстановление которой возможно только на программаторе BDM.</p></div>
+
+<h3>Совместимость версий ЭБУ и адаптеров</h3>
+
+<p>Не все адаптеры одинаково работают с разными поколениями блоков управления Cummins. Например, для старых версий ПО может потребоваться интерфейс, поддерживающий протокол J1708, в то время как современные системы ISF 2.8 Евро-4 и Евро-5 работают исключительно по высокоскоростной шине CAN 2.0B. Ошибка в выборе оборудования приведет к тому, что программа-загрузчик просто не увидит блок управления, выдав ошибку связи.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип ЭБУ Cummins</th>
+<th>Рекомендуемый интерфейс</th>
+<th>Протокол связи</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CM2150 / CM2180</td>
+<td>Nexiq USB-Link 2, MXPA</td>
+<td>J1939 (CAN)</td>
+</tr>
+<tr>
+<td>ISF 2.8 (Евро-3)</td>
+<td>OpenPort 2.0, K-Line адаптер</td>
+<td>J1708 / K-Line</td>
+</tr>
+<tr>
+<td>ISBe 6.7 (Евро-4/5)</td>
+<p>>Cummins INSITE Adapter</td></p>
+<td>J1939 (CAN High Speed)</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Для работы с новейшими блоками управления Euro-5 и Euro-6 может потребоваться обновление драйверов интерфейса до последней версии, доступной на сайте производителя оборудования.</p></div>
+
+<h2 id="программное-обеспечение-для-калибровки-и-прошивки">Программное обеспечение для калибровки и прошивки</h2>
+
+<p>Основным инструментом для работы с электроникой Cummins является программный комплекс <em>Cummins INSITE</em>. Это дилерское ПО позволяет не только считывать и стирать ошибки, но и выполнять калибровки, изменять параметры (параметрирование) и перепрошивать ЭБУ. Существует также альтернативное ПО, такое как <em>OpenDiag</em> или специализированные загрузчики (например, <em>BitBox</em>, <em>PCMflash</em>), которые часто используются для клонирования блоков или записи модифицированных прошивок (chiptuning). Выбор программы зависит от конечной цели: восстановление заводских параметров или изменение характеристик двигателя.</p>
+
+<p>При использовании <em>Cummins INSITE</em> важно правильно выбрать рабочую среду. Для старых версий (до 8.x) часто требовалась операционная система Windows XP или 7 в режиме совместимости, тогда как новые версии (9.x и выше) стабильно работают на Windows 10. Установка программы требует внимательности: сначала инсталлируются драйверы адаптера, затем сама среда, после чего производится активация лицензии. Неправильная последовательность может привести к тому, что программа не увидит подключенное оборудование.</p>
+
+<p>Файлы прошивок (калибровок) имеют расширение <code>.cal</code> или <code>.bin</code> и должны строго соответствовать номеру детали (Part Number) и ревизии аппаратной части ЭБУ. Загрузка неподходящей калибровки, даже если процесс записи пройдет успешно, может привести к некорректной работе двигателя, дерганью, повышенному расходу топлива или невозможности запуска. Базы данных калибровок (QuickServe Online) позволяют подобрать точную версию ПО по VIN-коду автомобиля или серийному номеру двигателя.</p>
+
+<div class="checklist-block"><h4>📋 Установка связи в Cummins INSITE</h4><ol><li><strong>Шаг 1.</strong> Запустите программу и выберите «Рабочее место»</li><li><strong>Шаг 2.</strong> Нажмите «Подключиться» и выберите тип подключения «Адаптер»</li><li><strong>Шаг 3.</strong> В списке устройств выберите ваш интерфейс (например, RP1210)</li><li><strong>Шаг 4.</strong> Нажмите «Далее» и дождитесь определения параметров ЭБУ</li></ol></div>
+
+<h3>Работа с базами калибровок</h3>
+
+<p>Поиск правильной прошивки — задача, требующая внимательности. В базе данных Cummins каждая калибровка имеет уникальный идентификатор. При поиске по VIN-коду система выдает список всех когда-либо установленных на этот двигатель обновлений. Важно выбирать последнюю рекомендованную версию, так как она содержит исправления ошибок предыдущих ревизий и оптимизированные карты топливоподачи. Однако, если цель — клонирование исправного блока на неисправный, необходимо искать именно ту версию, которая стояла originally, чтобы избежать конфликтов с иммобилайзером или другими системами автомобиля.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Использование модифицированных прошивок («евро-2», «отключение AdBlue») может привести к нарушению экологических норм и потере гарантии на двигатель. Все изменения вносятся пользователем на свой страх и риск.</p>
+</blockquote>
+
+<h2 id="технология-прошивки-через-obd2-и-bench-метод">Технология прошивки через OBD2 и Bench-метод</h2>
+
+<p>Процесс прошивки делится на два основных метода: через диагностический разъем (OBD2) и напрямую на столе (Bench). Метод OBD2 является штатным и наименее рискованным для целостности разъема, но он зависим от состояния проводки автомобиля. Если ЭБУ не выходит на связь через разъем из-за повреждения цепей CAN-шины, приходится прибегать к методу Bench, который подразумевает снятие блока и подключение напрямую к его контактам.</p>
+
+<p>При прошивке через OBD2 алгоритм действий стандартизирован. После подключения адаптера и запуска ПО выбирается функция «Программирование ЭБУ» или «Flash Calibration». Система автоматически считывает текущую версию ПО и сравнивает ее с загруженным файлом. Если версии отличаются, начинается процесс стирания старой памяти и записи новой. В это время на экране отображается прогресс-бар. Категорически запрещается прерывать процесс, выключать зажигание или шевелить провода.</p>
+
+<p>Метод Bench требует навыков в электронике и наличия переходников. ЭБУ извлекается, вскрывается (если требуется доступ к плате, хотя чаще достаточно подключения к внешнему разъему), и контакты соединяются с адаптером согласно схеме (Pinout). Для блоков <em>Bosch</em> часто требуется разблокировка (Unprotect) перед записью, что делается через BDM-разъем на плате. Этот метод используется преимущественно при восстановлении «кирпичей» или клонировании блоков, когда штатный доступ по OBD заблокирован или невозможен.</p>
+
+<ol>
+<li>Подключите адаптер к ЭБУ и запустите программу-загрузчик (например, PCMflash или BitBox).</li>
+<li>Выберите тип подключения (BDM, Bootmode или OBD) и модель процессора.</li></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#подготовка-оборудования-и-выбор-интерфейса">Подготовка оборудования и выбор интерфейса</a></li><li><a href="#программное-обеспечение-для-калибровки-и-прошивки">Программное обеспечение для калибровки и прошивки</a></li><li><a href="#технология-прошивки-через-obd2-и-bench-метод">Технология прошивки через OBD2 и Bench-метод</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/t/tr/trubka-obratki-kamaz-evro-4.html" class="related-card">Трубка обратки Камаз Евро 4: устройство, неисправности, замена</a></li><li><a href="/articles/k/ka/kak-ustanovit-kompressor-na-kamaz.html" class="related-card">Установка компрессора на КАМАЗ: пошаговая инструкция и схемы</a></li><li><a href="/articles/y/ya/yamz-238-ili-kamaz-740.html" class="related-card">Двигатель ЯМЗ-238 или КАМАЗ-740: сравнение для выбора</a></li><li><a href="/articles/r/re/remen-grm-na-kamaz.html" class="related-card">Ремонт ГРМ КамАЗ: замена ремня, метки и натяжка</a></li><li><a href="/articles/c/ch/chekhol-na-vozdushnyj-filtr-kamaz.html" class="related-card">Чехол на воздушный фильтр КАМАЗ: установка, виды и защита двигателя</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/t/tr/trubka-obratki-kamaz-evro-4.html" class="related-bottom-card"><span class="related-bottom-title">Трубка обратки Камаз Евро 4: устройство, неисправности, замена</span><span class="related-bottom-desc">Полное руководство по системе возврата топлива Камаз Евро 4. Диагностика трубок обратки, симптомы за</span></a><a href="/articles/k/ka/kak-ustanovit-kompressor-na-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Установка компрессора на КАМАЗ: пошаговая инструкция и схемы</span><span class="related-bottom-desc">Подробная инструкция по установке компрессора на КАМАЗ. Схемы подключения, моменты затяжки, проверка</span></a><a href="/articles/y/ya/yamz-238-ili-kamaz-740.html" class="related-bottom-card"><span class="related-bottom-title">Двигатель ЯМЗ-238 или КАМАЗ-740: сравнение для выбора</span><span class="related-bottom-desc">Подробный анализ двигателей ЯМЗ-238 и КАМАЗ-740. Сравнение ресурса, расхода топлива, ремонтопригодно</span></a><a href="/articles/r/re/remen-grm-na-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ремонт ГРМ КамАЗ: замена ремня, метки и натяжка</span><span class="related-bottom-desc">Полная инструкция по замене ремня ГРМ на КамАЗ. Проверка натяжения, установка меток, выбор аналогов </span></a><a href="/articles/c/ch/chekhol-na-vozdushnyj-filtr-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Чехол на воздушный фильтр КАМАЗ: установка, виды и защита двигателя</span><span class="related-bottom-desc">Подробная инструкция по выбору и установке защитного чехла на воздушный фильтр КАМАЗ. Защита двигате</span></a><a href="/articles/p/po/porshnekomplekt-kamaz-740.html" class="related-bottom-card"><span class="related-bottom-title">Поршнекомплект КАМАЗ 740: Выбор, установка и ресурс</span><span class="related-bottom-desc">Полное руководство по поршневой группе двигателей КАМАЗ 740. Разбор размеров, допусков, этапов замен</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

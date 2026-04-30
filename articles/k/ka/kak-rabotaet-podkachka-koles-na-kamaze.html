@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Подкачка колес на КамАЗ: устройство и принцип работы ЦТК — Про КАМАЗ</title>
+    <meta name="description" content="Техническая инструкция по работе системы подкачки шин КамАЗ. Разбор ЦТК, алгоритмов давления и устранение неисправностей.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/k/ka/kak-rabotaet-podkachka-koles-na-kamaze.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Подкачка колес на КамАЗ: устройство и принцип работы ЦТК">
+    <meta property="og:description" content="Техническая инструкция по работе системы подкачки шин КамАЗ. Разбор ЦТК, алгоритмов давления и устранение неисправностей.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/shiny-i-kolesa/">Шины и Колеса</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Подкачка колес на КамАЗ: устройство и принцип работы ЦТК</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Принцип работы системы подкачки шин на грузовиках КамАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#конструктивные-особенности-и-схема-пневмопривода-цтк">Конструктивные особенности и схема пневмопривода ЦТК</a></li><li><a href="#механизм-подвода-воздуха-к-шине-ступица-и-воздушный-клапан">Механизм подвода воздуха к шине: ступица и воздушный клапан</a></li><li><a href="#алгоритм-работы-системы-в-различных-режимах-эксплуатации">Алгоритм работы системы в различных режимах эксплуатации</a></li><li><a href="#диагностика-неисправностей-и-таблица-параметров">Диагностика неисправностей и таблица параметров</a></li><li><a href="#профилактическое-обслуживание-и-контроль-состояния">Профилактическое обслуживание и контроль состояния</a></li><li><a href="#эффективность-использования-цтк-на-разных-покрытиях">Эффективность использования ЦТК на разных покрытиях</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Эксплуатация тяжелого грузовика в условиях пересеченной местности или бездорожья неизбежно сталкивает водителя с необходимостью изменения давления в шинах. Резкий переход с асфальта на грунтовую дорогу, необходимость преодоления глубокой грязи или, наоборот, движение по твердому покрытию с полной загрузкой требуют оперативной корректировки давления в шинах для обеспечения оптимального пятна контакта.</p>
+<p>Отсутствие возможности быстрой подкачки или стравливания воздуха приводит к ускоренному износу протектора, повышению расхода топлива, а в критических ситуациях — к потере управляемости или застреванию техники. На грузовых автомобилях Камского автозавода за решение этой задачи отвечает централизованная система регулирования давления воздуха в шинах (ЦРДВ), более известная как система подкачки.</p>
+<p>Водитель должен четко понимать физический процесс, происходящий внутри контура, чтобы эффективно управлять системой и оперативно реагировать на падение давления. Игнорирование сигналов контрольных приборов или неправильная эксплуатация клапанов может привести к разгерметизации тормозной системы, так как оба контура завязаны на единый источник пневмоэнергии. В данном материале детально рассматривается устройство, алгоритмы работы и нюансы обслуживания пневматического контура колес.</p>
+
+<h2 id="конструктивные-особенности-и-схема-пневмопривода-цтк">Конструктивные особенности и схема пневмопривода ЦТК</h2>
+
+<p>Фундаментальной основой работы всей системы является источник сжатого воздуха, которым на современных моделях КамАЗ выступает компрессор, установленный на двигателе. Воздух, сжатый до рабочего давления, поступает в систему ресиверов, где происходит его очистка от масла и влаги, а также накопление энергетического запаса для работы всех потребителей.</p>
+<p>От общего контура пневмосистемы воздух через специальный защитный клапан подается в магистраль управления колесами. Важно отметить, что <strong>давление в контуре подкачки</strong> должно строго соответствовать техническим регламентам, так как его избыток может повредить манжеты, а недостаток — сделать систему неработоспособной при движении по сложным участкам.</p>
+
+<h3>Распределительный клапан и управление потоками</h3>
+
+<p>Ключевым элементом, управляющим потоками воздуха, является распределительный (управляющий) клапан, часто устанавливаемый на раме или в районе кронштейна запасного колеса. Именно через этот узел водитель осуществляет контроль над процессом наполнения или опустошения шин. Конструктивно клапан представляет собой сложное устройство с несколькими золотниками и каналами, разделяющими потоки воздуха в зависимости от положения рукоятки управления.</p>
+<p>В положении «Закрыто» или «Движение» подача воздуха к колесам прекращается, а сама система герметизируется, что позволяет использовать пневматику для других нужд, например, для привода тормозов или раздаточного моста. При переключении в режим «Подкачка» воздух из ресиверов направляется по трубопроводам к ступицам колес. На практике часто встречается ситуация, когда из-за загрязнения или обмерзания конденсатом подвижные части клапана залипают, что требует регулярной профилактики.</p>
+<p>Современные модификации грузовиков могут оснащаться электропневматическим управлением, где сигнал от переключателя в кабине подается на соленоиды, открывающие пневмоклапаны. Это позволяет автоматизировать процесс и вывести контроль давления на панель приборов в виде цифровых показателей, однако принцип подачи воздуха остается неизменным — от общего контура к периферии.</p>
+
+<p>Схема подключения трубопроводов выполнена таким образом, чтобы минимизировать гидравлическое сопротивление и обеспечить равномерное распределение воздуха по всем осям. Трубопроводы высокого давления выполнены из стали, а гибкие участки, подходящие к подвижным мостам, — из армированной резины, способной выдерживать вибрации и перепады температур.</p>
+
+<h2 id="механизм-подвода-воздуха-к-шине-ступица-и-воздушный-клапан">Механизм подвода воздуха к шине: ступица и воздушный клапан</h2>
+
+<p>После прохождения по магистральным трубопроводам сжатый воздух достигает конечной точки — колесной ступицы. Здесь расположен еще один критически важный узел — воздушный клапан колеса (часто называемый вентилем или золотником ступицы). Именно этот элемент обеспечивает герметичное соединение вращающейся ступицы и неподвижного подводящего трубопровода.</p>
+<p>Внутри корпуса клапана находится подпружиненный золотник, который под действием давления воздуха открывает для прохода газа в полость шины. Конструкция выполнена с высокой точностью, так как любые зазоры могут привести к утечкам, которые на скорости движения грузовика практически невозможно обнаружить на слух.</p>
+
+<h3>Устройство и работа шарнирного соединения</h3>
+
+<p>Вращающееся соединение реализовано через систему уплотнительных колец и подшипников скольжения. Воздух подается по внутренней полости полуоси или через внешний трубопровод к фланцу ступицы. <strong>Герметичность вращения</strong> обеспечивается специальными манжетами, которые прижимаются к зеркалу вращения с определенным усилием.</p>
+<p>При длительной эксплуатации без смазки или при попадании абразивных частиц поверхность зеркала вращения может быть повреждена, что приведет к постоянному травлению воздуха. В таких случаях система подкачки перестает держать давление, и компрессор вынужден работать в режиме постоянной докачки, что увеличивает расход топлива и износ самого компрессора.</p>
+<p>На некоторых моделях КамАЗ, особенно с односкатной ошиновкой, применяется схема, где трубопровод подходит непосредственно к вентилю колеса через поворотный кулак. В этом случае важно следить за состоянием гибкого шланга, так как он подвержен максимальным механическим нагрузкам при поворотах управляемых колес.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На полноприводных моделях с блокировками мостов трубопроводы подкачки часто прокладываются параллельно трубкам пневмопривода блокировок, что требует внимательности при ремонте, чтобы не перепутать линии.</p></div>
+
+<p>Регулировка зазора между седлом клапана и золотником производится специальными регулировочными винтами или шайбами. Неправильная регулировка может привести к тому, что клапан будет либо постоянно травить воздух в атмосферу, либо не будет пропускать воздух в шину даже при открытом управляющем кране.</p>
+
+<h2 id="алгоритм-работы-системы-в-различных-режимах-эксплуатации">Алгоритм работы системы в различных режимах эксплуатации</h2>
+
+<p>Эффективное использование системы подкачки требует от водителя понимания, в какие моменты необходимо изменять давление. Процесс не является полностью автоматическим на большинстве серийных моделей и требует ручного вмешательства через кран управления в кабине.</p>
+<p>При движении по дорогам с твердым покрытием и полной загрузкой давление должно поддерживаться на уровне, рекомендованном заводом-изготовителем (обычно 4,0–5,5 атм в зависимости от модели шины и нагрузки). В этом режиме система находится в состоянии ожидания, клапаны закрыты, и воздух в шины не подается.</p>
+
+<h3>Режим движения по мягкому грунту и бездорожью</h3>
+
+<p>При выезде на грунтовую дорогу, песок или снег возникает необходимость снизить давление в шинах для увеличения площади пятна контакта. Это позволяет грузовику «всплыть» на поверхность грунта и избежать глубокого закапывания. Для перехода в этот режим водитель открывает кран управления, и воздух из шин стравливается через систему в атмосферу (на некоторых системах) или перераспределяется.</p>
+<p>Однако, если требуется именно <strong>подкачать колеса</strong> после прохождения сложного участка или при проколе, алгоритм действий меняется. Водитель переводит рукоятку крана в положение «Подкачка». В этот момент сжатый воздух из ресиверов поступает в магистрали колес. </p>
+<p>Контроль процесса осуществляется по манометру в контуре подкачки и визуально — по изменению формы шины. После достижения необходимого давления кран закрывается, и система снова переходит в режим герметизации.</p>
+
+
+
+<p>Стоит учитывать, что при резком охлаждении воздуха (например, при выезде из теплого гаража на мороз) давление в шинах падает согласно законам термодинамики. В таких случаях система позволяет оперативно компенсировать потерю давления без использования внешних компрессоров.</p>
+
+<h2 id="диагностика-неисправностей-и-таблица-параметров">Диагностика неисправностей и таблица параметров</h2>
+
+<p>В процессе эксплуатации система подкачки может столкнуться с рядом типичных проблем, связанных с износом уплотнений, замерзанием конденсата или механическими повреждениями трубопроводов. Основным индикатором неисправности служит падение давления в ресиверах при открытой системе или невозможность накачать шины до рабочего значения.</p>
+<p>Частой проблемой является обмерзание клапанов в зимний период. Влага, содержащаяся в сжатом воздухе, конденсируется в lowest points системы и при отрицательных температурах превращается в лед, блокируя работу золотников. Для предотвращения этого необходимо регулярно сливать конденсат из ресиверов.</p>
+
+<h3>Сравнительная таблица режимов работы</h3>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Нормальный режим (Трасса)</th>
+<th>Режим подкачки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Положение крана</td>
+<td>Закрыто / Движение</td>
+<td>Открыто / Подкачка</td>
+</tr>
+<tr>
+<td>Давление в контуре</td>
+<td>Стабильное (по манометру)</td>
+<td>Пульсирующее (работа компрессора)</td>
+</tr>
+<tr>
+<td>Расход воздуха</td>
+<td>Отсутствует</td>
+<td>Высокий (до заполнения)</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Длительная работа компрессора в режиме подкачки на стоянке может привести к перегреву головки компрессора и выбросу большого количества масла в пневмосистему.</p></div>
+
+<p>Еще одной распространенной неисправностью является износ манжетных уплотнений в ступичных клапанах. Это приводит к тому, что воздух постоянно уходит в атмосферу через сапун или негерметичности ступицы. Определить это можно по характерному шипению на стоянке или по частому включению компрессора в движении при открытой системе.</p>
+
+<h3>Типичные ошибки при обслуживании</h3>
+
+<ol>
+<li><strong>Игнорирование слива конденсата</strong> — приводит к коррозии трубопроводов изнутри и обмерзанию клапанов зимой, что блокирует работу всей системы.</li>
+<li><strong>Использование некачественных уплотнителей</strong> — при ремонте ступичных клапанов применение резины, не стойкой к маслу и температуре, вызывает быстрое разрушение манжет и потерю герметичности.</li>
+<li><strong>Подкачка на высокой скорости</strong> — попытка накачать шины на скорости выше 10-15 км/ч может привести к биению колес, разрыву трубопроводов из-за вибрации и неравномерному распределению воздуха.</li>
+<li><strong>Неверная регулировка зазоров</strong> — отсутствие контроля зазора в ступичном клапане после сборки ведет либо к постоянному травлению, либо к неработоспособности подкачки.</li>
+</ol>
+
+
+
+<h2 id="профилактическое-обслуживание-и-контроль-состояния">Профилактическое обслуживание и контроль состояния</h2>
+
+<p>Для обеспечения надежной работы системы подкачки требуется регулярное техническое обслуживание. Оно включает в себя визуальный осмотр трубопроводов на предмет механических повреждений, проверку креплений кронштейнов и тестирование герметичности соединений.</p>
+<p>Особое внимание следует уделять состоянию воздушных фильтров и регуляторов давления. Загрязненный воздух — главная причина выхода из строя прецизионных пар трения в клапанах. На современных системах с осушителями воздуха ресурс регенериющего патрона также ограничен и требует замены согласно регламенту.</p>
+
+
+
+<p>При обнаружении неисправностей, таких как постоянная утечка воздуха или отсутствие реакции системы на открытие крана, необходимо провести дефектовку узлов. Часто проблема решается заменой ремкомплекта распределительного клапана или регулировкой зазоров в ступицах.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Перед проведением любых работ по демонтажу элементов системы подкачки необходимо полностью стравить воздух из всех ресиверов пневмосистемы. Нахождение под давлением может привести к травме.</p>
+</blockquote>
+
+<p> Любые манипуляции с общим контуром давления могут повлиять на эффективность торможения. Поэтому после ремонта обязательно проводится проверка работы тормозов и стояночной тормозной системы.</p>
+
+
+
+<p>Регулярная проверка давления в шинах внешним манометром позволяет сверять показания бортовой системы (если она есть) с реальными значениями. Разница показаний может указывать на неисправность датчиков или загрязнение каналов подвода воздуха к датчику.</p>
+
+<h2 id="эффективность-использования-цтк-на-разных-покрытиях">Эффективность использования ЦТК на разных покрытиях</h2>
+
+<p>Практическое применение системы централизованной подкачки шин позволяет значительно расширить эксплуатационные возможности грузовика. На песчаных грунтах снижение давления до 1,5–2,0 атм позволяет технике двигаться там, где колеса с нормальным давлением мгновенно закопались бы.</p>
+<p>При движении по болотистой местности или снежной целине эффект «самоочищения» протектора усиливается при низком давлении, так как шина становится мягче и лучше деформируется, выталкивая грязь из канавок протектора при каждом обороте колеса.</p>
+
+
+
+<p>Однако, возвращаясь на твердое покрытие, водитель обязан восстановить нормальное давление. Движение на спущенных шинах по асфальту приводит к перегреву каркаса шины, разрушению корда и возможному взрыву покрышки, что создает аварийную ситуацию на дороге.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Запрещается эксплуатация автомобиля с неисправной системой подкачки в режимах, требующих изменения давления, так как это может привести к застреванию техники в труднопроходимых местах.</p>
+</blockquote>
+
+<p>В заключение стоит отметить, что грамотное использование и своевременное обслуживание системы подкачки шин на КамАЗе — это не просто вопрос комфорта, а необходимое условие для сохранения ресурса шин и топливной экономичности автомобиля. Понимание принципов работы пневматики позволяет водителю самостоятельно устранять большинство мелких неисправностей и поддерживать машину в боевой готовности.</p>
+
+</div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#конструктивные-особенности-и-схема-пневмопривода-цтк">Конструктивные особенности и схема пневмопривода ЦТК</a></li><li><a href="#механизм-подвода-воздуха-к-шине-ступица-и-воздушный-клапан">Механизм подвода воздуха к шине: ступица и воздушный клапан</a></li><li><a href="#алгоритм-работы-системы-в-различных-режимах-эксплуатации">Алгоритм работы системы в различных режимах эксплуатации</a></li><li><a href="#диагностика-неисправностей-и-таблица-параметров">Диагностика неисправностей и таблица параметров</a></li><li><a href="#профилактическое-обслуживание-и-контроль-состояния">Профилактическое обслуживание и контроль состояния</a></li><li><a href="#эффективность-использования-цтк-на-разных-покрытиях">Эффективность использования ЦТК на разных покрытиях</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/r/ra/razmer-kamazovskogo-kolesa.html" class="related-card">Размер колес КамАЗ: таблицы, маркировка, совместимость дисков</a></li><li><a href="/articles/s/si/sistema-podkachki-koles-kamaz-43118-skhema.html" class="related-card">Схема подкачки колес Камаз 43118: устройство и ремонт</a></li><li><a href="/articles/r/ra/razmer-shin-kamaz-4310.html" class="related-card">Размер шин КАМАЗ 4310: характеристики, давление, маркировка</a></li><li><a href="/articles/k/ka/kak-razbortirovat-koleso-na-kamaze.html" class="related-card">Как разбортировать колесо на КАМАЗе: инструкция по ремонту шин</a></li><li><a href="/articles/s/sk/skolko-shpilek-na-kolese-kamaz.html" class="related-card">Количество шпилек на колесе Камаз: стандарты и размеры</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/r/ra/razmer-kamazovskogo-kolesa.html" class="related-bottom-card"><span class="related-bottom-title">Размер колес КамАЗ: таблицы, маркировка, совместимость дисков</span><span class="related-bottom-desc">Полный справочник размеров колес КамАЗ. Маркировка шин, параметры дисков, давление в шинах и таблицы</span></a><a href="/articles/s/si/sistema-podkachki-koles-kamaz-43118-skhema.html" class="related-bottom-card"><span class="related-bottom-title">Схема подкачки колес Камаз 43118: устройство и ремонт</span><span class="related-bottom-desc">Подробная схема системы подкачки колес Камаз 43118. Принцип работы, разборка кранов, устранение утеч</span></a><a href="/articles/r/ra/razmer-shin-kamaz-4310.html" class="related-bottom-card"><span class="related-bottom-title">Размер шин КАМАЗ 4310: характеристики, давление, маркировка</span><span class="related-bottom-desc">Подробный разбор размеров шин КАМАЗ 4310, нормы давления, расшифровка индексов и правила подбора рез</span></a><a href="/articles/k/ka/kak-razbortirovat-koleso-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как разбортировать колесо на КАМАЗе: инструкция по ремонту шин</span><span class="related-bottom-desc">Подробная инструкция: как разбортировать колесо КАМАЗ. Разборка бортов, снятие замочных колец, дефек</span></a><a href="/articles/s/sk/skolko-shpilek-na-kolese-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Количество шпилек на колесе Камаз: стандарты и размеры</span><span class="related-bottom-desc">Технический справочник по крепежу колес Камаз. Сколько шпилек на диске, размеры резьбы, отличия стар</span></a><a href="/articles/r/re/remkomplekt-podkachki-koles-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Ремкомплект подкачки колес КАМАЗ: устройство, диагностика и замена</span><span class="related-bottom-desc">Подробная инструкция по ремонту системы подкачки КАМАЗ. Разбор ремкомплектов клапанов, датчиков и кр</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

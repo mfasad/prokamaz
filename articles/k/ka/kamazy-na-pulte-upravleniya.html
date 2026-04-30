@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Управление КАМАЗом: Пульты, ЭБУ и диагностика систем — Про КАМАЗ</title>
+    <meta name="description" content="Полная инструкция по работе с пультами управления КАМАЗ: диагностика ЭБУ, настройка БСК, расшифровка кодов ошибок и подключение внешних устройств.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/k/ka/kamazy-na-pulte-upravleniya.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Управление КАМАЗом: Пульты, ЭБУ и диагностика систем">
+    <meta property="og:description" content="Полная инструкция по работе с пультами управления КАМАЗ: диагностика ЭБУ, настройка БСК, расшифровка кодов ошибок и подключение внешних устройств.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/elektrooborudovanie/">Электрооборудование</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Управление КАМАЗом: Пульты, ЭБУ и диагностика систем</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Системы управления КАМАЗ: Пульты, контроллеры и диагностика</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-бортовых-сетей-и-точки-доступа">Архитектура бортовых сетей и точки доступа</a></li><li><a href="#работа-с-бортовым-компьютером-и-бск">Работа с бортовым компьютером и БСК</a></li><li><a href="#диагностика-через-внешние-сканеры-и-по">Диагностика через внешние сканеры и ПО</a></li><li><a href="#управление-внешними-механизмами-и-цбу">Управление внешними механизмами и ЦБУ</a></li><li><a href="#типичные-ошибки-при-работе-с-электроникой">Типичные ошибки при работе с электроникой</a></li><li><a href="#эффективное-использование-диагностических-ресурсов">Эффективное использование диагностических ресурсов</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+<p>В процессе эксплуатации тяжелогруза серии 5490 или 65115 часто возникает ситуация, когда на приборной панели загорается индикатор неисправности, а стандартные методы визуального осмотра не выявляют явных причин.</p>
+<p>Современные грузовики КАМАЗ представляют собой сложный программно-аппаратный комплекс, где роль «пульта управления» выполняют электронные блоки управления (ЭБУ), связанные единой CAN-шиной, и взаимодействие с ними требует специфических знаний и инструментов.</p>
+<p>Если у вас возникла необходимость считать коды ошибок, проверить работу датчиков или активировать скрытые функции бортового компьютера, важно понимать архитектуру подключения и не перепутать диагностический разъем с обычным интерфейсом мультимедиа.</p>
+
+<h2 id="архитектура-бортовых-сетей-и-точки-доступа">Архитектура бортовых сетей и точки доступа</h2>
+<p>На практике основным «пультом» для взаимодействия с электроникой грузовика является диагностический разъем, расположенный в кабине, чаще всего под панелью приборов или в нише бардачка.</p>
+<p>Современные модели КАМАЗ, такие как K5 и K4, используют протокол <em>J1939</em> для обмена данными между двигателем, коробкой передач и тормозной системой, что требует специализированного оборудования для декодирования сигналов.</p>
+<p>Важно отметить, что <strong>напряжение в диагностической цепи</strong> должно строго соответствовать нормативам, так как скачки напряжения могут вывести из строя адаптер или даже сам ЭБУ двигателя.</p>
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Подключение несертифицированных сканеров к работающему двигателю может вызвать сбой в работе топливной аппаратуры Common Rail.</p></div>
+
+<h3>Расположение диагностических интерфейсов</h3>
+<p>На моделях с кузовом 2015-2018 годов выпуска разъем обычно находится под торпедой со стороны пассажира, закрытый пластиковой крышкой с маркировкой <code>DIAGNOSTIC</code>.</p>
+<p>В новых-generation грузовиках интерфейс часто интегрирован в панель рядом с блоком предохранителей или выведен в отдельную нишу для удобства подключения ноутбука механика.</p>
+<p>Для подключения необходимо использовать адаптеры стандарта <em>OBD-II</em> с поддержкой 24-вольтовой сети, так как бортовая сеть грузовика имеет напряжение 24 В, что критически отличается от легковых автомобилей.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип разъема</th>
+<th>Расположение</th>
+<th>Протокол</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16-pin OBD-II</td>
+<td>Под панелью (пассажир)</td>
+<td>J1939 / K-Line</td>
+</tr>
+<tr>
+<td>Специфицированный 9-pin</td>
+<td>Рядом с ЭБУ (двигатель)</td>
+<td>RS-485</td>
+</tr>
+</tbody>
+</table>
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На машинах с системой ЭРА-ГЛОНАСС дополнительный разъем может быть расположен рядом с модулем телематики.</p></div>
+
+<h2 id="работа-с-бортовым-компьютером-и-бск">Работа с бортовым компьютером и БСК</h2>
+<p>Штатным пультом управления для водителя является панель Бортовой Системы Контроля (БСК), расположенная в центральной части торпеды или интегрированная в приборную стрелку.</p>
+<p>Через этот интерфейс осуществляется мониторинг основных параметров: уровня топлива, давления в контурах, температуры охлаждающей жидкости и межсервисного интервала.</p>
+<p>Если на дисплее БСК отображается код неисправности, его необходимо зафиксировать перед попыткой сброса, так как повторное возникновение ошибки может указывать на критическую поломку.</p>
+
+<h3>Настройка параметров и сервисных интервалов</h3>
+<p>Для входа в инженерное меню БСК на некоторых моделях требуется одновременное нажатие кнопок «Меню» и «Вправо» в течение 5 секунд.</p>
+<p>В открывшемся меню можно скорректировать параметры шиберной заслонки, настроить работу круиз-контроля или сбросить счетчик пробега до следующего ТО.</p>
+<div class="checklist-block"><h4>📋 Сброс сервисного интервала</h4><ol><li><strong>Шаг 1.</strong> Включите зажигание</li><li><strong>Шаг 2.</strong> Зажмите кнопку сброса пробега</li><li><strong>Шаг 3.</strong> Дождитесь мигания индикатора</li><li><strong>Шаг 4.</strong> Отпустите и нажмите повторно для подтверждения</li></ol></div>
+<p>Стоит помнить, что <strong>некорректная настройка</strong> параметров двигателя через БСК может привести к повышенному расходу топлива или снижению тяговых характеристик.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Изменение калибровок спидометра или тахографа через сервисное меню без соответствующего оборудования является нарушением законодательства.</p>
+</blockquote>
+
+<h2 id="диагностика-через-внешние-сканеры-и-по">Диагностика через внешние сканеры и ПО</h2>
+<p>Для глубокой диагностики электроники КАМАЗ, выходящей за рамки возможностей БСК, необходимо использовать профессиональные сканеры или ноутбуки с установленным ПО.</p>
+<p>Наиболее распространенными программами являются <em>Diagbox</em>, <em>OpenDiag</em> (с соответствующими модулями) или специализированный софт от КАМАЗ — <em>Kamaz Diagnosis Tool</em>.</p>
+<p>Подключение осуществляется через интерфейс <code>USB-to-CAN</code> или <code>Bluetooth-адаптер</code>, который эмулирует работу штатного пульта управления дилерского центра.</p>
+
+<h3>Чтение и расшифровка кодов ошибок</h3>
+<p>После соединения с ЭБУ сканер позволяет считать активные и сохраненные коды неисправностей, которые классифицируются по системам: двигатель, ABS, коробка передач.</p>
+<p>Каждый код состоит из буквенно-цифрового обозначения, например, <code>P0087</code> (низкое давление в рампе) или <code>C0035</code> (неисправность датчика колеса), что позволяет точно локализовать проблему.</p>
+<p>Важно не только считать код, но и проанализировать <strong>параметры в реальном времени</strong>, такие как коррекция топливоподачи или положение педали акселератора, чтобы исключить ложные показания датчиков.</p>
+
+<ol>
+<li>Подключите диагностический адаптер к разъему OBD-II грузовика.</li>
+<li>Запустите программное обеспечение на компьютере и выберите тип соединения (CAN/J1939).</li>
+<li>Включите зажигание автомобиля (двигатель можно не запускать для чтения статических ошибок).</li>
+<li>Нажмите кнопку «Сканировать» или «Connect» в интерфейсе программы.</li>
+<li>Сохраните лог ошибок и сравните полученные данные с таблицей кодов неисправностей.</li>
+</ol>
+<div class="checklist-block"><h4>☑️ Проверка перед диагностикой</h4><label class="check-item"><input type="checkbox"><span>Заряжен ли аккумулятор</span></label><label class="check-item"><input type="checkbox"><span>Исправен ли адаптер</span></label><label class="check-item"><input type="checkbox"><span>Установлены ли драйверы</span></label><label class="check-item"><input type="checkbox"><span>Есть ли связь с ЭБУ</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<h2 id="управление-внешними-механизмами-и-цбу">Управление внешними механизмами и ЦБУ</h2>
+<p>Пульт управления может также подразумевать блоки управления дополнительным оборудованием, установленным на шасси КАМАЗ, такие как краны-манипуляторы, бетономешалки или рефрижераторы.</p>
+<p>Центральный Блок Управления (ЦБУ) в таких системах часто имеет собственный выносной пульт с джойстиком или кнопками, который коммутируется с основной CAN-шиной автомобиля.</p>
+<p>При возникновении проблем с работой навесного оборудования первым шагом всегда должна быть проверка целостности жгута проводов, соединяющего пульт оператора с ЦБУ.</p>
+
+<h3>Настройка работы ЦБУ и концевиков</h3>
+<p>Конфигурирование ЦБУ часто требует ввода специальных кодов активации функций, которые прописываются производителем спецтехники.</p>
+<p>В меню настройки можно задать логику работы гидравлики, ограничить углы поворота стрелы или настроить аварийные режимы остановки двигателя при перегрузке.</p>
+<p>Ошибки в конфигурации ЦБУ могут привести к тому, что <strong>система блокировки</strong> не позволит запустить двигатель или включить передачу, считая условия unsafe.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Значение по умолчанию</th>
+<th>Диапазон настройки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Обороты ХХ</td>
+<td>800 об/мин</td>
+<td>600-1000 об/мин</td>
+</tr>
+<tr>
+<td>Макс. обороты</td>
+<td>2200 об/мин</td>
+<td>1800-2500 об/мин</td>
+</tr>
+</tbody>
+</table>
+<div class="attention-box attention-info"><h4>Пульты управления</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Удобство оператора</li><li>✅ Многофункциональность</li><li>✅ Защита от влаги</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Высокая стоимость</li><li>❌ Сложность ремонта</li><li>❌ Зависимость от электроники</li></ul></div></div></div>
+
+<h2 id="типичные-ошибки-при-работе-с-электроникой">Типичные ошибки при работе с электроникой</h2>
+<p>Неопытные пользователи и механики часто допускают ряд систематических ошибок при попытке самостоятельной диагностики или настройки КАМАЗов.</p>
+<p>Игнорирование правил безопасности и порядка подключения оборудования является основной причиной выхода из строя дорогостоящих электронных компонентов.</p>
+
+<ol>
+<li><strong>Подключение адаптера при работающем двигателе</strong> — это может вызвать скачок напряжения, который повредит интерфейс сканера или ЭБУ, подключение нужно производить только при выключенном зажигании.</li>
+<li><strong>Использование дешевых китайских клонов адаптеров</strong> — такие устройства часто имеют нестабильную прошивку и могут послать ошибочный сигнал на форсунки, что приведет к гидроудару.</li>
+<li><strong>Сброс ошибок без устранения причины</strong> — простое стирание кода неисправности не ремонтирует узел, и проблема вернется через несколько циклов работы, возможно, в самый неподходящий момент.</li>
+<li><strong>Неверный выбор протокола связи</strong> — попытка соединиться с двигателем Cummins через протокол ЯМЗ или наоборот приведет к отсутствию связи или чтению некорректных данных.</li>
+</ol>
+
+<blockquote>
+<p>⚠️ Внимание: При работе с системой AdBlue (SCR) категорически запрещено использовать непроверенные программы для эмуляции датчиков, так как это ведет к закоксовке катализатора.</p>
+</blockquote>
+
+<p>Если у вас нет уверенности в правильности действий при работе с программным обеспечением двигателя, лучше обратиться в специализированный сервисный центр.</p>
+<p>Современный КАМАЗ — это высокотехнологичный продукт, требующий квалифицированного подхода к обслуживанию его электронных систем.</p>
+<p>Регулярная диагностика и правильное использование пультов управления позволяют продлить ресурс автомобиля и избежать дорогостоящих простоев.</p>
+
+<h2 id="эффективное-использование-диагностических-ресурсов">Эффективное использование диагностических ресурсов</h2>
+<p>Грамотная организация процесса диагностики позволяет существенно сократить время простоя техники в ремонте и повысить точность определения неисправности.</p>
+<p>Использование актуальных баз данных и регулярное обновление программного обеспечения диагностического комплекса является обязательным условием для работы с новыми моделями КАМАЗ.</p>
+<p>Внедрение телематических систем позволяет диспетчерам удаленно контролировать состояние «пульта» автомобиля и получать уведомления о критических ошибках в реальном времени.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Ведите журнал ошибок для каждого автомобиля: это поможет выявить повторяющиеся проблемы и спланировать превентивный ремонт.</p></div>
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Правильная работа с диагностическими пультами и ЭБУ КАМАЗ требует соблюдения протоколов подключения, использования сертифицированного ПО и внимательного анализа данных в реальном времени.</p></div></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-бортовых-сетей-и-точки-доступа">Архитектура бортовых сетей и точки доступа</a></li><li><a href="#работа-с-бортовым-компьютером-и-бск">Работа с бортовым компьютером и БСК</a></li><li><a href="#диагностика-через-внешние-сканеры-и-по">Диагностика через внешние сканеры и ПО</a></li><li><a href="#управление-внешними-механизмами-и-цбу">Управление внешними механизмами и ЦБУ</a></li><li><a href="#типичные-ошибки-при-работе-с-электроникой">Типичные ошибки при работе с электроникой</a></li><li><a href="#эффективное-использование-диагностических-ресурсов">Эффективное использование диагностических ресурсов</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/r/re/rele-signala-kamaz-gde-nakhoditsya.html" class="related-card">Где находится реле сигнала Камаз: схема, проверка и замена</a></li><li><a href="/articles/a/ak/akkumulyator-dlya-kamaza-ves.html" class="related-card">Вес аккумулятора для КАМАЗа: таблица параметров и выбор</a></li><li><a href="/articles/p/pr/pribornaya-panel-kamaz-evro.html" class="related-card">Приборная панель Камаз Евро: схемы, коды ошибок, ремонт</a></li><li><a href="/articles/b/bl/blok-predokhranitelej-kamaz-65115-evro-3.html" class="related-card">Блок предохранителей КамАЗ 65115 Евро-3: схемы и поиск неисправностей</a></li><li><a href="/articles/r/ra/raspinovka-pereklyuchatelya-sveta-kamaz.html" class="related-card">Распиновка переключателя света КАМАЗ: схема и подключение</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/r/re/rele-signala-kamaz-gde-nakhoditsya.html" class="related-bottom-card"><span class="related-bottom-title">Где находится реле сигнала Камаз: схема, проверка и замена</span><span class="related-bottom-desc">Подробная инструкция по поиску реле звукового сигнала на грузовиках Камаз. Схемы расположения, диагн</span></a><a href="/articles/a/ak/akkumulyator-dlya-kamaza-ves.html" class="related-bottom-card"><span class="related-bottom-title">Вес аккумулятора для КАМАЗа: таблица параметров и выбор</span><span class="related-bottom-desc">Точный вес аккумуляторов для КАМАЗ. Справочная таблица емкости, габаритов и массы АКБ 190Ач, 220Ач. </span></a><a href="/articles/p/pr/pribornaya-panel-kamaz-evro.html" class="related-bottom-card"><span class="related-bottom-title">Приборная панель Камаз Евро: схемы, коды ошибок, ремонт</span><span class="related-bottom-desc">Полная инструкция по приборной панели Камаз Евро. Расшифровка индикаторов, устранение неисправностей</span></a><a href="/articles/b/bl/blok-predokhranitelej-kamaz-65115-evro-3.html" class="related-bottom-card"><span class="related-bottom-title">Блок предохранителей КамАЗ 65115 Евро-3: схемы и поиск неисправностей</span><span class="related-bottom-desc">Полная схема и расположение предохранителей КамАЗ 65115 Евро-3. Инструкция по диагностике электрики,</span></a><a href="/articles/r/ra/raspinovka-pereklyuchatelya-sveta-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Распиновка переключателя света КАМАЗ: схема и подключение</span><span class="related-bottom-desc">Подробная инструкция по распиновке переключателя света КАМАЗ: схемы, цветовая маркировка проводов, т</span></a><a href="/articles/p/pr/preobrazovatel-s-24-na-12-volt-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Преобразователь 24 на 12 Вольт КАМАЗ: выбор, схема и установка</span><span class="related-bottom-desc">Техническое руководство по установке преобразователя напряжения 24В в 12В на грузовик КАМАЗ. Схемы п</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

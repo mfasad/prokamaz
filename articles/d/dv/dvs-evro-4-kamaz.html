@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Двигатель КАМАЗ Евро 4: Устройство, Ошибки, Настройка — Про КАМАЗ</title>
+    <meta name="description" content="Полная инструкция по ДВС КАМАЗ Евро 4. Разбор системы SCR, кодов ошибок, регулировки клапанов и особенностей эксплуатации Cummins и 740-й серии.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/d/dv/dvs-evro-4-kamaz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Двигатель КАМАЗ Евро 4: Устройство, Ошибки, Настройка">
+    <meta property="og:description" content="Полная инструкция по ДВС КАМАЗ Евро 4. Разбор системы SCR, кодов ошибок, регулировки клапанов и особенностей эксплуатации Cummins и 740-й серии.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777536696">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Двигатель КАМАЗ Евро 4: Устройство, Ошибки, Настройка</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Техническое руководство по двигателю КАМАЗ Евро 4</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#конструктивные-особенности-силовых-агрегатов-стандарта-евро-4">Конструктивные особенности силовых агрегатов стандарта Евро 4</a></li><li><a href="#система-нейтрализации-отработавших-газов-и-adblue">Система нейтрализации отработавших газов и AdBlue</a></li><li><a href="#диагностика-и-коды-неисправностей-эбу">Диагностика и коды неисправностей ЭБУ</a></li><li><a href="#регулировка-клапанов-и-техническое-обслуживание">Регулировка клапанов и техническое обслуживание</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Водитель грузового автомобиля сталкивается с резкой потерей тяги на подъеме и загоревшейся лампой «Check Engine» в самый неподходящий момент, когда график доставки срывается.</p>
+<p>Двигатель, еще вчера работавший ровно, переходит в аварийный режим, ограничивая обороты и мощность, что делает дальнейшее движение с полной загрузкой невозможным.</p>
+<p>Подобная ситуация часто возникает из-за сложной системы нейтрализации отработавших газов, которая в стандарте Евро 4 требует идеального качества топлива и исправности всех датчиков.</p>
+
+<h2 id="конструктивные-особенности-силовых-агрегатов-стандарта-евро-4">Конструктивные особенности силовых агрегатов стандарта Евро 4</h2>
+<p>Переход на экологический стандарт Евро 4 потребовал от инженеров КАМАЗ кардинального пересмотра конструкции топливной системы и системы выпуска отработавших газов.</p>
+<p>Основным изменением стало внедрение системы селективной каталитической нейтрализации, известной как <strong>SCR (Selective Catalytic Reduction)</strong>, которая требует использования специального реагента AdBlue.</p>
+<p>В отличие от предыдущих версий, где очистка происходила в основном за счет рециркуляции выхлопных газов (EGR), здесь основной упор сделан на химическую реакцию в выпускном тракте.</p>
+<p>Топливная система Bosch Common Rail обеспечивает высокое давление впрыска, что позволяет более точно дозировать подачу солярки и снижать шумность работы мотора.</p>
+<p>Блок управления двигателем (ЭБУ) теперь получает данные с большего количества сенсоров, включая датчики температуры выхлопных газов до и после катализатора, а также уровень мочевины в баке.</p>
+
+<h3>Модификации на базе двигателя 740.63 и 740.64</h3>
+<p>Моторы серии 740.63 и 740.64 стали первыми массовыми представителями экологичного семейства, сохранив при этом классическую V-образную компоновку.</p>
+<p>Данные агрегаты получили измененную головку блока цилиндров и усиленные поршни, способные выдерживать возросшие тепловые нагрузки при сгорании обедненных смесей.</p>
+<p>Система смазки была модернизирована для обеспечения стабильного давления масла при работе на холостых оборотах, что критично для турбокомпрессоров с изменяемой геометрией.</p>
+<p>Важно отметить, что <strong>топливная аппаратура</strong> этих двигателей крайне чувствительна к загрязнению, поэтому замена фильтров должна производиться строго по регламенту.</p>
+<p>Турбокомпрессоры на этих модификациях часто оснащаются перепускными клапанами wastegate для точного контроля наддува во всем диапазоне оборотов.</p>
+
+<h3>Двигатели Cummins ISBe4 и ISBe6</h3>
+<p>Лицензионные двигатели Cummins, собираемые в Набережных Челнах, отличаются рядной шестицилиндровой компоновкой и высокой степенью унификации с мировыми аналогами.</p>
+<p>Система <em>Coolant</em> в этих моторах спроектирована так, чтобы минимизировать тепловую напряженность, что положительно сказывается на ресурсе поршневой группы.</p>
+<p>Электроника Cumins использует собственные алгоритмы самодиагностики, которые могут отличаться от логики работы чистокровных КАМАЗов, требуя специализированного ПО для глубокой диагностики.</p>
+<p>Ресурс до первого капитального ремонта у рядных «Камминзов» традиционно выше, однако стоимость оригинальных запчастей и узлов впрыска значительно превышает цены на аналоги для 740-й серии.</p>
+<p>На практике, обслуживание этих двигателей требует использования только рекомендованных масел с определенным щелочным числом, чтобы избежать закоксовки форсунок.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Использование топлива с высоким содержанием серы приведет к быстрому выходу из строя катализатора и датчиков NOx, а ЭБУ принудительно снизит мощность двигателя.</p>
+</blockquote>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях Cummins интервал замены масла может быть увеличен до 60 000 км при использовании синтетических масел и фильтрации Fuel-Filter-Separator, но только при условии постоянного мониторинга качества топлива.</p></div>
+
+<p>Современные системы управления позволяют гибко настраивать характеристики двигателя, но любое вмешательство в калибровки должно проводиться квалифицированными специалистами.</p>
+<p>Некорректная настройка может привести к прогару поршней или разрушению турбины из-за выхода за пределы температурного режима.</p>
+
+<h2 id="система-нейтрализации-отработавших-газов-и-adblue">Система нейтрализации отработавших газов и AdBlue</h2>
+<p>Работа системы SCR базируется на впрыске раствора карбамида в поток выхлопных газов перед катализатором, где происходит разложение оксидов азота.</p>
+<p>Для нормальной работы системы требуется постоянный контроль качества реагента, так как замерзание или загрязнение мочевины может заблокировать форсунку дозирования.</p>
+<p>Бак для AdBlue оснащен подогревом и датчиком уровня, который передает данные в ЭБУ, позволяя водителю вовремя пополнить запас реагента.</p>
+<p>Если уровень жидкости упадет ниже критического, двигатель перейдет в режим ограничения мощности, и разблокировать его без заправки будет невозможно.</p>
+<p>Регулярная проверка работоспособности насоса-дозатора и форсунки впрыска мочевины является обязательной процедурой при плановом техническом обслуживании.</p>
+
+<h3>Принцип работы и компоненты SCR</h3>
+<p>Процесс нейтрализации начинается с нагрева выхлопных газов до рабочей температуры, после чего блок управления открывает клапан подачи мочевины.</p>
+<p>В катализаторе под воздействием высокой температуры и специального покрытия происходит химическая реакция, превращающая вредные оксиды в безвредный азот и водяной пар.</p>
+<p>Датчики NOx, установленные до и после катализатора, сравнивают концентрацию оксидов азота и корректируют количество впрыскиваемого реагента в реальном времени.</p>
+<p>При неисправности любого из элементов цепочки система переходит в аварийный режим, чтобы предотвратить выброс токсичных веществ в атмосферу.</p>
+<p>Стоит учитывать, что <strong>кристаллизация мочевины</strong> на стенках выхлопной трубы может полностью перекрыть выход газов, что приведет к серьезным повреждениям двигателя.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Категорически запрещено добавлять воду или другие жидкости в бак AdBlue, а также использовать реагент с истекшим сроком годности, так как это выведет из строя дорогостоящую систему нейтрализации.</p></div>
+
+<h3>Обслуживание бака и дозирующего модуля</h3>
+<p>Чистота бака для мочевины — залог долгой службы всей системы, поэтому при заправке необходимо использовать только чистые воронки и шланги.</p>
+<p>Раз в год или каждые 100 тысяч километров рекомендуется проводить промывку системы и замену фильтров тонкой очистки реагента.</p>
+<p>Дозирующий модуль часто выходит из строя из-за образования солевых отложений, которые блокируют движение плунжера насоса.</p>
+<p>При хранении автомобиля в зимний период необходимо следить за исправностью подогрева бака, чтобы избежать замерзания жидкости и разрыва трубопроводов.</p>
+<p>Визуальный осмотр патрубков на предмет утечек помогает предотвратить появление белого налета соли вокруг соединений, который свидетельствует о потере герметичности.</p>
+
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Функция</th>
+<th>Ресурс (км)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Насос-дозатор</td>
+<td>Подача мочевины под давлением</td>
+<td>250 000 - 400 000</td>
+</tr>
+<tr>
+<td>Форсунка впрыска</td>
+<td>Распыление реагента в выхлоп</td>
+<td>150 000 - 200 000</td>
+</tr>
+<tr>
+<td>Датчик NOx</td>
+<td>Контроль концентрации оксидов</td>
+<td>200 000 - 300 000</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Для продления жизни форсунки AdBlue рекомендуется после остановки двигателя не выключать зажигание сразу, а подождать 1-2 минуты, пока система не сольет остатки мочевины обратно в бак.</p></div>
+
+<h2 id="диагностика-и-коды-неисправностей-эбу">Диагностика и коды неисправностей ЭБУ</h2>
+<p>Современные двигатели КАМАЗ Евро 4 оснащены развитой системой самодиагностики, которая фиксирует любые отклонения в работе узлов.</p>
+<p>Считывание кодов ошибок осуществляется через диагностический разъем с помощью специализированных сканеров или ноутбука с установленным ПО.</p>
+<p>Наиболее распространенные проблемы связаны с датчиками давления, температуры и положения педали акселератора, которые часто требуют замены или калибровки.</p>
+<p>Ошибки, связанные с топливной системой, могут указывать как на неисправность форсунок, так и на проблемы с низковольтной проводкой или самим ЭБУ.</p>
+<p>Важно правильно интерпретировать коды, так как одна и та же ошибка может быть вызвана разными причинами, от обрыва провода до механического разрушения узла.</p>
+
+<h3>Популярные коды ошибок и методы их устранения</h3>
+<p>Код, указывающий на низкое давление в рампе Common Rail, часто возникает из-за завоздушивания системы или износа подкачивающего насоса.</p>
+<p>Ошибки по датчику положения распредвала могут приводить к затрудненному пуску двигателя и нестабильной работе на холостом ходу.</p>
+<p>При появлении кода неисправности катализатора или системы SCR необходимо в первую очередь проверить наличие и качество жидкости AdBlue.</p>
+<p>Сбои в работе электронного дросселя или педали газа часто лечатся заменой потенциометров или восстановлением контактов в разъемах.</p>
+<p>Если ЭБУ фиксирует ошибку связи по CAN-шине, следует проверить целостность витой пары и наличие короткого замыкания в бортовой сети.</p>
+
+<div class="checklist-block"><h4>📋 Диагностика через ПК</h4><ol><li><strong>Шаг 1.</strong> Подключите адаптер K-Line или Bluetooth к разъему OBD-II</li><li><strong>Шаг 2.</strong> Запустите программу OpenDiag или Jaltest</li><li><strong>Шаг 3.</strong> Выберите соответствующую модель двигателя и блок управления</li><li><strong>Шаг 4.</strong> Считайте и расшифруйте активные коды неисправностей</li></ol></div>
+
+<p>После устранения неисправности необходимо стереть коды ошибок из памяти ЭБУ и провести тестовый пробег для подтверждения устранения проблемы.</p>
+<p>Некоторые ошибки, особенно связанные с экологией, могут требовать выполнения процедур адаптации или регенерации сажевого фильтра (если он установлен).</p>
+
+<h3>Использование диагностического оборудования</h3>
+<p>Для глубокой диагностики требуется использование дилерских сканеров, таких как <em>КАМАЗ-Мастер</em> или универсальных комплексов вроде Bosch ESItronic.</p>
+<p>Программное обеспечение позволяет не только считывать ошибки, но и смотреть параметры работы двигателя в реальном времени, что помогает выявить плавающие неисправности.</p>
+<p>С помощью диагностического ПО можно проводить тесты исполнительных механизмов, например, включать вентиляторы охлаждения или проверять работу клапанов.</p>
+<p>Важно регулярно обновлять базы данных диагностических программ, так как производители постоянно выпускают новые калибровки и исправления.</p>
+<p>Квалифицированный диагност способен по осциллограммам сигналов определить состояние форсунок и механической части двигателя без его разборки.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Попытки «заглушить» систему Евро 4 программным путем могут привести к некорректной работе двигателя и невозможности прохождения государственного технического осмотра.</p>
+</blockquote>
+
+<table>
+<thead>
+<tr>
+<th>Тип сканера</th>
+<th>Функционал</th>
+<th>Совместимость</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Дилерский (КАМАЗ)</td>
+<td>Полная диагностика, кодирование</td>
+<td>Все модели КАМАЗ</td>
+</tr>
+<tr>
+<td>Универсальный (Bosch)</td>
+<td>Диагностика ДВС и ABS</td>
+<td>Двигатели Cummins, Bosch</td>
+</tr>
+<tr>
+<td>Мобильный адаптер</td>
+<td>Чтение базовых ошибок</td>
+<td>Базовая поддержка OBD-II</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Грамотная диагностика позволяет сэкономить значительные средства на ремонте, точно определяя неисправный узел вместо замены деталей наугад.</p></div>
+
+<h2 id="регулировка-клапанов-и-техническое-обслуживание">Регулировка клапанов и техническое обслуживание</h2>
+<p>Своевременная регулировка тепловых зазоров клапанов является критически важной процедурой для сохранения ресурса двигателя.</p>
+<p>Неправильно выставленные зазоры приводят к прогару клапанов, увеличению расхода масла и топлива, а также к характерному стуку в двигателе.</p>
+<p>Регулировка проводится на холодном двигателе, когда температура охлаждающей жидкости не превышает 30-40 градусов Цельсия.</p>
+<p>Для работы необходим набор щупов, ключей и динамометрический инструмент для контроля затяжки крепежных элементов.</p>
+<p>Порядок регулировки зависит от модели двигателя и должен строго соответствовать руководству по эксплуатации конкретного силового агрегата.</p>
+
+<h3>Порядок регулировки на двигателях 740 серии</h3>
+<p>На V-образных двигателях КАМАЗ регулировка производится попарно, начиная с первого цилиндра левого ряда.</p>
+<p>После выставления зазора на первом цилиндре коленчатый вал проворачивается на определенный угол, указанный в инструкции, для перехода к следующему цилиндру.</p>
+<p>Зазоры для впускных и выпускных клапанов могут отличаться, поэтому важно не перепутать щупы при проверке.</p>
+<p>Контрольная проверка зазоров проводится после полного оборота коленвала и затяжки контргайок регулировочных винтов.</p>
+<p>Нарушение последовательности регулировки может привести к неправильной работе газораспределительного механизма и снижению компрессии.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка перед регулировкой</h4><label class="check-item"><input type="checkbox"><span>Двигатель полностью остыл</span></label><label class="check-item"><input type="checkbox"><span>Снята клапанная крышка</span></label><label class="check-item"><input type="checkbox"><span>Очищена поверхность вокруг клапанов</span></label><label class="check-item"><input type="checkbox"><span>Подготовлен набор щупов и ключей</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<h3>Замена фильтров и расходных материалов</h3>
+<p>Интервалы замены масляного и топливного фильтров на двигателях Евро 4 сокращены по сравнению с предыдущими поколениями моторов.</p>
+<p>Использование оригинальных фильтрующих элементов гарантирует необходимую степень очистки и стабильное давление в системе смазки.</p>
+<p>При замене топливных фильтров необходимо заполнять их чистым дизельным топливом, чтобы облегчить пуск двигателя и избежать работы насоса «на сухую».</p>
+<p>Воздушный фильтр следует менять чаще при эксплуатации автомобиля в запыленных условиях, так как попадание пыли в цилиндр фатально для поршневой группы.</p>
+<p>Качество моторного масла должно соответствовать допускам API CI-4 или CJ-4, что обеспечивает защиту от сажи и высокотемпературных отложений.</p>
+
+<div class="attention-box attention-info"><h4>Замена фильтров</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Своевременная замена</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Снижает риск поломки ТНВД</li><li>❌ Увеличивает ресурс двигателя</li><li>❌ Стабилизирует расход топлива</li></ul></div></div></div>
+
+<p>Регулярное обслуживание системы вентиляции картера также необходимо, так как забитый сапун приводит к выдавливанию</div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#конструктивные-особенности-силовых-агрегатов-стандарта-евро-4">Конструктивные особенности силовых агрегатов стандарта Евро 4</a></li><li><a href="#система-нейтрализации-отработавших-газов-и-adblue">Система нейтрализации отработавших газов и AdBlue</a></li><li><a href="#диагностика-и-коды-неисправностей-эбу">Диагностика и коды неисправностей ЭБУ</a></li><li><a href="#регулировка-клапанов-и-техническое-обслуживание">Регулировка клапанов и техническое обслуживание</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/s/sk/skhema-metok-tnvd-kamaz-s-mekhanicheskim-vpryskom.html" class="related-card">Схема меток ТНВД КамАЗ механика: регулировка и установка</a></li><li><a href="/articles/r/re/regulirovka-klapanov-kamaz-k5-libkher.html" class="related-card">Регулировка клапанов Камаз К5 Либхер: порядок, зазоры и нормы</a></li><li><a href="/articles/k/ka/kak-vystavit-zazhiganie-na-kamaze-5320-pravilno.html" class="related-card">Как выставить зажигание на КамАЗе 5320: пошаговая инструкция</a></li><li><a href="/articles/k/ka/kakoj-dvigatel-na-kamaz-65115.html" class="related-card">Какой двигатель на КАМАЗ 65115: характеристики и модификации</a></li><li><a href="/articles/k/ko/koltso-uplotnitelnoe-tsentrifugi-kamaz.html" class="related-card">Уплотнительное кольцо центрифуги КАМАЗ: замена и размеры</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/s/sk/skhema-metok-tnvd-kamaz-s-mekhanicheskim-vpryskom.html" class="related-bottom-card"><span class="related-bottom-title">Схема меток ТНВД КамАЗ механика: регулировка и установка</span><span class="related-bottom-desc">Подробная инструкция по установке меток ТНВД КамАЗ с механическим приводом. Угол опережения впрыска,</span></a><a href="/articles/r/re/regulirovka-klapanov-kamaz-k5-libkher.html" class="related-bottom-card"><span class="related-bottom-title">Регулировка клапанов Камаз К5 Либхер: порядок, зазоры и нормы</span><span class="related-bottom-desc">Полная инструкция по регулировке клапанов двигателя Daimler OM 457 LA (Камаз К5). Тепловые зазоры, п</span></a><a href="/articles/k/ka/kak-vystavit-zazhiganie-na-kamaze-5320-pravilno.html" class="related-bottom-card"><span class="related-bottom-title">Как выставить зажигание на КамАЗе 5320: пошаговая инструкция</span><span class="related-bottom-desc">Подробное руководство по регулировке угла опережения впрыска топлива на двигателе КамАЗ-740. Метки, </span></a><a href="/articles/k/ka/kakoj-dvigatel-na-kamaz-65115.html" class="related-bottom-card"><span class="related-bottom-title">Какой двигатель на КАМАЗ 65115: характеристики и модификации</span><span class="related-bottom-desc">Полный обзор двигателей КАМАЗ 65115: Cummins ISB6.7e5 и КАМАЗ-740.62. Технические данные, отличия, с</span></a><a href="/articles/k/ko/koltso-uplotnitelnoe-tsentrifugi-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Уплотнительное кольцо центрифуги КАМАЗ: замена и размеры</span><span class="related-bottom-desc">Техническая инструкция по замене сальника центробежного фильтра масла КАМАЗ. Размеры, артикулы, прич</span></a><a href="/articles/s/sh/shkiv-kompressora-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Шкив компрессора КАМАЗ: виды, замена и регулировка натяжения</span><span class="related-bottom-desc">Полная инструкция по ремонту привода компрессора КАМАЗ. Размеры шкивов, замена подшипников, регулиро</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>
