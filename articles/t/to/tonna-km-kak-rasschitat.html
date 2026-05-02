@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Тонна-километр: формула расчета и примеры для логистики — Про КАМАЗ</title>
+    <meta name="description" content="Как правильно рассчитать тонна-километр. Формула, методы учета пробега с грузом, таблицы тарифов и типичные ошибки логистов в 2026 году.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/t/to/tonna-km-kak-rasschitat.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Тонна-километр: формула расчета и примеры для логистики">
+    <meta property="og:description" content="Как правильно рассчитать тонна-километр. Формула, методы учета пробега с грузом, таблицы тарифов и типичные ошибки логистов в 2026 году.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/drugoe/">Другое</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Тонна-километр: формула расчета и примеры для логистики</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Расчет тонна-километра: формулы, методики и примеры</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#базовая-формула-и-определение-показателя">Базовая формула и определение показателя</a></li><li><a href="#методики-определения-расстояния-для-расчетов">Методики определения расстояния для расчетов</a></li><li><a href="#расчет-в-системе-1с-и-автоматизация">Расчет в системе 1С и автоматизация</a></li><li><a href="#типичные-ошибки-и-способы-их-устранения">Типичные ошибки и способы их устранения</a></li><li><a href="#аналитика-и-оптимизация-показателей">Аналитика и оптимизация показателей</a></li><li><a href="#влияние-внешних-факторов-на-расчеты">Влияние внешних факторов на расчеты</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>При планировании перевозок или анализе логистических расходов часто возникает необходимость точно определить объем выполненной транспортной работы. Особенно остро этот вопрос встает при согласовании тарифов с заказчиками, где оплата производится не за факт доставки, а за фактический объем перемещенного груза на определенное расстояние.</p>
+
+<p>Некорректный расчет этого показателя может привести к значительным финансовым потерям для транспортной компании или к необоснованному завышению расходов для заказчика. Ошибки часто возникают на этапе определения точного расстояния или учета веса, что в итоге искажает реальную картину эффективности использования автопарка.</p>
+
+<p>Для исключения разногласий в бухгалтерской и управленческой отчетности необходимо строго придерживаться установленных методик вычисления. Точность данных напрямую влияет на итоговую себестоимость перевозки и маржинальность рейса.</p>
+
+<h2 id="базовая-формула-и-определение-показателя">Базовая формула и определение показателя</h2>
+
+<p>В основе всех расчетов лежит простая математическая зависимость, связывающая массу груза и пройденный путь. Тонна-километр является универсальной единицей измерения, используемой для оценки производительности транспорта любого типа, от малотонжных фур до тяжелых автопоездов.</p>
+
+<p>Формула расчета выглядит следующим образом: произведение массы перевезенного груза в тоннах умножается на расстояние перевозки в километрах. Если в рейсе перевозилось несколько партий груза с разной массой на разных участках пути, показатели суммируются.</p>
+
+<p>Для автоматизации процесса в электронных таблицах часто используют следующую конструкцию, где ячейки ссылаются на соответствующие данные путевых листов:</p>
+
+<pre><code>=СУММПРОИЗВ(A2:A10; B2:B10)</code></pre>
+
+<p>В данном примере столбец A содержит массу груза в тоннах, а столбец B — расстояние в километрах. Использование функции <code>СУММПРОИЗВ</code> позволяет мгновенно получить общий объем транспортной работы без создания промежуточных столбцов.</p>
+
+<blockquote>
+<p>⚠️ Внимание: При расчете массы груза в тоннах необходимо округлять значение до третьего знака после запятой для соблюдения стандартов бухгалтерского учета, однако промежуточные вычисления лучше производить с высокой точностью.</p>
+</blockquote>
+
+<h3>Учет tare weight и полной массы</h3>
+
+<p>Важно различать массу нетто (вес самого груза) и массу брутто (вес груза с упаковкой и тарой). В большинстве коммерческих договоров расчет ведется именно по массе нетто, если иное не предусмотрено спецификацией контракта.</p>
+
+<p>Если в договоре указано, что оплачивается полная масса, то в формулу подставляется вес автомобиля с грузом, зафиксированный на весовых комплексах. Это характерно для перевозки сыпучих грузов или металлолома.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Для жидких грузов, таких как ГСМ или молоко, масса рассчитывается через плотность вещества и объем цистерны, указанный в накладной.</p></div>
+
+<p>Логисты часто сталкиваются с ситуацией, когда фактический вес отличается от заявленного в документах. В таких случаях приоритет отдается данным весового контроля, зафиксированным в путевом листе.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип данных</th>
+<th>Единица измерения</th>
+<th>Источник информации</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Масса нетто</td>
+<td>Тонны (т)</td>
+<td>Товарно-транспортная накладная</td>
+</tr>
+<tr>
+<td>Расстояние</td>
+<td>Километры (км)</td>
+<td>Путевой лист / GPS-трекер</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="методики-определения-расстояния-для-расчетов">Методики определения расстояния для расчетов</h2>
+
+<p>Ключевым параметром, вызывающим больше всего споров, является расстояние. Существует несколько подходов к его определению, каждый из которых имеет свои особенности применения в зависимости от типа договора.</p>
+
+<p>Наиболее распространенным методом является использование кратчайшего маршрута по автомобильным дорогам общего пользования. Этот метод удобен для планирования, но не всегда отражает реальность, так как водитель может выбрать более длинный путь из-за пробок или ремонта дорог.</p>
+
+<div class="checklist-block"><h4>📋 Определение маршрута</h4><ol><li><strong>Шаг 1.</strong> Откройте атлас автомобильных дорог</li><li><strong>Шаг 2.</strong> Найдите кратчайший путь между пунктами</li><li><strong>Шаг 3.</strong> Зафиксируйте километраж в путевом листе</li><li><strong>Шаг 4.</strong> Сравните с показателям одометра</li></ol></div>
+
+<p>Фактический пробег определяется по показаниям спидометра или данным систем спутникового мониторинга. Этот метод наиболее точен, но требует доверия между заказчиком и перевозчиком, так как водитель теоретически может накрутить лишние километры.</p>
+
+<h3>Сравнение методов учета пробега</h3>
+
+<p>При использовании нормативного расстояния стороны опираются на официальные справочники, например, «Атлас автомобильных дорог». Это исключает споры, но может быть невыгодно, если реальный путь значительно отличается от нормативного.</p>
+
+<p>Расстояние по карте часто используется в предварительных расчетах стоимости услуги до начала рейса. Однако для финальных расчетов с водителями или контрагентами лучше использовать фактические данные.</p>
+
+<ul>
+<li>Нормативное расстояние — фиксированная величина из справочников.</li>
+<li>Фактический пробег — данные одометра или ГЛОНАСС/GPS.</li>
+<li>Расстояние по карте — расчет через онлайн-сервисы.</li>
+</ul>
+
+<p>В договорах с крупными сетевыми ритейлерами часто прописывается жесткий маршрут. Любое отклонение от него должно быть согласовано диспетчером, иначе дополнительные километры могут не оплачиваться.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Использование данных GPS-мониторинга в суде возможно только если оборудование сертифицировано и прошло регулярную поверку.</p></div>
+
+<h2 id="расчет-в-системе-1с-и-автоматизация">Расчет в системе 1С и автоматизация</h2>
+
+<p>Современный учет транспортной работы невозможен без использования специализированного программного обеспечения. В системе <em>1С:Управление автотранспортом</em> или <em>1С:ERP</em> расчет тонна-километров автоматизирован и базируется на введенных первичных документах.</p>
+
+<p>Для корректной работы модулей необходимо правильно настроить справочники. В карточке номенклатуры должна быть указана единица измерения «тонна», а в маршрутной карте — актуальные расстояния между точками.</p>
+
+<p>Процесс формирования отчета обычно выглядит как последовательность действий в интерфейсе программы. Сначала заполняется путевой лист, затем на его основе создается акт выполненных работ.</p>
+
+<pre><code>Документы → Транспорт → Путевые листы → Создать</code></pre>
+
+<p>После проведения документа система автоматически пересчитывает показатели эффективности. Если данные в путевом листе изменены, отчетность обновляется мгновенно.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр настройки</th>
+<th>Значение по умолчанию</th>
+<th>Рекомендация</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Точность расстояния</td>
+<td>1 км</td>
+<td>0.1 км</td>
+</tr>
+<tr>
+<td>Единица веса</td>
+<td>кг</td>
+<td>Тонны (3 знака)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Интеграция с системами мониторинга</h3>
+
+<p>Прямая интеграция с трекерами позволяет исключить человеческий фактор при вводе данных о пробеге. Система сама выгрузит реальный путь, пройденный автомобилем, и учтет его при расчете.</p>
+
+<p>Это особенно актуально для развозных маршрутов, где автомобиль делает множество остановок. Вручную учесть каждый отрезок пути практически невозможно без автоматизации.</p>
+
+<blockquote>
+<p>⚠️ Внимание: При настройке интеграции убедитесь, что часовой пояс на сервере и на трекерах совпадает, иначе время и пробег могут быть рассчитаны неверно.</p>
+</blockquote>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Настройте автоматический импорт данных из телематики в 1С раз в сутки, чтобы диспетчеры видели актуальную картину утром следующего дня.</p></div>
+
+<h2 id="типичные-ошибки-и-способы-их-устранения">Типичные ошибки и способы их устранения</h2>
+
+<p>Несмотря на кажущуюся простоту формулы, в практической деятельности допускаются систематические ошибки. Они связаны как с невнимательностью, так и с неверным пониманием методологии учета.</p>
+
+<ol>
+<li><strong>Округление массы до целых чисел</strong> — при перевозке небольших партий груза округление до тонны дает колоссальную погрешность. Правильно: использовать дробные значения до 0.001 т.</li>
+<li><strong>Учет порожнего пробега</strong> — иногда в расчет mistakenly включают путь без груза. Тонна-километры считаются только при наличии груза, пустой пробег тарифицируется иначе.</li>
+<li><strong>Неверная единица измерения</strong> — путаница между килограммами и тоннами. Если вес в кг, его обязательно нужно делить на 1000 перед умножением на километры.</li>
+<li><strong>Игнорирование коэффициентов</strong> — для некоторых видов грузов (опасные, негабаритные) применяются повышающие коэффициенты, которые забывают учесть в итоговой сумме.</li>
+</ol>
+
+<p>Частой проблемой является расхождение данных между отправителем и получателем груза. В таких случаях следует опираться на данные, зафиксированные в момент взвешивания на выезде с территории отправителя, если договором не предусмотрено взвешивание на стороне получателя.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка перед расчетом</h4><label class="check-item"><input type="checkbox"><span>Вес в тоннах</span></label><label class="check-item"><input type="checkbox"><span>Расстояние актуально</span></label><label class="check-item"><input type="checkbox"><span>Маршрут согласован</span></label><label class="check-item"><input type="checkbox"><span>Единицы измерения верны</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<h2 id="аналитика-и-оптимизация-показателей">Аналитика и оптимизация показателей</h2>
+
+<p>Полученные данные о тонна-километрах служат не только для выставления счетов, но и для глубокого анализа работы автопарка. Сравнение плановых и фактических показателей позволяет выявить неэффективные маршруты.</p>
+
+<p>Если фактический объем транспортной работы значительно ниже планового при том же количестве рейсов, это может указывать на систематический недогруз автомобилей. Это прямой сигнал для логистов пересмотреть схему загрузки.</p>
+
+<p>Анализ динамики показателя по месяцам помогает прогнозировать потребность в топливе и запчастях. Чем больше тонна-километров, тем выше ресурсоемкость эксплуатации техники.</p>
+
+<div class="attention-box attention-info"><h4>Анализ метрики</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Объективность оценки:Позволяет сравнить разные типы транспорта:Сложность сбора:Требует точных данных о весе и пути</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Сезонность:Влияние погодных условий на маршрут</li></ul></div></div></div>
+
+<p>Для крупных логистических операторов этот показатель является ключевым KPI. На его основе строятся графики загрузки мощностей и принимается решение о покупке новых транспортных средств или продаже излишков.</p>
+
+<p>Регулярный мониторинг позволяет быстро реагировать на изменения рынка. Например, если стоимость тонна-километра упала, значит, конкуренция выросла или снизились тарифы, и нужно искать пути оптимизации затрат.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Точный расчет тонна-километра — фундамент прозрачной логистики и справедливых расчетов с клиентами.</p></div>
+
+<p>Внедрение автоматизированных систем контроля значительно снижает количество ошибок и спорных ситуаций. Инвестиции в ПО и телематику окупаются за счет повышения точности учета и сокращения потерь.</p>
+
+<h2 id="влияние-внешних-факторов-на-расчеты">Влияние внешних факторов на расчеты</h2>
+
+<p>При планировании и анализе нельзя игнорировать внешние обстоятельства, которые могут влиять на фактический пробег и, следовательно, на итоговый расчет. Сезонные изменения, такие как закрытие дорог на ремонт или зимние ограничения, могут удлинять маршруты.</p>
+
+<p>Дорожная ситуация в крупных мегаполисах также вносит свои коррективы. Объезд пробок увеличивает километраж, что должно учитываться при расчете фактических показателей, особенно если оплата производится по факту.</p>
+
+<p>Законодательные ограничения на движение тяжелого транспорта в определенные часы или дни недели также могут заставлять водителей выбирать более длинные обходные пути.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Законодательство и правила дорожного движения могут меняться. Всегда проверяйте актуальность ограничений на официальных ресурсах автодорожных служб перед планированием маршрута.</p></div>
+
+<p>Учет этих факторов делает анализ более реалистичным. Если водитель вынужден был сделать крюк из-за аварии на трассе, этот пробег должен быть обоснован и принят к оплате.</p>
+
+<p>В заключение стоит отметить, что грамотное управление показателем тонна-километр требует комплексного подхода, сочетающего точные математические расчеты, современные технологии мониторинга и гибкость в принятии решений.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#базовая-формула-и-определение-показателя">Базовая формула и определение показателя</a></li><li><a href="#методики-определения-расстояния-для-расчетов">Методики определения расстояния для расчетов</a></li><li><a href="#расчет-в-системе-1с-и-автоматизация">Расчет в системе 1С и автоматизация</a></li><li><a href="#типичные-ошибки-и-способы-их-устранения">Типичные ошибки и способы их устранения</a></li><li><a href="#аналитика-и-оптимизация-показателей">Аналитика и оптимизация показателей</a></li><li><a href="#влияние-внешних-факторов-на-расчеты">Влияние внешних факторов на расчеты</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/k/kr/kran-vozdushnyj-kamaz-na-pritsep.html" class="related-card">Установка воздушного крана на прицеп КАМАЗ: инструкция и схемы</a></li><li><a href="/articles/b/bu/buksirovka-na-zhestkoj-stsepke-gruzovogo-avtomobilya.html" class="related-card">Буксировка грузовика на жесткой сцепке: правила, схемы и инструкции</a></li><li><a href="/articles/g/gl/glushilka-platona-kak-rabotaet.html" class="related-card">Глушилка Платон: принцип работы и последствия для КАМАЗ</a></li><li><a href="/articles/n/nu/nuzhna-li-kategoriya-e-dlya-buksirovki-na-zhestkoj-stsepke.html" class="related-card">Категория Е для буксировки на жесткой сцепке: ПДД 2026-2026</a></li><li><a href="/articles/r/rz/rzhavyj-antifriz-v-sisteme-okhlazhdeniya-prichiny.html" class="related-card">Ржавый антифриз в системе охлаждения: причины и методы устранения</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/k/kr/kran-vozdushnyj-kamaz-na-pritsep.html" class="related-bottom-card"><span class="related-bottom-title">Установка воздушного крана на прицеп КАМАЗ: инструкция и схемы</span><span class="related-bottom-desc">Техническая инструкция по монтажу и подключению воздушного крана на прицеп КАМАЗ. Схемы, параметры д</span></a><a href="/articles/b/bu/buksirovka-na-zhestkoj-stsepke-gruzovogo-avtomobilya.html" class="related-bottom-card"><span class="related-bottom-title">Буксировка грузовика на жесткой сцепке: правила, схемы и инструкции</span><span class="related-bottom-desc">Полное руководство по буксировке грузового автомобиля на жесткой сцепке. Требования ПДД, выбор троса</span></a><a href="/articles/g/gl/glushilka-platona-kak-rabotaet.html" class="related-bottom-card"><span class="related-bottom-title">Глушилка Платон: принцип работы и последствия для КАМАЗ</span><span class="related-bottom-desc">Технический разбор устройств блокировки терминалов Платон. Методы обнаружения, юридические риски и в</span></a><a href="/articles/n/nu/nuzhna-li-kategoriya-e-dlya-buksirovki-na-zhestkoj-stsepke.html" class="related-bottom-card"><span class="related-bottom-title">Категория Е для буксировки на жесткой сцепке: ПДД 2026-2026</span><span class="related-bottom-desc">Нужна ли категория E для буксировки на жесткой сцепке? Полный разбор правил, требований к стажу и шт</span></a><a href="/articles/r/rz/rzhavyj-antifriz-v-sisteme-okhlazhdeniya-prichiny.html" class="related-bottom-card"><span class="related-bottom-title">Ржавый антифриз в системе охлаждения: причины и методы устранения</span><span class="related-bottom-desc">Детальный анализ причин появления ржавого налета и осадка в антифризе. Методы промывки, выбор химии </span></a><a href="/articles/n/na/nabivka-nomera-na-ramu-avtomobilya.html" class="related-bottom-card"><span class="related-bottom-title">Набивка номера на раму грузовика: технология и требования</span><span class="related-bottom-desc">Полная инструкция по восстановлению VIN-кода на раме. Технологии набивки, выбор шрифта, глубина марк</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

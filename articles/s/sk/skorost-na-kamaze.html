@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Скорость КАМАЗ: технические ограничения, датчики и разгон — Про КАМАЗ</title>
+    <meta name="description" content="Технический анализ скоростных характеристик грузовиков КАМАЗ. Работа датчиков скорости, влияние редукторов и шин, методы диагностики и типичные неисправности.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/s/sk/skorost-na-kamaze.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Скорость КАМАЗ: технические ограничения, датчики и разгон">
+    <meta property="og:description" content="Технический анализ скоростных характеристик грузовиков КАМАЗ. Работа датчиков скорости, влияние редукторов и шин, методы диагностики и типичные неисправности.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Скорость КАМАЗ: технические ограничения, датчики и разгон</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Технические аспекты скорости на грузовиках КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#физика-движения-и-расчетные-показатели">Физика движения и расчетные показатели</a></li><li><a href="#датчики-скорости-и-электроника">Датчики скорости и электроника</a></li><li><a href="#ограничение-скорости-и-тахографический-контроль">Ограничение скорости и тахографический контроль</a></li><li><a href="#типичные-ошибки-и-неисправности">Типичные ошибки и неисправности</a></li><li><a href="#оптимизация-скоростных-характеристик">Оптимизация скоростных характеристик</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>В процессе эксплуатации тяжелогрузной техники водители часто сталкиваются с ситуацией, когда показания спидометра не соответствуют фактической скорости движения или техническим возможностям силовой установки.</p>
+<p>На практике это приводит к невозможности точно рассчитать время прибытия, нарушению режимов труда и отдыха из-за некорректных данных тахографа, а также к преждевременному износу трансмиссии при неправильном выборе передач.</p>
+<p>Понимание физики движения многотонного автомобиля и принципов работы его измерительных систем является ключевым навыком для любого профессионального водителя или механика, занимающегося обслуживанием парка.</p>
+
+<h2 id="физика-движения-и-расчетные-показатели">Физика движения и расчетные показатели</h2>
+
+<p>Фактическая скорость движения грузового автомобиля определяется взаимодействием нескольких критических параметров, среди которых первостепенную роль играют передаточные числа главной пары и коробки передач.</p>
+<p>Например, для модели <em>КАМАЗ-5320</em> с двигателем <em>740.10</em> и главной парой 5.94 максимальная скорость по паспорту составляет 85 км/ч, однако установка шин большего профиля может существенно исказить эти данные.</p>
+<p>Расчет теоретической скорости производится на основе частоты вращения коленчатого вала двигателя в режиме максимальной мощности, что позволяет определить, соответствует ли поведение машины заявленным характеристикам.</p>
+
+<h3>Влияние передаточных чисел</h3>
+<p>Изменение передаточного числа главной пары является распространенным методом адаптации автомобиля под конкретные условия эксплуатации, будь то скоростные междугородние перевозки или работа в карьерах.</p>
+<p>При установке «быстрого» моста с меньшим передаточным числом крутящий момент на колесах снижается, что требует более частого переключения передач при трогании с места или движении в гору.</p>
+<p><strong>Важно учитывать</strong>, что изменение передаточных чисел без соответствующей корректировки показаний спидометра приведет к ошибкам в учете пробега и скорости.</p>
+<p>Если у вас установлен двигатель <em>КАМАЗ-740.30-260</em>, то для достижения максимальной экономичности следует стремиться держать обороты в диапазоне 1600-1800 об/мин, что напрямую влияет на выбираемую передачу.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Эксплуатация автомобиля с измененными передаточными числами без проверки нагрузочной способности трансмиссии может привести к ускоренному разрушению шестерен и подшипников.</p>
+</blockquote>
+
+<p>В таблице ниже приведены сравнительные данные для различных конфигураций главных пар на стандартных шинах:</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип главной пары</th>
+<th>Передаточное число</th>
+<th>Рекомендуемый режим</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Стандартная</td>
+<td>5.94</td>
+<td>Смешанный цикл</td>
+</tr>
+<tr>
+<td>Быстроходная</td>
+<td>4.98</td>
+<td>Магистраль</td>
+</tr>
+<tr>
+<td>Карьерная</td>
+<td>6.53</td>
+<td>Бездорожье</td>
+</tr>
+</tbody>
+</table>
+
+<p>На практике выбор оптимальной пары позволяет снизить расход топлива на трассе до 10%, если автомобиль работает преимущественно с постоянной высокой скоростью.</p>
+<p>Допустим, вы планируете переоборудование автомобиля для работы в составе автопоезда: в этом случае необходимо учитывать полную массу и требуемую динамику разгона.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Для точного расчета скорости используйте онлайн-калькуляторы, вводя реальный радиус качения установленных шин.</p></div>
+
+<h2 id="датчики-скорости-и-электроника">Датчики скорости и электроника</h2>
+
+<p>Современные системы управления двигателем, такие как <em>ЯСМ</em> или <em>BOSCH</em>, полагаются на точные данные от датчиков скорости для корректного формирования смесеобразования и управления тормозными системами.</p>
+<p>На автомобилях с электронным блоком управления (ЭБУ) сигнал скорости используется не только для спидометра, но и для ограничения максимальной скорости движения (функция limiter).</p>
+<p>Если датчик скорости <em>ДС-1</em> или <em>ДС-2206</em> передает искаженный сигнал, ЭБУ может перейти в аварийный режим работы, ограничивая мощность двигателя.</p>
+
+<h3>Принцип работы и диагностика</h3>
+<p>Проверка работоспособности датчика начинается с визуального осмотра разъема и целостности проводки, так как окисление контактов является частой причиной сбоев.</p>
+<p>Для измерения сигнала можно использовать осциллограф или частотомер, подключив их к соответствующим выводам разъема ЭБУ при приподнятом ведущем мосте.</p>
+<p><strong>Критически важно</strong> проверить зазор между торцом датчика и зубчатым венцом, который должен составлять от 0.5 до 1.5 мм в зависимости от модели.</p>
+
+<div class="checklist-block"><h4>📋 Диагностика датчика скорости</h4><ol><li><strong>Шаг 1.</strong> Поднимите ведущий мост на домкрат</li><li><strong>Шаг 2.</strong> Подключите мультиметр к сигнальному проводу</li><li><strong>Шаг 3.</strong> Вращайте колесо и проверяйте наличие импульсов</li><li><strong>Шаг 4.</strong> Сравните частоту с эталонной</li></ol></div>
+
+<p>В некоторых случаях проблема кроется не в самом датчике, а в состоянии привода, особенно если используется механический привод спидометра через раздаточную коробку.</p>
+<p>Износ шлицов вала привода может приводить к проскальзыванию и, как следствие, к заниженным показаниям скорости на приборной панели.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Неисправный датчик скорости может вызвать некорректную работу системы ABS и ESP, что создает прямую угрозу безопасности движения.</p>
+</blockquote>
+
+<p>Ниже представлена таблица совместимости датчиков для различных моделей:</p>
+
+<table>
+<thead>
+<tr>
+<th>Модель КАМАЗ</th>
+<th>Тип датчика</th>
+<th>Расположение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>КАМАЗ-5490</td>
+<td>Индуктивный</td>
+<td>КПП</td>
+</tr>
+<tr>
+<td>КАМАЗ-65115</td>
+<td>Холла</td>
+<td>Раздатка</td>
+</tr>
+</tbody>
+</table>
+
+<p>На старых моделях с механическим приводом часто требуется смазка троса спидометра, так как его заклинивание может повредить квадратный вал в коробке передач.</p>
+
+<h2 id="ограничение-скорости-и-тахографический-контроль">Ограничение скорости и тахографический контроль</h2>
+
+<p>Согласно техническому регламенту и требованиям безопасности, многие грузовые автомобили оснащаются программными или аппаратными ограничителями скорости.</p>
+<p>Функция ограничения скорости (Limiter) в ЭБУ работает путем анализа сигнала датчика и прекращения подачи топлива при достижении установленного порога, обычно 90 км/ч для магистральных тягачей.</p>
+<p>Вмешательство в работу этой системы без соответствующих разрешений и калибровки является нарушением законодательства и может привести к юридической ответственности.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Снятие ограничений скорости может привести к перегреву двигателя и разрушению шин, не рассчитанных на высокие скоростные режимы.</p></div>
+
+<h3>Настройка через диагностическое ПО</h3>
+<p>Программное обеспечение, такое как <em>DiagnoSoft</em> или дилерские сканеры, позволяет изменять параметры ограничения скорости в конфигурационных файлах ЭБУ.</p>
+<p>Процесс настройки требует точного ввода параметров шин и главной пары, чтобы ограничение срабатывало именно на той скорости, которая требуется по регламенту.</p>
+<p>Если в системе стоит неверный коэффициент шин, реальная скорость автомобиля будет отличаться от показаний тахографа и спидометра.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка системы ограничения</h4><label class="check-item"><input type="checkbox"><span>Считать текущие параметры ЭБУ</span></label><label class="check-item"><input type="checkbox"><span>Проверить версию прошивки</span></label><label class="check-item"><input type="checkbox"><span>Убедиться в исправности датчика скорости</span></label><label class="check-item"><input type="checkbox"><span>Провести тестовый заезд с контролем по GPS</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Стоит помнить, что тахограф фиксирует не только скорость, но и события, связанные с попытками вмешательства в его работу или работу датчиков движения.</p>
+<p>Регулярная калибровка тахографа в авторизованных мастерских обязательна для избежания штрафов со стороны контролирующих органов.</p>
+
+<p>В блоке ниже представлены плюсы и минусы использования электронных ограничителей:</p>
+
+<div class="attention-box attention-info"><h4>Электронные ограничители скорости</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Повышение безопасности</li><li>✅ Снижение расхода топлива</li><li>✅ Увеличение ресурса двигателя</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Снижение средней скорости потока</li><li>❌ Риск некорректной работы на скользкой дороге</li><li>❌ Необходимость точной настройки</li></ul></div></div></div>
+
+<h2 id="типичные-ошибки-и-неисправности">Типичные ошибки и неисправности</h2>
+
+<p>В ходе эксплуатации водители и механики часто допускают ошибки, которые приводят к неверной оценке скоростных характеристик автомобиля.</p>
+<p>Одной из распространенных проблем является игнорирование разницы в диаметре шин на осях, что особенно актуально для полноприводных моделей КАМАЗ.</p>
+<p>Разница в износе протектора или установке шин разных моделей может привести к возникновению циркуляции мощности в трансмиссии и ложным показаниям датчиков.</p>
+
+<ol>
+<li><strong>Игнорирование давления в шинах</strong> — недокачанные шины уменьшают радиус качения, что приводит к занижению показаний спидометра и росту расхода топлива.</li>
+<li><strong>Неверный подбор главной пары</strong> — установка слишком «быстрого» моста на автомобиль с маломощным двигателем приводит к постоянной работе мотора на предельных оборотах.</li>
+<li><strong>Отсутствие калибровки после ремонта</strong> — замена КПП или моста без проверки передаточных чисел и настройки датчиков вносит хаос в показания приборов.</li>
+<li><strong>Использование неоригинальных датчиков</strong> — дешевые аналоги часто имеют нелинейную характеристику сигнала, что сбивает логику работы ЭБУ.</li>
+</ol>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>При замене шин всегда проверяйте фактический диаметр новой резины, так как маркировка 315/80 R22.5 у разных производителей может отличаться на 1-2 см.</p></div>
+
+<p>На практике устранение этих ошибок позволяет восстановить паспортную динамику разгона и обеспечить точность бортовых систем контроля.</p>
+<p>Если вы заметили, что автомобиль «не тянет» на высоких передачах, первым делом проверьте соответствие фактической скорости показаниям приборов с помощью GPS-навигатора.</p>
+
+<h2 id="оптимизация-скоростных-характеристик">Оптимизация скоростных характеристик</h2>
+
+<p>Для улучшения динамических показателей без вмешательства в конструкцию двигателя можно использовать методы оптимизации работы трансмиссии и управления автомобилем.</p>
+<p>Правильное использование делителя и демультипликатора в коробке передач позволяет держать двигатель в зоне максимального крутящего момента.</p>
+<p>На современных моделях с АКПП <em>ZF</em> или <em>ЯША</em> важно следить за адаптацией коробки, так как incorrect learning может приводить к затянутым переключениям и потере инерции.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Скорость КАМАЗа зависит от совокупности механических параметров трансмиссии, состояния шин и корректности работы электронных датчиков.</p></div>
+
+<p>Водитель должен понимать, что максимальная техническая скорость не всегда является целевым показателем для грузового автомобиля.</p>
+<p>Экономичный режим движения, как правило, находится в диапазоне 60-70 км/ч, где аэродинамическое сопротивление еще не растет экспоненциально.</p>
+<p>Регулярный технический осмотр ходовой части и трансмиссии гарантирует, что заявленные скоростные характеристики будут доступны в любой момент.</p>
+
+<p>Подводя итог, следует сказать, что управление скоростью на КАМАЗе — это комплексная задача, требующая исправности всех узлов автомобиля.</p>
+<p>Своевременная диагностика датчиков, правильный подбор передаточных чисел и контроль состояния шин позволяют эксплуатировать технику эффективно и безопасно.</p>
+<p>Соблюдение регламентных работ и отказ от кустарных методов вмешательства в электронику обеспечат долгий срок службы дорогостоящих компонентов.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#физика-движения-и-расчетные-показатели">Физика движения и расчетные показатели</a></li><li><a href="#датчики-скорости-и-электроника">Датчики скорости и электроника</a></li><li><a href="#ограничение-скорости-и-тахографический-контроль">Ограничение скорости и тахографический контроль</a></li><li><a href="#типичные-ошибки-и-неисправности">Типичные ошибки и неисправности</a></li><li><a href="#оптимизация-скоростных-характеристик">Оптимизация скоростных характеристик</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/k/ka/kamaz-master-skachat-torrent.html" class="related-card">КамАЗ Мастер: как скачать торрент и настроить ПО</a></li><li><a href="/articles/k/ka/kamaz-kompas-2025.html" class="related-card">КАМАЗ Компас 2026: обзор бортовой системы и диагностика</a></li><li><a href="/articles/k/ko/kody-oshibok-ural-nekst.html" class="related-card">Коды ошибок Урал Next: расшифровка и устранение неисправностей</a></li><li><a href="/articles/d/dy/dymogenerator-iz-svechi-nakala-12-volt.html" class="related-card">Дымогенератор из свечи накала 12 вольт своими руками</a></li><li><a href="/articles/v/vo/vosstanovit-nomer-na-rame-avtomobilya.html" class="related-card">Как восстановить номер на раме грузовика: методы и документы</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/k/ka/kamaz-master-skachat-torrent.html" class="related-bottom-card"><span class="related-bottom-title">КамАЗ Мастер: как скачать торрент и настроить ПО</span><span class="related-bottom-desc">Техническое руководство по скачиванию и установке программы КАМАЗ Мастер через торрент-клиент. Диагн</span></a><a href="/articles/k/ka/kamaz-kompas-2025.html" class="related-bottom-card"><span class="related-bottom-title">КАМАЗ Компас 2026: обзор бортовой системы и диагностика</span><span class="related-bottom-desc">Подробный анализ бортовой системы КАМАЗ Компас 2026 года. Диагностика, устранение ошибок, настройка </span></a><a href="/articles/k/ko/kody-oshibok-ural-nekst.html" class="related-bottom-card"><span class="related-bottom-title">Коды ошибок Урал Next: расшифровка и устранение неисправностей</span><span class="related-bottom-desc">Подробный разбор кодов ошибок Урал Next. Диагностика двигателя ЯМЗ, системы AdBlue, тормозов и элект</span></a><a href="/articles/d/dy/dymogenerator-iz-svechi-nakala-12-volt.html" class="related-bottom-card"><span class="related-bottom-title">Дымогенератор из свечи накала 12 вольт своими руками</span><span class="related-bottom-desc">Подробная инструкция по изготовлению дымогенератора для автодиагностики из свечи накала. Схемы, черт</span></a><a href="/articles/v/vo/vosstanovit-nomer-na-rame-avtomobilya.html" class="related-bottom-card"><span class="related-bottom-title">Как восстановить номер на раме грузовика: методы и документы</span><span class="related-bottom-desc">Полная инструкция по восстановлению номера рамы автомобиля. Юридические аспекты, технологии клеймени</span></a><a href="/articles/o/os/oshibki-pzhd-14ts-10-24v-kody.html" class="related-bottom-card"><span class="related-bottom-title">Коды ошибок ПЖД 14ТС-10 24В: расшифровка и устранение</span><span class="related-bottom-desc">Полная таблица кодов ошибок ПЖД 14ТС-10 24В. Причины сбоев, мигание индикатора, диагностика контролл</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

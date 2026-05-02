@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>АВЗ КАМАЗ ВК: Подключение, настройка и диагностика — Про КАМАЗ</title>
+    <meta name="description" content="Полная инструкция по подключению контроллера АВЗ к КАМАЗ через блок ВК. Настройка CAN-шины, коды ошибок и проверка исполнительных механизмов.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/a/av/avz-kamaz-vk.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="АВЗ КАМАЗ ВК: Подключение, настройка и диагностика">
+    <meta property="og:description" content="Полная инструкция по подключению контроллера АВЗ к КАМАЗ через блок ВК. Настройка CAN-шины, коды ошибок и проверка исполнительных механизмов.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/elektrooborudovanie/">Электрооборудование</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">АВЗ КАМАЗ ВК: Подключение, настройка и диагностика</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Настройка контроллера АВЗ на КАМАЗ через блок ВК</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#архитектура-взаимодействия-авз-и-вк-в-системе-управления-камаз">Архитектура взаимодействия АВЗ и ВК в системе управления КАМАЗ</a></li><li><a href="#процедура-подключения-и-первичная-настройка">Процедура подключения и первичная настройка</a></li><li><a href="#диагностика-и-калибровка-исполнительных-механизмов">Диагностика и калибровка исполнительных механизмов</a></li><li><a href="#типичные-ошибки-и-методы-их-устранения">Типичные ошибки и методы их устранения</a></li><li><a href="#оптимальная-работа-системы-управления-заслонками">Оптимальная работа системы управления заслонками</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Ситуация, когда бортовой компьютер КАМАЗа перестает корректно отображать параметры двигателя или исполнительные механизмы отказываются реагировать на команды, часто указывает на сбой в работе контроллера АВЗ (Автоматизированная Вентиляция и Заслонки) или его связки с блоком ВК (Водительский Контроллер).</p>
+<p>Водители и механики сталкиваются с тем, что после замены узлов или обновления прошивок система перестает видеть заслонки дросселя, заслонки выхлопного тормоза или неправильно считывает положение педалей.</p>
+<p>Отсутствие синхронизации между блоками приводит к переходу двигателя в аварийный режим, ограничению мощности и невозможности проведения плановой диагностики без специального оборудования.</p>
+<p>Данная проблема требует последовательного подхода к проверке электрических цепей, настройке параметров CAN-шины и калибровке исполнительных устройств через диагностический интерфейс.</p>
+
+<h2 id="архитектура-взаимодействия-авз-и-вк-в-системе-управления-камаз">Архитектура взаимодействия АВЗ и ВК в системе управления КАМАЗ</h2>
+
+<p>Понимание топологии сети является первым шагом к успешной диагностике. В современных грузовиках КАМАЗ, оснащенных двигателями Cummins или КамАЗ-740 поколения Евро-4 и выше, обмен данными происходит по высокоскоростному протоколу CAN J1939.</p>
+<p>Контроллер <strong>АВЗ</strong> отвечает за управление пневматическими и электрическими заслонками, в то время как блок <strong>ВК</strong> выступает в роли основного интерфейса для водителя, отображая текущее состояние систем.</p>
+<p>Если связь между этими узлами нарушена, на дисплее ВК появляются символы «прочерков» вместо значений или загораются индикаторы неисправности.</p>
+
+<h3>Физический уровень подключения и адресация</h3>
+<p>Физическое соединение осуществляется через витую пару, подходящую к разъемам обоих блоков. Важно учитывать, что на разных моделях шасси распиновка разъемов может отличаться, особенно на переходных моделях 2015–2018 годов выпуска.</p>
+<p>Каждый блок в сети имеет уникальный адрес. Для контроллера АВЗ стандартным является адрес <code>0xF4</code> (или десятичный 244), однако в конфигурациях с дополнительными модулями адресация может быть изменена программно.</p>
+<p>Проверка целостности линий CAN-High и CAN-Low проводится мультиметром: сопротивление между линиями в выключенном состоянии должно составлять около 60 Ом, что указывает на наличие двух оконечных резисторов в сети.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Перед проведением любых работ с электрическими разъемами блоков АВЗ и ВК обязательно отключайте массу автомобиля. Кратковременное замыкание линий CAN на борт может вывести из строя дорогостоящие контроллеры ЭБУ двигателя.</p>
+</blockquote>
+
+<p>В таблице ниже приведены основные параметры физического уровня для штатной проводки:</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Нормальное значение</th>
+<th>Допустимое отклонение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сопротивление CAN-шины</td>
+<td>60 Ом</td>
+<td>58–62 Ом</td>
+</tr>
+<tr>
+<td>Напряжение CAN-H</td>
+<td>2.5–3.5 В</td>
+<td>±0.2 В</td>
+</tr>
+<tr>
+<td>Напряжение CAN-L</td>
+<td>1.5–2.5 В</td>
+<td>±0.2 В</td>
+</tr>
+</tbody>
+</table>
+
+<p>Если замеры показывают значительные отклонения, необходимо проверить состояние коннекторов на предмет окисления, особенно в зонах повышенной вибрации рамы.</p>
+<p>Часто причиной сбоев становится не сам блок АВЗ, а поврежденный жгут проводки, идущий от рамы к кабине, где расположен блок ВК.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На моделях КАМАЗ-5490 Neo и newer разъем диагностики может быть вынесен в отдельный лючок под панелью приборов, что упрощает доступ к шине CAN.</p></div>
+
+<h2 id="процедура-подключения-и-первичная-настройка">Процедура подключения и первичная настройка</h2>
+
+<p>Для проведения работ по настройке потребуется специализированный диагностический адаптер, поддерживающий протоколы J1939 и специфичные для КАМАЗ расширения, а также ноутбук с установленным программным обеспечением.</p>
+<p>Подключение осуществляется через стандартный 9-контактный разъем (или 16-контактный OBDII в зависимости от года выпуска), расположенный в кабине водителя.</p>
+<p>После подключения адаптера и запуска программы необходимо выбрать правильный тип транспортного средства и версию программного обеспечения ЭБУ.</p>
+
+<h3>Идентификация и чтение конфигурации</h3>
+<p>Первым действием при входе в систему диагностики является чтение идентификаторов установленных блоков. Программа должна увидеть ЭБУ двигателя, блок АВЗ и блок ВК как активные устройства в сети.</p>
+<p>Если блок АВЗ не отображается в списке обнаруженных устройств, это свидетельствует либо об отсутствии питания на блоке, либо о полном обрыве связи.</p>
+<p>В случае успешного подключения следует перейти в раздел конфигурирования параметров. Здесь проверяется соответствие установленной версии прошивки требованиям технического регламента для конкретной модели двигателя.</p>
+
+<div class="checklist-block"><h4>📋 Первичная диагностика</h4><ol><li><strong>Шаг 1.</strong> Подключите адаптер к разъему диагностики</li><li><strong>Шаг 2.</strong> Включите зажигание (двигатель не запускать)</li><li><strong>Шаг 3.</strong> Запустите диагностическое ПО и выберите модель КАМАЗ</li><li><strong>Шаг 4.</strong> Считайте список активных ошибок и VIN-код автомобиля</li></ol></div>
+
+<p>Важно убедиться, что в конфигурации правильно выбран тип управляемых заслонок. Для двигателей Cummins ISBe и ISLe параметры могут отличаться от настроек для двигателей КамАЗ-740.82.</p>
+<p>Некорректный выбор типа двигателя в меню конфигурации приведет к тому, что блок АВЗ будет посылать неверные сигналы управления, что вызовет ошибку рассинхронизации.</p>
+
+<ol>
+<li>Откройте меню «Конфигурация автомобиля» в диагностическом ПО.</li>
+<li>Перейдите в подраздел «Дополнительные системы» или «Пневматика/Заслонки».</li>
+<li>Проверьте поле «Тип контроллера АВЗ» — должно соответствовать установленному hardware (обычно v2.0 или v3.0).</li>
+<li>Сверьте номер калибровки с эталонным значением для данной модели двигателя.</li>
+</ol>
+
+<p>После внесения изменений в конфигурацию (если они были необходимы) требуется выполнить цикл включения-выключения зажигания для применения новых настроек.</p>
+<p>Блок ВК должен автоматически обновить отображаемую информацию после перезагрузки сети.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Изменение параметров калибровки двигателя без соответствующей квалификации может привести к нарушению экологических норм и нестабильной работе силового агрегата.</p></div>
+
+<h2 id="диагностика-и-калибровка-исполнительных-механизмов">Диагностика и калибровка исполнительных механизмов</h2>
+
+<p>Наиболее частой причиной обращения к блоку АВЗ является необходимость калибровки положения заслонок после их замены или ремонта.</p>
+<p>Процедура позволяет блоку управления запомнить крайние положения (открыто/закрыто) и средние точки для плавного регулирования.</p>
+<p>Без правильной калибровки заслонка выхлопного тормоза может не перекрывать выхлоп полностью, что снижает эффективность торможения, или, наоборот, создавать избыточное противодавление.</p>
+
+<h3>Адаптация дроссельной заслонки и заслонки выхлопного тормоза</h3>
+<p>Процесс адаптации запускается через диагностическое меню в разделе «Сервисные функции» или «Адаптация компонентов».</p>
+<p>Во время выполнения процедуры двигатель должен быть прогрет до рабочей температуры, а педаль акселератора отпущена.</p>
+<p>Система автоматически подаст команды на полное открытие и закрытие заслонок, считывая показания датчиков положения.</p>
+
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Действие при калибровке</th>
+<th>Контрольный параметр</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Дроссельная заслонка</td>
+<td>Циклическое открытие/закрытие</td>
+<td>0% и 100% хода</td>
+</tr>
+<tr>
+<td>Заслонка выхлопного тормоза</td>
+<td>Закрытие под давлением</td>
+<td>Давление в выхлопной системе</td>
+</tr>
+<tr>
+<td>Заслонка EGR (если есть)</td>
+<td>Проверка хода штока</td>
+<td>Позиция в %</td>
+</tr>
+</tbody>
+</table>
+
+<p>Если в процессе калибровки возникает ошибка, следует проверить механическую часть: отсутствие заеданий, целостность тяг и правильность установки пневмоцилиндров.</p>
+<p>Часто механическое препятствие не дает заслонке дойти до конца, и блок АВЗ фиксирует это как неисправность привода.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка перед калибровкой</h4><label class="check-item"><input type="checkbox"><span>Двигатель прогрет до 60°C+</span></label><label class="check-item"><input type="checkbox"><span>Пневмосистема накачана до 8 бар</span></label><label class="check-item"><input type="checkbox"><span>Педали не нажаты</span></label><label class="check-item"><input type="checkbox"><span>Ошибки в памяти ЭБУ отсутствуют</span></label><label class="check-item"><input type="checkbox"><span>Рычаг КПП в нейтральном положении</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<p>После успешной калибровки параметры сохраняются в энергонезависимую память блока АВЗ.</p>
+<p>Блок ВК должен отображать текущее положение заслонок в процентах или вольтах, и эти значения должны изменяться плавно при работе двигателя.</p>
+<p>Резкие скачки показаний на дисплее ВК свидетельствуют о неисправности датчика обратной связи или плохом контакте в разъеме.</p>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Во время процедуры калибровки заслонки издают громкие звуки и резко перемещаются. Не держите руки вблизи движущихся механизмов и убедитесь, что рядом с выхлопной трубой никого нет.</p>
+</blockquote>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Успешная калибровка фиксирует крайние положения заслонок в памяти контроллера, что необходимо для корректной работы двигателя и систем безопасности.</p></div>
+
+<h2 id="типичные-ошибки-и-методы-их-устранения">Типичные ошибки и методы их устранения</h2>
+
+<p>В процессе эксплуатации и настройки системы АВЗ-ВК могут возникать специфические ошибки, требующие точной идентификации.</p>
+<p>Большинство проблем решается проверкой контактов или повторной процедурой настройки, но некоторые указывают на аппаратные неисправности.</p>
+<p>Ниже приведен перечень наиболее распространенных сбоев и алгоритмы действий для их устранения.</p>
+
+<ol>
+<li><strong>Ошибка «Нет связи с блоком АВЗ»</strong> — чаще всего вызвана перегоранием предохранителя питания блока или обрывом провода массы. Необходимо проверить целостность цепи питания 24В на разъеме контроллера.</li>
+<li><strong>Ошибка «Рассинхронизация положения заслонки»</strong> — возникает, если фактическое положение заслонки не совпадает с расчетным более чем на 10-15%. Требуется механическая регулировка привода и повторная калибровка.</li>
+<li><strong>Ошибка «Короткое замыкание в цепи управления»</strong> — указывает на повреждение проводки соленоидов или самого пневмоклапана. Проверьте сопротивление обмотки клапана, оно должно соответствовать паспортным данным (обычно 10–50 Ом).</li>
+<li><strong>«Плавающие» показания на дисплее ВК</strong> — часто являются следствием наводок в цепи CAN-шины или плохой «массы» на кузове кабины. Следует проверить крепление минусового провода блока ВК.</li>
+</ol>
+
+<p>Для глубокого анализа можно использовать осциллограф, подключив его к линиям CAN, чтобы увидеть уровень шумов и искажений сигнала.</p>
+<p>Наличие сильных помех может требовать установки дополнительных ферритовых фильтров или замены экранированного кабеля.</p>
+
+<div class="attention-box attention-info"><h4>Методы диагностики</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Аппаратная проверка мультиметром доступна всегда</li><li>✅ Программная диагностика дает точный код ошибки</li><li>✅ Визуальный осмотр выявляет явные повреждения</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требуется наличие оборудования</li><li>❌ Не все ошибки отображаются на дисплее ВК</li><li>❌ Сложность доступа к блокам на некоторых моделях</li></ul></div></div></div>
+
+<p>При замене блока АВЗ на новый обязательно требуется его программирование и привязка к конкретному автомобилю, так как «чистые» блоки не имеют калибровок.</p>
+<p>Использование б/у блоков без перепрошивки может привести к конфликту адресов в сети, если предыдущий автомобиль имел другую конфигурацию.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>При частом появлении ошибок связи попробуйте обработать разъемы контактов спреем для очистки электрики и смазать их диэлектрической смазкой для защиты от влаги.</p></div>
+
+<h2 id="оптимальная-работа-системы-управления-заслонками">Оптимальная работа системы управления заслонками</h2>
+
+<p>Корректная работа связки АВЗ и ВК обеспечивает не только комфорт управления, но и соблюдение экологических норм, а также эффективность торможения двигателем.</p>
+<p>Регулярная проверка состояния разъемов и своевременная адаптация после ремонтов позволяют избежать внезапных остановок в пути.</p>
+<p>Система, работающая в штатном режиме, реагирует на команды мгновенно и не создает лишних нагрузок на бортсеть.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Данные о кодах ошибок и адресах блоков могут различаться в зависимости от версии программного обеспечения ЭБУ. Всегда сверяйтесь с актуальной технической документацией производителя для конкретной модификации двигателя.</p></div>
+
+
+<p>Поддержание чистоты контактов и защита жгутов от перетирания являются лучшими профилактическими мерами.</p>
+<p>При возникновении повторяющихся ошибок, которые не устраняются программным сбросом, целесообразно провести замену suspect-компонента для исключения его влияния на сеть.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#архитектура-взаимодействия-авз-и-вк-в-системе-управления-камаз">Архитектура взаимодействия АВЗ и ВК в системе управления КАМАЗ</a></li><li><a href="#процедура-подключения-и-первичная-настройка">Процедура подключения и первичная настройка</a></li><li><a href="#диагностика-и-калибровка-исполнительных-механизмов">Диагностика и калибровка исполнительных механизмов</a></li><li><a href="#типичные-ошибки-и-методы-их-устранения">Типичные ошибки и методы их устранения</a></li><li><a href="#оптимальная-работа-системы-управления-заслонками">Оптимальная работа системы управления заслонками</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/s/sk/skhema-podklyucheniya-datchika-urovnya-topliva-kamaz.html" class="related-card">Схема подключения датчика уровня топлива КАМАЗ: Инструкция</a></li><li><a href="/articles/p/pa/panel-priborov-kamaz-k5.html" class="related-card">Панель приборов КАМАЗ К5: устройство, ошибки и настройка</a></li><li><a href="/articles/k/ka/kamaz-starter-skhema.html" class="related-card">Схема стартера КАМАЗ: устройство, разборка и ремонт</a></li><li><a href="/articles/r/re/rele-povorotov-kamaz-43118-gde-nakhoditsya.html" class="related-card">Реле поворотов КамАЗ 43118: схема, где находится и замена</a></li><li><a href="/articles/k/ka/kak-proverit-generator-kamaza.html" class="related-card">Проверка генератора Камаз: диагностика, нормы, ремонт</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/s/sk/skhema-podklyucheniya-datchika-urovnya-topliva-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Схема подключения датчика уровня топлива КАМАЗ: Инструкция</span><span class="related-bottom-desc">Подробная техническая инструкция по подключению ДУТ и поплавковых датчиков на КАМАЗ. Схемы распиновк</span></a><a href="/articles/p/pa/panel-priborov-kamaz-k5.html" class="related-bottom-card"><span class="related-bottom-title">Панель приборов КАМАЗ К5: устройство, ошибки и настройка</span><span class="related-bottom-desc">Технический анализ приборной панели КАМАЗ К5 (K5). Расшифровка индикаторов, коды ошибок, устройство </span></a><a href="/articles/k/ka/kamaz-starter-skhema.html" class="related-bottom-card"><span class="related-bottom-title">Схема стартера КАМАЗ: устройство, разборка и ремонт</span><span class="related-bottom-desc">Подробная инструкция по схеме стартера КАМАЗ. Разборка, проверка обмоток, устранение неисправностей </span></a><a href="/articles/r/re/rele-povorotov-kamaz-43118-gde-nakhoditsya.html" class="related-bottom-card"><span class="related-bottom-title">Реле поворотов КамАЗ 43118: схема, где находится и замена</span><span class="related-bottom-desc">Подробная инструкция по поиску реле поворотов на КамАЗ 43118. Схема подключения, распиновка, проверк</span></a><a href="/articles/k/ka/kak-proverit-generator-kamaza.html" class="related-bottom-card"><span class="related-bottom-title">Проверка генератора Камаз: диагностика, нормы, ремонт</span><span class="related-bottom-desc">Подробная инструкция по проверке генератора Камаз. Нормы напряжения, тесты мультиметром, поиск неисп</span></a><a href="/articles/k/ka/kak-podklyuchit-ukazatel-urovnya-topliva.html" class="related-bottom-card"><span class="related-bottom-title">Подключение указателя уровня топлива: схемы, диагностика и нормы</span><span class="related-bottom-desc">Подробная инструкция по подключению датчика уровня топлива КАМАЗ. Схемы проводки, распиновка, провер</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Регулировка зажигания КамАЗ Евро 3 с ТНВД Bosch — Про КАМАЗ</title>
+    <meta name="description" content="Полное руководство по настройке угла опережения впрыска на КамАЗ Евро 3 с ТНВД Bosch. Методы регулировки, параметры, ошибки и технические нюансы.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/r/re/regulirovka-zazhiganiya-kamaz-evro-3-s-tnvd-bosh.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Регулировка зажигания КамАЗ Евро 3 с ТНВД Bosch">
+    <meta property="og:description" content="Полное руководство по настройке угла опережения впрыска на КамАЗ Евро 3 с ТНВД Bosch. Методы регулировки, параметры, ошибки и технические нюансы.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/dvigatel-i-tnvd/">Двигатель и ТНВД</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Регулировка зажигания КамАЗ Евро 3 с ТНВД Bosch</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Точная регулировка зажигания КамАЗ Евро 3 с ТНВД Bosch</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#диагностика-и-подготовка-к-регулировке-тнвд">Диагностика и подготовка к регулировке ТНВД</a></li><li><a href="#методы-установки-угла-опережения-впрыска">Методы установки угла опережения впрыска</a></li><li><a href="#электронная-калибровка-через-диагностический-сканер">Электронная калибровка через диагностический сканер</a></li><li><a href="#типичные-ошибки-при-регулировке-зажигания">Типичные ошибки при регулировке зажигания</a></li><li><a href="#контроль-качества-работы-после-настройки">Контроль качества работы после настройки</a></li><li><a href="#оптимальная-работа-топливной-системы">Оптимальная работа топливной системы</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Водители и механики часто сталкиваются с ситуацией, когда двигатель КамАЗ с системой Common Rail или насос-форсунками Bosch начинает работать неустойчиво, дымить черным или белым дымом, а также терять тягу при разгоне. Эти симптомы указывают на нарушение фаз впрыска топлива, что в обиходе часто называют сбоем «зажигания», хотя технически речь идет об угле опережения впрыска.</p>
+<p>Игнорирование первичных признаков рассинхронизации работы топливного насоса высокого давления и коленчатого вала может привести к серьезным последствиям, включая прогар поршней, выход из строя форсунок или разрушение шатунов из-за детонации. Точная настройка момента начала подачи топлива является критически важной процедурой, требующей строгого соблюдения регламента завода-изготовителя.</p>
+<p>Рассмотрим детально процесс диагностики и регулировки момента впрыска на двигателях КамАЗ экологического класса Евро 3, оснащенных топливной аппаратурой производства <em>Robert Bosch GmbH</em>. Особое внимание уделим методам, не требующим сложного стендового оборудования, но обеспечивающим высокую точность.</p>
+
+<h2 id="диагностика-и-подготовка-к-регулировке-тнвд">Диагностика и подготовка к регулировке ТНВД</h2>
+
+<p>Перед началом любых манипуляций с топливной аппаратурой необходимо убедиться, что проблема действительно кроется в фазировке ТНВД, а не в неисправности датчиков положения коленвала или распредвала. Система управления двигателем <em>EDC7</em> или <em>EDC16</em> может ошибочно интерпретировать сигналы при растяжении цепи ГРМ или смещении меток шкивов.</p>
+<p>Проверка начинается с визуального осмотра привода ТНВД. На двигателях КамАЗ 740.63, 740.60 и их модификациях привод осуществляется через шестерни распределительного вала. Необходимо снять защитный кожух и убедиться в отсутствии люфтов в муфте привода и целостности шестерни промежуточной передачи.</p>
+
+<h3>Проверка меток ГРМ и привода</h3>
+<p>Совпадение меток на шестерне коленчатого вала и шестерне распределительного вала является базовым условием корректной работы. Если метки сбиты, регулировка угла опережения впрыска вращения ТНВД не даст результата, так как фаза будет нарушена глобально. Допустимое расхождение меток не должно превышать половины зуба шестерни.</p>
+<p>Важно проверить состояние установочного штифта (фиксатора) ТНВД. При износе отверстия под фиксатор или самого пальца возникает люфт, который приводит к «плаванию» угла опережения впрыска под нагрузкой. В таких случаях требуется замена втулки привода или переходного фланца.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Любое вмешательство в герметичность топливной системы требует абсолютной чистоты. Попадание одной песчинки в плунжерную пару ТНВД Bosch приведет к заклиниванию насоса.</p></div>
+
+<p>Для проведения точной диагностики потребуется специализированный инструмент, в частности, индикаторный нутромер или электронное устройство для замера хода плунжера. На практике часто используется метод подъема плунжера первой секции в верхнюю мертвую точку.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Нормативное значение</th>
+<th>Допустимый допуск</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Угол опережения впрыска</td>
+<td>1° ± 0.5° до ВМТ</td>
+<td>± 0.5°</td>
+</tr>
+<tr>
+<td>Ход плунжера (геометрический)</td>
+<td>3.5 - 4.0 мм</td>
+<td>± 0.1 мм</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Корректная диагностика исключает неисправности привода ГРМ и люфты в муфте перед началом тонкой настройки ТНВД.</p></div>
+
+<h2 id="методы-установки-угла-опережения-впрыска">Методы установки угла опережения впрыска</h2>
+
+<p>Существует два основных способа регулировки момента начала подачи топлива: статический (механический) и динамический (с использованием диагностического сканера). Статический метод является базовым и позволяет завести двигатель, в то время как динамический необходим для точной калибровки под конкретный экземпляр двигателя.</p>
+<p>Механическая регулировка производится путем поворота корпуса ТНВД вокруг своей оси относительно фланца крепления. Поворот по часовой стрелке (если смотреть со стороны привода) уменьшает угол опережения, против часовой — увеличивает. Однако этот метод дает лишь приблизительный результат.</p>
+
+<h3>Использование индикатора хода плунжера</h3>
+<p>Наиболее точным механическим способом считается установка момента начала подачи по ходу плунжера первой секции. Для этого ТНВД снимается с двигателя или используется специальный доступ на установленном насосе. Поршень первого цилиндра выставляется в положение, соответствующее началу впрыска согласно градусной шкале маховика.</p>
+<p>В отверстие под штуцер первой секции устанавливается индикатор с точностью деления 0.01 мм. Вращая коленчатый вал, находят момент, когда плунжер начинает перекрывать впускное окно. Расстояние, которое проходит толкатель индикатора с момента начала подъема до момента, соответствующего углу опережения, должно совпадать с паспортными данными.</p>
+
+<div class="checklist-block"><h4>📋 Установка угла по индикатору</h4><ol><li><strong>Шаг 1.</strong> Выставить поршень 1-го цилиндра в ВМТ</li><li><strong>Шаг 2.</strong> Установить индикатор в корпус ТНВД</li><li><strong>Шаг 3.</strong> Вращать вал против часовой стрелки до начала движения плунжера</li><li><strong>Шаг 4.</strong> Зафиксировать показания и сравнить с эталоном</li></ol></div>
+
+<p>При использовании этого метода критически важно учитывать люфт в приводе толкателя. Измерения следует проводить несколько раз, вращая вал в одну сторону, чтобы исключить влияние зазоров. Разброс показаний более 0.05 мм указывает на износ пары «кулачок-толкатель».</p>
+<p>Если двигатель оснащен системой изменения фаз или имеет особенности конструкции привода, как, например, на некоторых модификациях КамАЗ-65115, методика может отличаться. В таких случаях опора на заводскую документацию <em>Bosch</em> обязательна.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На двигателях с электронным управлением угол опережения впрыска может корректироваться ЭБУ в реальном времени в пределах 3-5 градусов, но базовая механическая установка должна быть идеальной.</p></div>
+
+<h2 id="электронная-калибровка-через-диагностический-сканер">Электронная калибровка через диагностический сканер</h2>
+
+<p>Современная диагностика двигателей КамАЗ Евро 3 невозможна без использования специализированного программного обеспечения, такого как <em>Cummins INSITE</em> (для двигателей Cummins) или дилерских сканеров для Bosch, например, <em>Bosch KTS</em> с софтом <em>ESI[tronic]</em>. Электронная регулировка позволяет задать параметр «Angle of Advance» (Угол опережения) непосредственно в памяти контроллера.</p>
+<p>Процесс начинается с подключения адаптера к диагностическому разъему <code>OBD-II</code> или <code>K-Line</code>, расположенному в кабине. После установления связи с блоком управления необходимо считать текущие параметры работы двигателя и коды неисправностей.</p>
+
+<h3>Параметры настройки в ЭБУ</h3>
+<p>В меню диагностики следует найти раздел, отвечающий за параметры впрыска. Обычно он обозначается как «Injection Timing» или «Start of Injection». Здесь отображается реальный угол, который видит ЭБУ на основе сигналов датчиков положения коленвала и распредвала.</p>
+<p>Если механическая часть выполнена верно, но угол в сканере отличается от номинального, требуется корректировка. Это делается либо программным смещением (калибровкой), либо физической доводкой положения ТНВД с одновременным контролем показаний в реальном времени.</p>
+
+<div class="checklist-block"><h4>☑️ Подготовка к электронной настройке</h4><label class="check-item"><input type="checkbox"><span>Заряд АКБ не менее 12.5В</span></label><label class="check-item"><input type="checkbox"><span>Двигатель прогрет до рабочей температуры</span></label><label class="check-item"><input type="checkbox"><span>Отсутствуют активные ошибки по датчикам положения</span></label><label class="check-item"><input type="checkbox"><span>Диагностический кабель исправен</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Важно понимать, что электронная калибровка не способна компенсировать сильный механический износ. Если для получения нормального угла требуется программное смещение более 2 градусов, это сигнал о необходимости проверки состояния шестерен ГРМ или самого ТНВД.</p>
+<p>После внесения изменений в калибровки необходимо выполнить процедуру «Сохранить» и перезагрузить контроллер. Только после этого новые параметры вступят в силу и будут использоваться для управления форсунками.</p>
+
+<pre><code>Процедура сброса адаптаций:
+<p>1. Подключить сканер</p>
+<p>2. Войти в режим "Сервис"</p>
+<p>3. Выбрать "Сброс адаптаций ТНВД"</p>
+<p>4. Подтвердить действие</code></pre></p>
+
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Точность</th>
+<th>Необходимое оборудование</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Механический (по меткам)</td>
+<td>Низкая (± 2°)</td>
+<td>Стробоскоп, метки</td>
+</tr>
+<tr>
+<td>Индикаторный</td>
+<td>Высокая (± 0.5°)</td>
+<td>Индикатор, градусовник</td>
+</tr>
+<tr>
+<td>Электронный (Сканер)</td>
+<td>Максимальная</td>
+<td>Диагностический комплекс</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-info"><h4>Выбор метода регулировки</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Высокая точность</li><li>✅ Контроль в реальном времени</li><li>✅ Возможность записи параметров</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требует дорогого оборудования</li><li>❌ Необходимы навыки работы с ПО</li><li>❌ Зависимость от исправности электроники</li></ul></div></div></div>
+
+<h2 id="типичные-ошибки-при-регулировке-зажигания">Типичные ошибки при регулировке зажигания</h2>
+
+<p>Процесс настройки топливной аппаратуры Bosch на двигателях КамАЗ требует высокой квалификации. Даже опытные механики иногда допускают ошибки, которые приводят к нестабильной работе мотора или его поломке.</p>
+<p>Одной из распространенных проблем является неправильная интерпретация показаний индикатора. Механики часто забывают, что ход плунжера измеряется от момента перекрытия впускного окна, а не от нижней мертвой точки. Это приводит к ошибке в несколько градусов.</p>
+
+<ol>
+<li><strong>Игнорирование люфта в приводе</strong> — если не выбрать весь зазор в муфте или шестернях перед замером, показания будут «плавать», и выставить точный угол не получится; правильно: всегда вращать вал в одну сторону (обычно по ходу вращения) при подходе к контрольной точке.</li>
+<li><strong>Неверное определение ВМТ</strong> — использование грубых методов поиска верхней мертвой точки (например, по бумажке) дает большую погрешность; правильно: использовать индикатор в свечном отверстии или резьбовом отверстии форсунки для точной фиксации пика.</li>
+<li><strong>Попытка регулировки без прогрева</strong> — тепловое расширение деталей двигателя и ТНВД влияет на зазоры; правильно: проводить финальную проверку и корректировку на прогретом до рабочей температуры двигателе.</li>
+<li><strong>Нарушение герметичности при снятии показаний</strong> — подсос воздуха через индикаторное устройство искажает гидравлические процессы в секции; правильно: использовать специальные переходники с уплотнительными кольцами, смазанными топливом.</li>
+</ol>
+
+<blockquote>
+<p>⚠️ <strong>Внимание:</strong> Попытка регулировки ТНВД на работающем двигателе путем ослабления крепежных болтов фланца опасна. Резкий срыв насоса может привести к разрыву трубок высокого давления и пожару.</p>
+</blockquote>
+
+<p>Еще одной ошибкой является пренебрежение качеством топлива при настройке. Если в системе находится топливо с низкой смазывающей способностью или водой, характеристики распыла будут отличаться от расчетных, и «идеально» выставленный угол не даст ожидаемого результата.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Используйте только чистое дизельное топливо для настроечных работ. Наличие воды в системе Common Rail или ТНВД Bosch недопустимо и ведет к коррозии прецизионных пар.</p></div>
+
+<h2 id="контроль-качества-работы-после-настройки">Контроль качества работы после настройки</h2>
+
+<p>Завершающим этапом работ является комплексная проверка работы двигателя. Недостаточно просто выставить метки или угол — необходимо убедиться, что двигатель работает ровно во всех режимах. Сначала проводится визуальный осмотр на предмет утечек топлива, которые могли возникнуть при демонтаже и монтаже элементов.</p>
+<p>Далее двигатель запускается и прогревается. Оценивается легкость запуска «на горячую» и «на холодную». Тяжелый запуск может свидетельствовать о слишком раннем впрыске, в то время как поздний впрыск вызывает затрудненный пуск и белый дым.</p>
+
+<h3>Анализ выхлопа и шумов</h3>
+<p>Цвет выхлопных газов является отличным индикатором правильности установки угла опережения. Черный дым под нагрузкой говорит о слишком позднем впрыске или переобогащении смеси, белый дым (пар) — о слишком позднем впрыске или попадании антифриза/воды.</p>
+<p>Характерный металлический стук (детонация) при резком добавлении газа указывает на слишком ранний впрыск. В этом случае регулировку необходимо повторить, сместив угол в позднюю сторону. Работа двигателя должна быть ровной, без провалов и рывков.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Эксплуатация двигателя с сильно нарушенным углом опережения впрыска (ранним) более 30 минут может привести к тепловому удару и разрушению поршневой группы.</p></div>
+
+<p>Для окончательного подтверждения качества регулировки рекомендуется провести дорожные испытания. Автомобиль должен уверенно набирать скорость, не должно быть «провалов» тяги в диапазоне 1200-1600 об/мин. Расход топлива после правильной настройки обычно снижается на 3-7%.</p>
+<p>Важно также провести повторную диагностику сканером после 100-200 км пробега. Параметры коррекции угла впрыска в ЭБУ не должны выходить за предельные значения. Если система постоянно пытается скорректировать угол на максимальную величину, значит, механическая часть настроена неверно.</p>
+
+<h2 id="оптимальная-работа-топливной-системы">Оптимальная работа топливной системы</h2>
+
+<p>Регулировка угла опережения впрыска на КамАЗ Евро 3 с ТНВД Bosch — это баланс между механической точностью и электронными настройками. Правильно выполненная процедура обеспечивает не только заявленную мощность и экономичность, но и ресурс двигателя.</p>
+<p>Регулярный контроль состояния привода ТНВД и своевременная замена фильтров тонкой очистки топлива позволят сохранить установленные параметры на длительное время. Помните, что качество топлива напрямую влияет на стабильность работы плунжерных пар и, следовательно, на точность впрыска.</p>
+<p>Соблюдение технологического процесса и использование поверенного инструмента гарантирует, что двигатель будет работать как часы, обеспечивая надежную тягу в любых дорожных условиях.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#диагностика-и-подготовка-к-регулировке-тнвд">Диагностика и подготовка к регулировке ТНВД</a></li><li><a href="#методы-установки-угла-опережения-впрыска">Методы установки угла опережения впрыска</a></li><li><a href="#электронная-калибровка-через-диагностический-сканер">Электронная калибровка через диагностический сканер</a></li><li><a href="#типичные-ошибки-при-регулировке-зажигания">Типичные ошибки при регулировке зажигания</a></li><li><a href="#контроль-качества-работы-после-настройки">Контроль качества работы после настройки</a></li><li><a href="#оптимальная-работа-топливной-системы">Оптимальная работа топливной системы</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/p/po/porshnya-kamaz-740.html" class="related-card">Поршни Камаз 740: размеры, артикулы и правила подбора</a></li><li><a href="/articles/g/gi/gilza-kamaz-5320.html" class="related-card">Гильза Камаз 5320: размеры, маркировка и замена</a></li><li><a href="/articles/k/ka/kak-prokachat-solyarku-kamaz-5490.html" class="related-card">Прокачка топливной системы Камаз 5490: удаление воздуха из контура</a></li><li><a href="/articles/t/ts/tsokotyat-paltsy-pri-nagruzke.html" class="related-card">Стук пальцев при нагрузке: причины, диагностика и ремонт двигателя</a></li><li><a href="/articles/s/so/solyarka-popadaet-v-maslo-dvigatelya-prichiny.html" class="related-card">Солярка в масле двигателя: причины, диагностика и устранение</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/p/po/porshnya-kamaz-740.html" class="related-bottom-card"><span class="related-bottom-title">Поршни Камаз 740: размеры, артикулы и правила подбора</span><span class="related-bottom-desc">Технический разбор поршневой группы двигателей Камаз 740. Размеры, допуски, маркировка, таблица совм</span></a><a href="/articles/g/gi/gilza-kamaz-5320.html" class="related-bottom-card"><span class="related-bottom-title">Гильза Камаз 5320: размеры, маркировка и замена</span><span class="related-bottom-desc">Технические параметры гильзы цилиндров Камаз 5320. Таблица размеров, допуски на расточку и пошаговая</span></a><a href="/articles/k/ka/kak-prokachat-solyarku-kamaz-5490.html" class="related-bottom-card"><span class="related-bottom-title">Прокачка топливной системы Камаз 5490: удаление воздуха из контура</span><span class="related-bottom-desc">Технология удаления воздуха из системы топливоподачи Камаз 5490. Пошаговая прокачка ТНВД, фильтров и</span></a><a href="/articles/t/ts/tsokotyat-paltsy-pri-nagruzke.html" class="related-bottom-card"><span class="related-bottom-title">Стук пальцев при нагрузке: причины, диагностика и ремонт двигателя</span><span class="related-bottom-desc">Почему цокают пальцы при нагрузке? Полный разбор причин детонации, калильного зажигания и износа ГРМ</span></a><a href="/articles/s/so/solyarka-popadaet-v-maslo-dvigatelya-prichiny.html" class="related-bottom-card"><span class="related-bottom-title">Солярка в масле двигателя: причины, диагностика и устранение</span><span class="related-bottom-desc">Почему дизельное топливо попадает в масло: полный разбор причин, методов диагностики ТНВД и форсунок</span></a><a href="/articles/l/lu/lukojl-rosneft-ili-gazprom-kakoe-maslo-luchshe.html" class="related-bottom-card"><span class="related-bottom-title">Лукойл, Роснефть или Газпром: какое масло лучше для грузовика</span><span class="related-bottom-desc">Сравнение моторных масел Лукойл, Роснефть и Газпром для КАМАЗ. Выбор вязкости, допуски, анализ харак</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

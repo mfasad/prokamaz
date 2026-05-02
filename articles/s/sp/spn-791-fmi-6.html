@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>SPN 791 FMI 6: Ошибка короткого замыкания в системе управления КАМАЗ — Про КАМАЗ</title>
+    <meta name="description" content="Подробная инструкция по диагностике и устранению SPN 791 FMI 6. Анализ причин короткого замыкания, проверка проводки и алгоритм сброса ошибки на грузовиках КАМАЗ.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/s/sp/spn-791-fmi-6.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="SPN 791 FMI 6: Ошибка короткого замыкания в системе управления КАМАЗ">
+    <meta property="og:description" content="Подробная инструкция по диагностике и устранению SPN 791 FMI 6. Анализ причин короткого замыкания, проверка проводки и алгоритм сброса ошибки на грузовиках КАМАЗ.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">SPN 791 FMI 6: Ошибка короткого замыкания в системе управления КАМАЗ</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Диагностика и устранение SPN 791 FMI 6 на грузовиках КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#интерпретация-диагностических-кодов-spn-и-fmi">Интерпретация диагностических кодов SPN и FMI</a></li><li><a href="#алгоритм-поиска-короткого-замыкания-в-проводке">Алгоритм поиска короткого замыкания в проводке</a></li><li><a href="#диагностика-исполнительных-механизмов-и-датчиков">Диагностика исполнительных механизмов и датчиков</a></li><li><a href="#программная-диагностика-и-сброс-ошибок">Программная диагностика и сброс ошибок</a></li><li><a href="#типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</a></li><li><a href="#профилактика-и-долгосрочная-эксплуатация">Профилактика и долгосрочная эксплуатация</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Появление на приборной панели грузовика индикатора «Check Engine» в сочетании с кодом неисправности SPN 791 FMI 6 часто застает водителя врасплох, требуя немедленного внимания к системе управления двигателем. Ситуация осложняется тем, что электроника может принудительно ограничивать мощность силового агрегата или переводить мотор в аварийный режим работы, что делает дальнейшую эксплуатацию тяжелой техники невозможной или крайне рискованной для целостности узлов.</p>
+
+<p>Подобный сбой сигнализирует о критическом нарушении в электрической цепи, а именно о коротком замыкании на массу или на плюс, в зависимости от конкретной конфигурации проводки и логики работы контроллера. Игнорирование этого сигнала может привести к выходу из строя дорогостоящих компонентов, таких как электронный блок управления (ЭБУ), или стать причиной отказа систем безопасности во время движения по трассе.</p>
+
+<p>Для квалифицированного устранения неполадки необходимо четко понимать, какие именно параметры фиксирует бортовая система и в какой последовательности проводить проверки. Важно не спешить с заменой датчиков, так как в большинстве случаев проблема кроется не в самом исполнительном механизме, а в целостности жгутов, контактных группах или окислении разъемов, что требует внимательного визуального и инструментального контроля.</p>
+
+<h2 id="интерпретация-диагностических-кодов-spn-и-fmi">Интерпретация диагностических кодов SPN и FMI</h2>
+
+<p>Понимание природы неисправности начинается с правильной расшифровки аббревиатур, используемых в протоколе J1939, который является стандартом для коммерческого транспорта, включая технику КАМАЗ. Код SPN (Suspect Parameter Number) указывает на конкретный параметр или компонент, в котором обнаружена аномалия, в то время как FMI (Failure Mode Identifier) описывает тип возникшей неисправности.</p>
+
+<p>В рассматриваемом случае число 791 относится к параметрам, связанным с управлением двигателем, часто затрагивая цепи управления форсунками, клапанами или датчиками положения. Значение FMI 6 однозначно указывает на то, что напряжение в цепи ниже нормального порога, что интерпретируется диагностическим оборудованием как короткое замыкание на землю (Ground). <strong>Это критический параметр</strong>, который требует проверки изоляции проводов.</p>
+
+<h3>Специфика работы контроллера Bosch EDC7</h3>
+
+<p>На большинстве современных двигателей КАМАЗ, таких как Cummins ISBe или дизелях серии КАМАЗ-740 с электронным управлением, используется архитектура Bosch EDC7 UC31. Контроллер постоянно мониторит ток, протекающий через выходные драйверы. Если ток превышает допустимое значение при закрытом ключе, система фиксирует короткое замыкание.</p>
+
+<p>Особенностью работы <em>Bosch EDC7</em> является возможность самодиагностики в реальном времени. При обнаружении FMI 6 контроллер может однократно попытаться активировать цепь, и если ток снова возрастет до критического уровня, драйвер будет заблокирован для предотвращения термического повреждения платы. Это объясняет, почему некоторые системы могут работать нестабльно перед полным отключением узла.</p>
+
+<p>Важно учитывать, что диагностика должна проводиться с использованием совместимого сканера, способного отображать не только статические коды, но и текущие параметры в реальном времени. Это позволяет увидеть момент возникновения скачка напряжения или изменения сопротивления, что сужает круг поиска дефекта.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На некоторых модификациях ЭБУ код SPN 791 может дублироваться кодами производителя, поэтому всегда сверяйтесь с технической документацией к конкретной версии прошивки.</p></div>
+
+<p>Стоит отметить, что ложные срабатывания возможны при сильных наводках в бортовой сети, например, при работе мощных потребителей или неисправности генератора. Однако приоритетным направлением поиска остается физическая целостность проводки, идущей к проблемному узлу.</p>
+
+<h2 id="алгоритм-поиска-короткого-замыкания-в-проводке">Алгоритм поиска короткого замыкания в проводке</h2>
+
+<p>Поиск источника короткого замыкания требует системного подхода и наличия базового набора инструментов, включая мультиметр, набор щупов и схему электрооборудования. Первым шагом всегда должна стать визуальная inspection жгута проводов, идущего от ЭБУ к исполнительному механизму, на предмет перетертостей, оплавлений или следов воздействия грызунов.</p>
+
+<p>Особое внимание следует уделить местам прохождения жгута через металлические перегородки кабины или рамы, где резиновые втулки могли рассохнуться или сместиться. Именно в этих точках чаще всего происходит повреждение изоляции и контакт провода с «массой» автомобиля, что и вызывает ошибку FMI 6.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Перед началом любых работ с электропроводкой обязательно отключите массу аккумулятора. Это предотвратит случайное короткое замыкание инструментом и защитит электронный блок управления от скачков напряжения.</p></div>
+
+<h3>Проверка целостности жгутов и разъемов</h3>
+
+<p>Для проведения точной диагностики необходимо прозвонить каждый провод в подозрительной цепи. Один щуп мультиметра устанавливается на контакт разъема ЭБУ (предварительно отсоединенного), а второй — на массу автомобиля. Наличие сопротивления, близкого к нулю, при отключенном потребителе укажет на место замыкания.</p>
+
+<p>Часто проблема кроется в самих разъемах: попадание влаги, окисление контактов или разрушение уплотнителей приводят к тому, что ток течет по непредназначенному пути. <strong>Окисленные контакты</strong> могут создавать паразитные токи утечки, которые контроллер воспринимает как неисправность цепи.</p>
+
+<p>Рекомендуется использовать спрей-очиститель контактов при обработке разъемов, но только после механической очистки от грязи и окислов. Если разъем имеет следы термического повреждения или оплавления, его необходимо заменить целиком вместе с ответной частью, так как восстановление герметичности в таком случае невозможно.</p>
+
+<div class="checklist-block"><h4>📋 Диагностика цепи</h4><ol><li><strong>Шаг 1.</strong> Отключите аккумулятор</li><li><strong>Шаг 2.</strong> Снимите разъем с ЭБУ и датчика/форсунки</li><li><strong>Шаг 3.</strong> Прозвоните провод на замыкание с массой</li><li><strong>Шаг 4.</strong> Проверьте сопротивление самого датчика/форсунки</li></ol></div>
+
+<p>В случаях, когда визуальный осмотр не выявил дефектов, применяют метод покачивания жгута во время работы двигателя или при включенном зажигании. Если в момент механического воздействия ошибка появляется или исчезает, это локализует место обрыва или замыкания в подвижной части проводки.</p>
+
+<h2 id="диагностика-исполнительных-механизмов-и-датчиков">Диагностика исполнительных механизмов и датчиков</h2>
+
+<p>Если проводка находится в исправном состоянии, внимание переключается на сами компоненты, подключенные к цепи SPN 791. В зависимости от конкретной модификации двигателя, это могут быть электромагнитные форсунки, клапаны рециркуляции выхлопных газов (EGR) или датчики положения педали акселератора.</p>
+
+<p>Внутреннее короткое замыкание обмотки соленоида — распространенная причина появления FMI 6. При нагреве двигателя изоляция внутри компонента может разрушаться, вызывая замыкание витков или на корпус, что регистрируется ЭБУ как критическая ошибка.</p>
+
+<h3>Проверка сопротивления компонентов</h3>
+
+<p>Для проверки необходимо измерить сопротивление между контактами компонента и между контактом и корпусом. Значения должны соответствовать техническим требованиям производителя двигателя. Например, сопротивление форсунки Common Rail обычно составляет от 0.2 до 0.6 Ом, в то время как для соленоидов EGR оно может быть выше.</p>
+
+<p>Если мультиметр показывает сопротивление значительно ниже нормы или нулевое значение, компонент подлежит замене. Важно также проверить, не «пробивает» ли компонент на корпус, измерив сопротивление между контактом и металлической частью детали — оно должно быть бесконечным.</p>
+
+<table>
+<thead>
+<tr>
+<th>Компонент</th>
+<th>Нормальное сопротивление</th>
+<th>Признак неисправности</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Электромагнитная форсунка</td>
+<td>0.2 - 0.6 Ом</td>
+<td>Сопротивление < 0.1 Ом или обрыв</td>
+</tr>
+<tr>
+<td>Клапан EGR</td>
+<td>10 - 20 Ом</td>
+<td>Замыкание на корпус</td>
+</tr>
+<tr>
+<td>Датчик положения</td>
+<td>Зависит от модели</td>
+<td>Нестабильный сигнал</td>
+</tr>
+</tbody>
+</table>
+
+<p>При замене компонентов необходимо использовать оригинальные запчасти или качественные аналоги, так как дешевые реплики часто имеют отклонения в электрических параметрах, что приводит к повторному появлению ошибки через короткий промежуток времени.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка компонентов</h4><label class="check-item"><input type="checkbox"><span>Измерено сопротивление компонента</span></label><label class="check-item"><input type="checkbox"><span>Проверено отсутствие замыкания на корпус</span></label><label class="check-item"><input type="checkbox"><span>Визуально оценено состояние разъема компонента</span></label><label class="check-item"><input type="checkbox"><span>Сравнены показания с эталонными значениями</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<h2 id="программная-диагностика-и-сброс-ошибок">Программная диагностика и сброс ошибок</h2>
+
+<p>После проведения всех ремонтных работ и устранения физической причины неисправности необходимо выполнить программный сброс ошибки. Просто отключить аккумулятор часто бывает недостаточно, так как код неисправности может сохраняться в энергонезависимой памяти ЭБУ.</p>
+
+<p>Для этого требуется подключение диагностического адаптера и ноутбука со специализированным ПО, таким как <em>Cummins Insite</em>, <em>Jaltest</em> или дилерские сканеры КАМАЗ. Процедура сброса позволяет системе провести повторный тест компонентов и убедиться в устранении причины FMI 6.</p>
+
+<h3>Использование диагностического ПО</h3>
+
+<p>В процессе работы с программным обеспечением следует не только стереть коды, но и проверить статус «ожидающих» ошибок. Если после сброса и нескольких циклов запуска двигателя ошибка возвращается немедленно, значит, дефект не устранен или имеется скрытая неисправность в цепи.</p>
+
+<p>Также стоит проверить историю параметров, чтобы убедиться, что в момент возникновения ошибки не было скачков напряжения в бортовой сети, вызванных неисправностью реле регулятора напряжения генератора. Нестабильное питание часто становится косвенной причиной сбоев в работе электроники.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Принудительное удаление ошибок без физического ремонта может привести к тому, что система перейдет в аварийный режим работы с ограничением мощности, что опасно при движении в потоке транспорта.</p>
+</blockquote>
+
+<p>В некоторых случаях может потребоваться калибровка нового компонента, особенно если речь идет о форсунках Common Rail. Коды форсунок (IMA-коды) необходимо прописать в память ЭБУ для корректной работы двигателя на всех режимах.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>После замены компонентов и сброса ошибок дайте двигателю поработать на холостом ходу 5-10 минут, чтобы ЭБУ провел адаптацию и обновил параметры работы систем.</p></div>
+
+<h2 id="типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</h2>
+
+<p>В процессе ремонта technicians часто допускают ряд типичных ошибок, которые не только не решают проблему, но и могут усугубить ситуацию. Понимание этих нюансов позволяет сэкономить время и ресурсы.</p>
+
+<ol>
+<li><strong>Замена датчика без проверки проводки</strong> — самая распространенная ошибка, ведущая к unnecessary расходам, так как причина часто кроется в перетертом жгуте, а не в самом датчике.</li>
+<li><strong>Использование «скруток» вместо пайки</strong> — в условиях вибрации грузовика скрутки быстро окисляются и теряют контакт, поэтому все соединения должны быть пропаяны или выполнены через качественные клеммы.</li>
+<li><strong>Игнорирование состояния массы двигателя</strong> — плохой контакт основного провода массы двигателя с рамой может вызывать хаотичные ошибки по всем датчикам, включая SPN 791.</li>
+<li><strong>Отсутствие проверки напряжения бортовой сети</strong> — если генератор выдает повышенное напряжение, это может приводить к пробою драйверов ЭБУ, и установка новых компонентов без ремонта генератора приведет к их сгоранию.</li>
+</ol>
+
+<div class="attention-box attention-info"><h4>Выбор метода ремонта</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Сохранение заводской конфигурации</li><li>✅ Высокая надежность паяных соединений</li><li>✅ Долговечность оригинальных запчастей</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Высокая стоимость оригиналов</li><li>❌ Необходимость спец. оборудования</li><li>❌ Длительное время поиска дефекта</li></ul></div></div></div>
+
+<h2 id="профилактика-и-долгосрочная-эксплуатация">Профилактика и долгосрочная эксплуатация</h2>
+
+<p>Для предотвращения повторного возникновения ошибки SPN 791 FMI 6 важно регулярно проводить осмотр подкапотного пространства. Особое внимание следует уделять состоянию гофры жгутов и креплению проводов, которые не должны болтаться или касаться горячих частей двигателя.</p>
+
+<p>При мойке двигателя необходимо использовать осторожность и не направлять струю высокого давления непосредственно на разъемы ЭБУ и датчиков, так как вода под давлением может проникнуть внутрь connectors, вызывая коррозию и замыкание.</p>
+
+<p>Регулярная диагностика, проводимая во плановых ТО, позволяет выявить зарождающиеся проблемы с проводкой или компонентами до того, как они приведут к остановке автомобиля на трассе. Контроль за состоянием аккумуляторных батарей и клемм также является важной частью профилактики.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Норма</th>
+<th>Действие при отклонении</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Напряжение бортсети</td>
+<td>13.5 - 14.5 В</td>
+<td>Проверить генератор и реле</td>
+</tr>
+<tr>
+<td>Сопротивление изоляции</td>
+<td>> 1 МОм</td>
+<td>Заменить участок жгута</td>
+</tr>
+</tbody>
+</table>
+
+<p>Соблюдение этих простых правил и использование качественных расходных материалов при ремонте обеспечит стабильную работу системы управления двигателем и снизит риск внезапных поломок в пути.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Устранение SPN 791 FMI 6 требует комплексной проверки цепи от ЭБУ до исполнительного механизма, включая поиск замыканий, проверку компонентов и программный сброс.</p></div>
+
+<p>В заключение, успешное решение проблемы с кодом SPN 791 FMI 6 зависит от последовательности действий и внимательности к деталям. Начинать всегда следует с простейшего — визуального осмотра и проверки контактов, постепенно переходя к более сложным измерениям параметров компонентов.</p>
+
+<p>Грамотная диагностика позволяет не только устранить текущую неисправность, но и предотвратить развитие сопутствующих проблем в электрической системе грузовика. Надежность техники КАМАЗ напрямую зависит от качества обслуживания и своевременного реагирования на сигналы бортовой системы диагностики.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#интерпретация-диагностических-кодов-spn-и-fmi">Интерпретация диагностических кодов SPN и FMI</a></li><li><a href="#алгоритм-поиска-короткого-замыкания-в-проводке">Алгоритм поиска короткого замыкания в проводке</a></li><li><a href="#диагностика-исполнительных-механизмов-и-датчиков">Диагностика исполнительных механизмов и датчиков</a></li><li><a href="#программная-диагностика-и-сброс-ошибок">Программная диагностика и сброс ошибок</a></li><li><a href="#типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</a></li><li><a href="#профилактика-и-долгосрочная-эксплуатация">Профилактика и долгосрочная эксплуатация</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/o/os/oshibka-05-na-avtonomke.html" class="related-card">Ошибка 05 на автономке КАМАЗ: причины и устранение</a></li><li><a href="/articles/s/sp/spn-630-fmi-2.html" class="related-card">SPN 630 FMI 2: Диагностика и устранение неисправности</a></li><li><a href="/articles/k/ko/kody-oshibok-pzhd-14ts-10-kamaz.html" class="related-card">Коды ошибок ПЖД 14ТС-10 КАМАЗ: расшифровка и диагностика</a></li><li><a href="/articles/t/tk/tkr-kamaz-evro-5.html" class="related-card">ТКР КАМАЗ Евро-5: Диагностика, Неисправности и Регулировка</a></li><li><a href="/articles/k/ka/kak-proverit-datchik-skorosti-na-kamaze.html" class="related-card">Как проверить датчик скорости КАМАЗ: инструкция, коды ошибок</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/o/os/oshibka-05-na-avtonomke.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка 05 на автономке КАМАЗ: причины и устранение</span><span class="related-bottom-desc">Подробный анализ ошибки 05 на автономном отопителе КАМАЗ. Диагностика, причины возникновения, методы</span></a><a href="/articles/s/sp/spn-630-fmi-2.html" class="related-bottom-card"><span class="related-bottom-title">SPN 630 FMI 2: Диагностика и устранение неисправности</span><span class="related-bottom-desc">Подробная инструкция по коду ошибки SPN 630 FMI 2. Причины неисправности в системе SCR, методы диагн</span></a><a href="/articles/k/ko/kody-oshibok-pzhd-14ts-10-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Коды ошибок ПЖД 14ТС-10 КАМАЗ: расшифровка и диагностика</span><span class="related-bottom-desc">Полный справочник кодов неисправностей отопителя 14ТС-10 для КАМАЗ. Расшифровка индикаторов, методы </span></a><a href="/articles/t/tk/tkr-kamaz-evro-5.html" class="related-bottom-card"><span class="related-bottom-title">ТКР КАМАЗ Евро-5: Диагностика, Неисправности и Регулировка</span><span class="related-bottom-desc">Полная инструкция по диагностике и ремонту турбокомпрессора ТКР на КАМАЗ Евро-5. Разбор кодов ошибок</span></a><a href="/articles/k/ka/kak-proverit-datchik-skorosti-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как проверить датчик скорости КАМАЗ: инструкция, коды ошибок</span><span class="related-bottom-desc">Подробное руководство по диагностике датчика скорости на грузовиках КАМАЗ. Методы проверки мультимет</span></a><a href="/articles/s/sp/spn-158-fmi-2.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка SPN 158 FMI 2: Причины, Диагностика и Ремонт Датчика Давления</span><span class="related-bottom-desc">Подробная инструкция по диагностике кода неисправности SPN 158 FMI 2. Причины, методы проверки датчи</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

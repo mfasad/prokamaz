@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Почему при зарядке кипит электролит не во всех банках — Про КАМАЗ</title>
+    <meta name="description" content="Технический анализ причин закипания электролита в одной или нескольких банках АКБ. Диагностика сульфатации, замыкания и потери емкости.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/p/po/pochemu-pri-zaryadke-akkumulyatora-kipit-elektrolit-ne-vo-vsekh-bankakh.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Почему при зарядке кипит электролит не во всех банках">
+    <meta property="og:description" content="Технический анализ причин закипания электролита в одной или нескольких банках АКБ. Диагностика сульфатации, замыкания и потери емкости.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/elektrooborudovanie/">Электрооборудование</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Почему при зарядке кипит электролит не во всех банках</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Почему при зарядке кипит электролит не во всех банках</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#физика-процесса-и-нормальное-кипение-электролита">Физика процесса и нормальное кипение электролита</a></li><li><a href="#основные-причины-локального-закипания">Основные причины локального закипания</a></li><li><a href="#диагностика-и-выявление-неисправной-секции">Диагностика и выявление неисправной секции</a></li><li><a href="#методы-восстановления-и-десульфатации">Методы восстановления и десульфатации</a></li><li><a href="#типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</a></li><li><a href="#оценка-состояния-и-необходимость-замены">Оценка состояния и необходимость замены</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Если при постановке аккумулятора на зарядку наблюдается активное газовыделение («кипение») только в одной или нескольких банках, в то время как остальные ведут себя спокойно, это сигнализирует о серьезном дисбалансе в работе батареи. Такое поведение не является нормой для исправного свинцово-кислотного аккумулятора и указывает на то, что процесс электролиза воды в разных секциях протекает с разной интенсивностью, что часто предшествует полному выходу устройства из строя.</p>
+
+<p>На практике это означает, что одна часть батареи уже достигла своего предела заряда или имеет внутреннюю неисправность, в то время как остальные секции все еще пытаются накопить энергию. Игнорирование этого симптома может привести к вздутию корпуса, разрушению пластин и даже взрыву аккумулятора из-за концентрации гремучего газа в замкнутом объеме.</p>
+
+<p>Для понимания сути процесса необходимо учитывать, что стандартный автомобильный аккумулятор состоит из шести последовательно соединенных банок (секций), каждая из которых вырабатывает напряжение около 2,1 Вольта. При зарядке ток проходит через все банки одинаковый, но напряжение на каждой из них может существенно различаться в зависимости от их внутреннего состояния, что и приводит к описываемой аномалии.</p>
+
+<h2 id="физика-процесса-и-нормальное-кипение-электролита">Физика процесса и нормальное кипение электролита</h2>
+
+<p>Чтобы понять причину неравномерного газообразования, следует рассмотреть, что происходит внутри исправной батареи при достижении полного заряда. В нормальных условиях, когда сульфат свинца на пластинах полностью восстановился, дальнейшее прохождение тока вызывает электролиз воды, содержащейся в электролите. В этот момент начинается обильное выделение водорода и кислорода, что визуально воспринимается как кипение.</p>
+
+<p>Важно отметить, что <strong>равномерное кипение</strong> во всех банках при достижении напряжения 14,4–14,8 В (для 12-вольтовой батареи) является признаком того, что аккумулятор заряжен и переходит в режим перезаряда. В этот момент плотность электролита во всех секциях должна быть практически одинаковой, с допустимой погрешностью не более 0,01 г/см³.</p>
+
+<p>Однако, если одна банка начинает «кипеть» значительно раньше остальных, это говорит о том, что она воспринимает зарядный ток иначе, чем ее соседи. Это может быть связано с тем, что емкость этой банки снизилась, и она быстрее достигает точки насыщения, либо внутри нее происходит короткое замыкание, вызывающее локальный перегрев и бурную реакцию.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Нормальное кипение начинается только на финальной стадии зарядки, когда напряжение на клеммах достигает 14,4 В и выше. Если бурление наблюдается сразу после подключения зарядного устройства, это признак неисправности.</p></div>
+
+<p>Физическая основа процесса кроется в законе Ома для участка цепи: поскольку банки соединены последовательно, сила тока через них одинакова. Следовательно, различие в поведении может быть вызвано только изменением внутреннего сопротивления или емкости конкретной банки. Если сопротивление падает из-за замыкания, или емкость падает из-за разрушения активной массы, реакция в этой секции будет доминировать.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Нормальная банка</th>
+<th>Неисправная банка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Начало газообразования</td>
+<td>Одновременно с другими при 14,4В</td>
+<td>Раньше других или отсутствует</td>
+</tr>
+<tr>
+<td>Температура корпуса</td>
+<td>Равномерная</td>
+<td>Локальный нагрев</td>
+</tr>
+<tr>
+<td>Плотность электролита</td>
+<td>Одинаковая во всех ячейках</td>
+<td>Сильно отличается от соседних</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="основные-причины-локального-закипания">Основные причины локального закипания</h2>
+
+<p>Наиболее распространенной причиной того, что электролит кипит не во всех банках, является <strong>короткое замыкание</strong> между пластинами внутри одной из секций. Это может произойти из-за осыпания активной массы с решеток, которая скапливается на дне и замыкает плюсовые и минусовые пластины, или из-за коробления самих пластин в результате старения или глубокого разряда.</p>
+
+<p>При коротком замыкании напряжение на этой банке падает практически до нуля, но ток продолжает через нее протекать. Вся энергия, которая в нормальной банке шла на химические реакции, здесь превращается в тепло. Электролит в такой банке закипает мгновенно и интенсивно, часто с характерным шипением, в то время как остальные банки только начинают заряжаться.</p>
+
+<p>Второй важной причиной является <strong>сульфатация пластин</strong> в одной или нескольких банках. Если в одной секции сульфатация развита сильнее, ее емкость становится значительно меньше, чем у остальных. В процессе зарядки такая «слабая» банка быстрее достигает своего максимума и начинает разлагать воду, тогда как остальные еще накапливают заряд.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Эксплуатация аккумулятора с кипящей банкой запрещена. Выделяющийся водород в смеси с кислородом образует гремучий газ, взрыв которого может разорвать корпус батареи и разбросать кислоту.</p></div>
+
+<p>Также стоит рассмотреть вариант с механическим разрушением или отслоением активной массы. Если в одной банкеная масса осыпалась, площадь контакта электролита с пластинами уменьшается. Это приводит к локальному повышению плотности тока на оставшихся участках пластин, что провоцирует бурное газообразование именно в этой зоне.</p>
+
+<ol>
+<li>Проверьте уровень электролита: низкий уровень может вызывать перегрев верхушек пластин и ложное кипение.</li>
+<li>Измерьте напряжение на каждой банке отдельно: неисправная будет показывать значительно меньшее значение.</li>
+<li>Оцените прозрачность электролита: в замыкающей банке жидкость часто становится мутной или коричневой из-за осыпавшегося свинца.</li>
+<li>Прощупайте корпус: горячая точка укажет на проблемную секцию.</li>
+</ol>
+
+<div class="checklist-block"><h4>📋 Первичная диагностика банки</h4><ol><li><strong>Шаг 1.</strong> Снимите крышки с банок</li><li><strong>Шаг 2.</strong> Подключите зарядное устройство</li><li><strong>Шаг 3.</strong> Наблюдайте за газообразованиеом</li><li><strong>Шаг 4.</strong> Замерьте плотность и температуру</li></ol></div>
+
+<h2 id="диагностика-и-выявление-неисправной-секции">Диагностика и выявление неисправной секции</h2>
+
+<p>Для точного определения причины, почему кипит электролит не во всех банках, необходимо провести комплексную диагностику с использованием измерительных приборов. Первым шагом всегда должен стать визуальный осмотр и проверка уровня электролита. Если в одной банке уровень значительно ниже, это может быть причиной перегрева, но чаще всего низкий уровень — это следствие, а не причина кипения.</p>
+
+<p>Ключевым методом диагностики является измерение напряжения на каждой банке под нагрузкой и без нее. Для этого используется вольтметр с щупами, которые позволяют подключиться к перемычкам между банками через заливные отверстия. Исправная заряженная банка должна выдавать около 2,1 В. Если показания составляют 0–0,5 В, налицо короткое замыкание.</p>
+
+<p>Вторым важным параметром является плотность электролита, измеряемая ареометром. В кипящей банке плотность может быть аномально высокой (если выкипела вода) или низкой (если произошло перемешивание с осадком или замыкание). Разброс плотности более 0,04 г/см³ между банками считается критическим.</p>
+
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Вероятная причина</th>
+<th>Метод подтверждения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Бурное кипение, мутный электролит</td>
+<td>Короткое замыкание</td>
+<td>Замер напряжения (0-0.5В)</td>
+</tr>
+<tr>
+<td>Раннее кипение, высокая плотность</td>
+<td>Сульфатация/Потеря емкости</td>
+<td>Контрольный разряд</td>
+</tr>
+<tr>
+<td>Кипение при низком уровне</td>
+<td>Пересыхание/Оголение пластин</td>
+<td>Визуальный осмотр</td>
+</tr>
+</tbody>
+</table>
+
+<div class="checklist-block"><h4>☑️ Диагностика неисправной банки</h4><label class="check-item"><input type="checkbox"><span>Измерено напряжение на каждой банке</span></label><label class="check-item"><input type="checkbox"><span>Проверена плотность электролита</span></label><label class="check-item"><input type="checkbox"><span>Оценен цвет и прозрачность жидкости</span></label><label class="check-item"><input type="checkbox"><span>Проверен нагрев корпуса</span></label><label class="check-item"><input type="checkbox"><span>Сделан вывод о ремонтопригодности</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<p>Также эффективным методом является контрольно-тренировочный цикл (КТЦ). Если при разряде одна банка «садится» значительно быстрее других (напряжение падает ниже 1,7 В пока остальные еще держат), значит, именно она имеет меньшую емкость и будет закипать первой при заряде. Это подтверждает теорию о дисбалансе емкостей.</p>
+
+<h2 id="методы-восстановления-и-десульфатации">Методы восстановления и десульфатации</h2>
+
+<p>Если диагностика показала, что причиной неравномерного кипения является сульфатация, а не физическое короткое замыкание, можно попытаться восстановить батарею. Метод десульфатации малыми токами позволяет постепенно растворить крупные кристаллы сульфата свинца, увеличивая полезную площадь пластин и выравнивая емкость банок.</p>
+
+<p>Процесс заключается в зарядке аккумулятора током, составляющим примерно 1/20 от его емкости (например, 2-3 Ампера для 60 Ач), в течение длительного времени. Периодически следует давать батарее «отдохнуть» и замерять плотность. Если в проблемной банке плотность начинает расти и приближаться к значениям в других банках, процесс идет успешно.</p>
+
+<p>В некоторых случаях помогает метод «лечения» импульсными токами или полная замена электролита с промывкой дистиллированной водой. Однако, если внутри банки произошло короткое замыкание из-за осыпания пластин, эти методы не помогут. Попытка «раскутивки» (подачи высокого напряжения) замыкания часто дает лишь временный эффект.</p>
+
+<div class="attention-box attention-info"><h4>Восстановление АКБ</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Увеличение срока службы</li><li>✅ Экономия средств</li><li>✅ Восстановление пускового тока</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Трудоемкость процесса</li><li>❌ Не всегда эффективно</li><li>❌ Риск работы с кислотой</li></ul></div></div></div>
+
+<p>Стоит упомянуть и метод добавления дистиллированной воды для выравнивания уровня, если кипение вызвано именно осушением верхней части пластин. После доливки необходимо провести длительную зарядку малым током для перемешивания электролита и выравнивания плотности по высоте банки.</p>
+
+<blockquote>
+<p>⚠️ Внимание: При работе с электролитом используйте резиновые перчатки и защитные очки. Кислота вызывает тяжелые химические ожоги. При попадании на кожу немедленно промойте водой с содой.</p>
+</blockquote>
+
+<h2 id="типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</h2>
+
+<p>При попытке решить проблему неравномерного кипения автовладельцы часто допускают ошибки, которые окончательно добивают аккумулятор. Понимание этих ошибок поможет избежать лишних затрат и обеспечит безопасность.</p>
+
+<ol>
+<li><strong>Доливка электролита вместо воды</strong> — многие, видя снижение уровня, доливают готовый электролит, что повышает плотность и ускоряет коррозию пластин, усугубляя сульфатацию. Правильно: доливать только дистиллированную воду.</li>
+<li><strong>Попытка зарядить «кипящую» батарею большим током</strong> — это вызывает перегрев, коробление пластин и гарантированное замыкание. Правильно: снижать ток до минимума или прекратить зарядку.</li>
+<li><strong>Игнорирование цвета электролита</strong> — если жидкость в банке черная или коричневая, это значит, что активная масса осыпалась. Зарядка такой батареи бесполезна и опасна. Правильно: утилизировать АКБ.</li>
+<li><strong>Замыкание банок проволокой для «раскутивки»</strong> — грубый метод, который может привести к расплавлению перемычек и взрыву паров внутри корпуса. Правильно: использовать специализированные десульфатирующие устройства.</li>
+</ol>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Если электролит в одной банке стал мутным или коричневым сразу после зарядки, это признак того, что активная масса полностью разрушилась. Восстановлению такая батарея не подлежит.</p></div>
+
+<blockquote>
+<p>⚠️ Внимание: Не проводите зарядку аккумулятора в жилом помещении без мощной вентиляции. Выделяющийся водород не имеет запаха, но взрывоопасен в концентрации от 4% в воздухе.</p>
+</blockquote>
+
+<h2 id="оценка-состояния-и-необходимость-замены">Оценка состояния и необходимость замены</h2>
+
+<p>В ситуациях, когда восстановительные мероприятия не дают результата, встает вопрос о замене аккумулятора. Понимание того, когда ремонт экономически нецелесообразен, важно для планирования бюджета. Если короткое замыкание подтверждено замерами напряжения (0 В на банке), и промывка не помогает, батарею следует заменить.</p>
+
+<p>Также признаком необратимости процессов является ситуация, когда после полного заряда и отстаивания (12 часов) плотность в банках все равно сильно различается, а напряжение на одной из них при нагрузке падает мгновенно. Это говорит о необратимой потере емкости активной массы.</p>
+
+<p>Современные необслуживаемые аккумуляторы (типа Ca/Ca) практически не подлежат ремонту в случае закипания одной из банок. Их конструкция не позволяет заменить электролит или прочистить каналы. Для таких батарей неравномерное кипение — это однозначный сигнал к покупке новой.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Неравномерное кипение электролита — признак дисбаланса емкости или короткого замыкания в одной из секций, что требует немедленной диагностики и часто ведет к замене аккумулятора.</p></div>
+
+<p>В заключение стоит подчеркнуть, что регулярное обслуживание, включающее проверку уровня электролита и плотности, позволяет выявить проблему на ранней стадии. Если вы заметили, что одна банка начала «булькать» раньше времени, не ждите полного отказа батареи — проведите диагностику немедленно.</p>
+
+<p>Игнорирование этого симптома может привести не только к невозможности запустить двигатель в холодное время года, но и к повреждению бортовой электроники автомобиля из-за скачков напряжения, которые генерирует неисправный аккумулятор в связке с генератором.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Утилизацию отработанных аккумуляторов следует производить только в специальных приемных пунктах. Выброс свинцово-кислотных батарей в бытовые отходы запрещен законом и вредит экологии.</p>
+</blockquote></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#физика-процесса-и-нормальное-кипение-электролита">Физика процесса и нормальное кипение электролита</a></li><li><a href="#основные-причины-локального-закипания">Основные причины локального закипания</a></li><li><a href="#диагностика-и-выявление-неисправной-секции">Диагностика и выявление неисправной секции</a></li><li><a href="#методы-восстановления-и-десульфатации">Методы восстановления и десульфатации</a></li><li><a href="#типичные-ошибки-при-устранении-неисправности">Типичные ошибки при устранении неисправности</a></li><li><a href="#оценка-состояния-и-необходимость-замены">Оценка состояния и необходимость замены</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/p/po/pochemu-generator-nachinaet-rabotat-posle-peregazovki.html" class="related-card">Почему генератор КАМАЗ работает только после перегазовки</a></li><li><a href="/articles/g/gd/gde-nakhoditsya-rele.html" class="related-card">Где находится реле стартера и фар КАМАЗ: схема и замена</a></li><li><a href="/articles/p/pr/propala-zaryadka-na-kamaze.html" class="related-card">Пропала зарядка на КамАЗе: диагностика, ремонт генератора и цепи</a></li><li><a href="/articles/k/ka/kak-vyklyuchit-fen-na-kamaze.html" class="related-card">Как выключить фен на КАМАЗе: инструкция по отопителю</a></li><li><a href="/articles/k/ka/kak-sdelat-klemmu-na-akb.html" class="related-card">Замена клеммы на АКБ: инструкция по ремонту и выбору</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/p/po/pochemu-generator-nachinaet-rabotat-posle-peregazovki.html" class="related-bottom-card"><span class="related-bottom-title">Почему генератор КАМАЗ работает только после перегазовки</span><span class="related-bottom-desc">Диагностика генераторов КАМАЗ: причины работы только после перегазовки. Проверка щеток, реле-регулят</span></a><a href="/articles/g/gd/gde-nakhoditsya-rele.html" class="related-bottom-card"><span class="related-bottom-title">Где находится реле стартера и фар КАМАЗ: схема и замена</span><span class="related-bottom-desc">Подробная инструкция по поиску и замене реле в автомобилях КАМАЗ. Расположение, схемы, диагностика н</span></a><a href="/articles/p/pr/propala-zaryadka-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Пропала зарядка на КамАЗе: диагностика, ремонт генератора и цепи</span><span class="related-bottom-desc">Подробная инструкция по устранению отсутствия зарядки на КамАЗе. Проверка генератора, регулятора нап</span></a><a href="/articles/k/ka/kak-vyklyuchit-fen-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как выключить фен на КАМАЗе: инструкция по отопителю</span><span class="related-bottom-desc">Подробная инструкция: как выключить фен (отопитель) на КАМАЗе. Управление планаром, управление клима</span></a><a href="/articles/k/ka/kak-sdelat-klemmu-na-akb.html" class="related-bottom-card"><span class="related-bottom-title">Замена клеммы на АКБ: инструкция по ремонту и выбору</span><span class="related-bottom-desc">Подробное руководство по замене клеммы аккумулятора. Выбор свинцовых или латунных контактов, снятие </span></a><a href="/articles/k/ka/kak-zapustit-pzhd-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Как запустить ПЖД на КамАЗе: пошаговая инструкция и настройки</span><span class="related-bottom-desc">Полное руководство по запуску подогревателя ПЖД-15Т и ПЖД-2000 на КамАЗ. Настройка таймера, устранен</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

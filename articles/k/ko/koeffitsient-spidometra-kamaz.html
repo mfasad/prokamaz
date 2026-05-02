@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Коэффициент спидометра КАМАЗ: настройка и таблица передаточных чисел — Про КАМАЗ</title>
+    <meta name="description" content="Техническое руководство по расчету и установке коэффициента спидометра на грузовиках КАМАЗ. Таблицы передаточных чисел, настройка электронного тахографа и устранение погрешностей.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/k/ko/koeffitsient-spidometra-kamaz.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Коэффициент спидометра КАМАЗ: настройка и таблица передаточных чисел">
+    <meta property="og:description" content="Техническое руководство по расчету и установке коэффициента спидометра на грузовиках КАМАЗ. Таблицы передаточных чисел, настройка электронного тахографа и устранение погрешностей.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/elektrooborudovanie/">Электрооборудование</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Коэффициент спидометра КАМАЗ: настройка и таблица передаточных чисел</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Коэффициент спидометра КАМАЗ: настройка и таблица передаточных чисел</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#физический-смысл-и-расчет-передаточного-числа">Физический смысл и расчет передаточного числа</a></li><li><a href="#процедура-настройки-электронного-тахографа">Процедура настройки электронного тахографа</a></li><li><a href="#таблицы-коэффициентов-и-совместимость-моделей">Таблицы коэффициентов и совместимость моделей</a></li><li><a href="#диагностика-неисправностей-датчиков-скорости">Диагностика неисправностей датчиков скорости</a></li><li><a href="#типичные-ошибки-при-калибровке">Типичные ошибки при калибровке</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Игнорирование расхождений показаний спидометра с реальной скоростью движения часто приводит к серьезным штрафам со стороны систем весогабаритного контроля и тахографов. Водители и логисты сталкиваются с ситуацией, когда техническая неисправность отсутствует, но приборный щиток демонстрирует явно искаженные данные.</p>
+<p>Подобная проблема может возникнуть после плановой замены шин на типоразмер с иным внешним диаметром или после переборки главной передачи с изменением передаточного числа. В таких случаях стандартная калибровка теряет свою актуальность, и система начинает генерировать ошибки, не соответствующие фактическому положению дел.</p>
+<p>Для корректной работы бортового компьютера и тахографа требуется точная математическая корректировка входного сигнала. Коэффициент спидометра КАМАЗ является тем самым параметром, который связывает физическое вращение колес с цифровыми значениями на дисплее, обеспечивая достоверность показаний.</p>
+
+<h2 id="физический-смысл-и-расчет-передаточного-числа">Физический смысл и расчет передаточного числа</h2>
+
+<p>Понимание природы возникновения коэффициента необходимо для его грамотной корректировки в полевых условиях. Величина, которую требуется ввести в настройки, представляет собой количество импульсов, генерируемых датчиком скорости на один километр пройденного пути. Изменение любого элемента в цепочке «двигатель — коробка передач — раздатка — мосты — колеса» влияет на итоговую цифру.</p>
+<p>Основным фактором, диктующим необходимость пересчета, является изменение длины окружности колеса. При установке шин большей размерности фактический пробег за один оборот датчика увеличивается, что при старых настройках приведет к занижению показаний скорости. И наоборот, уменьшение диаметра скатов вызовет искусственное завышение показаний спидометра.</p>
+<p>Расчет ведется на основе паспортных данных шин и передаточных чисел главной передачи. Формула учитывает статический радиус колеса и количество зубьев шестерен в редукторе. Ошибка даже в несколько единиц при вводе коэффициента может привести к существенному расхождению показаний на высоких скоростях, что недопустимо для соблюдения ПДД.</p>
+
+<h3>Влияние размерности шин на показания</h3>
+<p>Наиболее частой причиной сбоя настроек становится сезонная смена резины или переход на всесезонные аналоги с отличающимся профилем. Даже незначительное изменение высоты профиля шины меняет эффективный диаметр колеса.</p>
+<p>Если на грузовике КАМАЗ-5320 или современной модели КАМАЗ-5490 установлены шины, отличные от заводских спецификаций, стандартный коэффициент становится неактуальным. Например, переход с камерных шин на бескамерные того же типоразмера может незначительно изменить геометрию пятна контакта и радиус качения.</p>
+<p>Для точного определения нового коэффициента рекомендуется использовать GPS-трекер или эталонный участок дороги с известной длиной. Сравнение показаний штатного спидометра и эталонного устройства позволяет вычислить поправочный коэффициент с высокой точностью.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На автомобилях с электронным тахографом изменение коэффициента без соответствующей пломбировки и внесения записи в карточку мастерской считается вмешательством в работу calibrated parts.</p></div>
+
+<h2 id="процедура-настройки-электронного-тахографа">Процедура настройки электронного тахографа</h2>
+
+<p>Современные автомобили КАМАЗ оснащаются электронными тахографами, которые требуют обязательной калибровки при изменении технических параметров. Процедура настройки выполняется через меню приборной панели или специализированным оборудованием в зависимости от модели устройства. Для доступа к инженерному меню часто требуется ввод PIN-кода, который по умолчанию может быть установлен заводом-изготовителем.</p>
+<p>Процесс ввода данных подразумевает переход в режим настройки параметров автомобиля. Здесь оператор должен найти поле, отвечающее за количество импульсов на километр (k-factor). Ввод неверного значения приведет к блокировке устройства или выдаче постоянных предупреждений о неисправности.</p>
+<p>После ввода новых данных необходимо обязательно сохранить изменения и перезагрузить систему. Тахограф проведет самотестирование и сверит введенный коэффициент с текущими показаниями датчиков. Если расхождение между введенным значением и реальным сигналом будет слишком велико, система может потребовать повторной калибровки.</p>
+
+<div class="checklist-block"><h4>📋 Калибровка спидометра</h4><ol><li><strong>Шаг 1.</strong> Перейдите в меню настроек тахографа</li><li><strong>Шаг 2.</strong> Введите PIN-код доступа (по умолчанию часто 0000 или 1234)</li><li><strong>Шаг 3.</strong> Найдите параметр «Количество импульсов/км»</li><li><strong>Шаг 4.</strong> Введите расчетное значение и сохраните изменения</li><li><strong>Шаг 5.</strong> Проверьте показания на ходу</li></ol></div>
+
+<h3>Настройка через бортовой компьютер</h3>
+<p>На некоторых модификациях КАМАЗ с электронно-управляемым двигателем и современной панелью приборов (например, комбинация приборов нового образца) доступна корректировка через меню БК. Для этого необходимо зажать определенные кнопки на панели при включении зажигания.</p>
+<p>В инженерном меню следует найти раздел, отвечающий за конфигурацию автомобиля. Здесь отображается текущий коэффициент. Изменение значения производится кнопками управления или клавишами навигации. </p>
+<p>После внесения изменений обязательно проводится контрольный замер. Автомобль прогоняют по мерному участку или сверяют скорость с навигатором. Если погрешность сохраняется, процедуру повторяют, внося корректировки до достижения приемлемого результата.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Неправильная настройка тахографа может привести к блокировке карты водителя и невозможности начала смены. Убедитесь в правильности вводимых данных.</p></div>
+
+<h2 id="таблицы-коэффициентов-и-совместимость-моделей">Таблицы коэффициентов и совместимость моделей</h2>
+
+<p>Для упрощения процесса настройки существуют справочные таблицы, содержащие типовые значения коэффициентов для различных комплектаций грузовиков. Однако следует понимать, что эти данные являются усредненными. Реальный коэффициент зависит от конкретного износа шин, давления в них и фактического передаточного числа установленного редуктора.</p>
+<p>В таблицах приведены значения для наиболее распространенных комбинаций шин и главных передач. Использование этих данных допустимо для первичной настройки или быстрой проверки, но для официальной калибровки тахографа требуется индивидуальный расчет или замер на стенде.</p>
+
+<table>
+<thead>
+<tr>
+<th>Модель КАМАЗ</th>
+<th>Типоразмер шин</th>
+<th>Передаточное число моста</th>
+<th>Коэф. (имп/км)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>КАМАЗ-5320</td>
+<td>260 R508</td>
+<td>7.22</td>
+<td>2350-2400</td>
+</tr>
+<tr>
+<td>КАМАЗ-55111</td>
+<td>260 R508</td>
+<td>6.33</td>
+<td>2050-2100</td>
+</tr>
+<tr>
+<td>КАМАЗ-65115</td>
+<td>280/300 R508</td>
+<td>5.94</td>
+<td>1900-1950</td>
+</tr>
+<tr>
+<td>КАМАЗ-5490</td>
+<td>315/70 R22.5</td>
+<td>3.73</td>
+<td>1250-1300</td>
+</tr>
+</tbody>
+</table>
+
+<p>Значения в таблице могут варьироваться в зависимости от года выпуска автомобиля и установленного оборудования. На старых моделях с механическим приводом спидометра коэффициент определяется количеством зубьев шестерен в редукторе привода.</p>
+<p>Для современных тягачей с дисковыми тормозами и низкопрофильной резиной коэффициенты существенно ниже из-за меньшего количества оборотов колеса на километр пути. Ошибочная установка коэффициента от грузового автомобиля на тягач приведет к двукратному искажению показаний.</p>
+
+<h3>Сравнение методов определения коэффициента</h3>
+<p>Существует несколько способов определения необходимого значения: расчетный, табличный и экспериментальный. Каждый из них имеет свои преимущества и недостатки в зависимости от доступного оборудования и требуемой точности.</p>
+
+<div class="attention-box attention-info"><h4>Методы определения коэффициента</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Высокая точность расчетов</li><li>✅ Не требует выезда на трассу</li><li>✅ Учет всех параметров</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Трудоемкость вычислений</li><li>❌ Риск ошибки в формуле</li></ul></div></div></div>
+
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Точность</th>
+<th>Необходимое оборудование</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Расчетный</td>
+<td>Высокая</td>
+<td>Паспортные данные, калькулятор</td>
+</tr>
+<tr>
+<td>Экспериментальный</td>
+<td>Максимальная</td>
+<td>GPS-трекер, мерный участок</td>
+</tr>
+<tr>
+<td>Табличный</td>
+<td>Средняя</td>
+<td>Справочные данные</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Для получения наиболее точного результата используйте комбинацию методов: возьмите значение из таблицы как базовое и скорректируйте его по результатам замера на трассе с помощью GPS.</p></div>
+
+<h2 id="диагностика-неисправностей-датчиков-скорости">Диагностика неисправностей датчиков скорости</h2>
+
+<p>Если после корректной установки коэффициента спидометр продолжает работать нестабильно, стрелка дергается или показания пропадают, проблема кроется в аппаратной части. Чаще всего выходит из строя сам датчик скорости, установленный на коробке передач, или повреждается проводка.</p>
+<p>Датчик скорости на КАМАЗ представляет собой индуктивный или-элемент, который генерирует импульсный сигнал. Загрязнение рабочей поверхности датчика металлической стружкой, которая неизбежно накапливается в масле КПП, может экранировать сигнал или вызывать ложные импульсы.</p>
+<p>Проверка целостности цепи начинается с визуального осмотра разъема и жгута проводов. Окисление контактов или перетирание изоляции в местах соприкосновения с рамой — частая причина потери сигнала. Прозвонка мультиметром позволяет выявить обрыв или короткое замыкание.</p>
+
+<div class="checklist-block"><h4>☑️ Диагностика цепи датчика скорости</h4><label class="check-item"><input type="checkbox"><span>Визуальный осмотр разъема на предмет окисления</span></label><label class="check-item"><input type="checkbox"><span>Проверка целостности проводов на обрыв</span></label><label class="check-item"><input type="checkbox"><span>Очистка торца датчика от металлической стружки</span></label><label class="check-item"><input type="checkbox"><span>Замер сопротивления датчика мультиметром</span></label><label class="check-item"><input type="checkbox"><span>Проверка наличия питания на разъеме</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<h3>Типичные симптомы неисправности</h3>
+<p>При неисправном датчике или неверном коэффициенте наблюдаются характерные симптомы. Стрелка спидометра может хаотично скакать, показывать ноль при движении или, наоборот, не возвращаться в ноль после остановки. Одновременно с этим может перестать работать круиз-контроль, так как он завязан на сигнал скорости.</p>
+<p>Электронный блок управления двигателем (ЭБУ) при потере сигнала скорости может перейти в аварийный режим работы, ограничивая мощность и обороты двигателя. На панели приборов загорается индикатор неисправности, а в памяти диагностического адаптера фиксируется соответствующий код ошибки.</p>
+<p>Важно отличать неисправность датчика от механического повреждения привода. На старых моделях КАМАЗ с механическим спидометром мог выйти из строя гибкий вал (трос). В современных системах все завязано на электрический сигнал, поэтому механических приводов вала нет, но есть риск повреждения шестерни в самом датчике или валу КПП.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Стабильная работа спидометра зависит от исправности датчика, целостности проводки и корректности введенного коэффициента.</p></div>
+
+<h2 id="типичные-ошибки-при-калибровке">Типичные ошибки при калибровке</h2>
+
+<p>В процессе настройки допускаются ошибки, которые сводят на нет все усилия и могут привести к новым проблемам. Понимание этих ошибок поможет избежать лишних затрат времени и ресурсов.</p>
+
+<ol>
+<li><strong>Игнорирование фактического давления в шинах</strong> — при расчете или замере не учитывается, что спущенные шины уменьшают диаметр колеса, что вносит погрешность. Перед настройкой необходимо привести давление в норму.</li>
+<li><strong>Округление значений коэффициента</strong> — введение приблизительных чисел (например, 2300 вместо 2347) приводит к накоплению ошибки. На больших дистанциях расхождение в пробеге может составить десятки километров.</li>
+<li><strong>Использование коэффициента для другого типа КПП</strong> — установка значений от механической коробки на автомобиль с автоматом или vice versa недопустима из-за разной конструкции выходных валов и датчиков.</li>
+<li><strong>Отсутствие проверки после настройки</strong> — многие считают, что введение цифр в меню завершает процесс. Без контрольного замера невозможно гарантировать точность показаний.</li>
+</ol>
+
+<blockquote>
+<p>⚠️ Внимание: Самостоятельное вмешательство в работу тахографа, являющегося средством измерения, может быть расценено контролирующими органами как нарушение законодательства. Все работы должны фиксироваться в мастерской с выдачей сертификата калибровки.</p>
+</blockquote>
+
+<p>Точность показаний спидометра критически важна не только для избежания штрафов, но и для безопасности дорожного движения. Водитель, ориентирующийся на неверные показания, может неосознанно нарушить скоростной режим или выбрать неверную передачу, что особенно опасно на затяжных спусках.</p>
+<p>Регулярная проверка коэффициента при смене шин или ремонте трансмиссии должна стать правилом для любого транспортного предприятия. Это позволяет поддерживать автопарк в технически исправном состоянии и избегать проблем при прохождении техосмотра.</p>
+<p>Современные диагностические комплексы позволяют быстро считать текущий коэффициент и сравнить его с эталонным значением для данной комплектации. Использование таких инструментов упрощает диагностику и повышает качество обслуживания грузовиков КАМАЗ.</p>
+
+<blockquote>
+<p>⚠️ Внимание: При замене датчика скорости на аналог от стороннего производителя характеристики сигнала (форма, амплитуда, скважность) могут отличаться. Это требует повторной проверки показаний спидометра даже при том же коэффициенте.</p>
+</blockquote></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#физический-смысл-и-расчет-передаточного-числа">Физический смысл и расчет передаточного числа</a></li><li><a href="#процедура-настройки-электронного-тахографа">Процедура настройки электронного тахографа</a></li><li><a href="#таблицы-коэффициентов-и-совместимость-моделей">Таблицы коэффициентов и совместимость моделей</a></li><li><a href="#диагностика-неисправностей-датчиков-скорости">Диагностика неисправностей датчиков скорости</a></li><li><a href="#типичные-ошибки-при-калибровке">Типичные ошибки при калибровке</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/p/pr/provodka-na-kamaz.html" class="related-card">Проводка на КАМАЗ: схемы, диагностика и ремонт своими руками</a></li><li><a href="/articles/o/ob/oboznachenie-predokhranitelej-kamaz.html" class="related-card">Обозначение предохранителей КАМАЗ: Схемы, Расшифровка, Поиск</a></li><li><a href="/articles/s/st/steklo-zadnego-fonarya-kamaz-65115.html" class="related-card">Замена и регулировка стекла заднего фонаря Камаз 65115: Инструкция</a></li><li><a href="/articles/f/fo/forma-dlya-vosstanovleniya-klemm-akb.html" class="related-card">Форма для восстановления клемм АКБ: изготовление и применение</a></li><li><a href="/articles/p/pr/predokhranitel-kruiz-kontrolya-kamaz.html" class="related-card">Предохранитель круиз-контроля КамАЗ: схема, номинал, поиск</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/p/pr/provodka-na-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Проводка на КАМАЗ: схемы, диагностика и ремонт своими руками</span><span class="related-bottom-desc">Подробная инструкция по электрике КАМАЗ. Схемы проводки, поиск обрывов, замена жгутов и типичные неи</span></a><a href="/articles/o/ob/oboznachenie-predokhranitelej-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Обозначение предохранителей КАМАЗ: Схемы, Расшифровка, Поиск</span><span class="related-bottom-desc">Подробная инструкция по расшифровке обозначений предохранителей КАМАЗ. Схемы блоков БПФ, БПД и реле.</span></a><a href="/articles/s/st/steklo-zadnego-fonarya-kamaz-65115.html" class="related-bottom-card"><span class="related-bottom-title">Замена и регулировка стекла заднего фонаря Камаз 65115: Инструкция</span><span class="related-bottom-desc">Подробная инструкция по замене, герметизации и регулировке стекла заднего фонаря Камаз 65115. Разбор</span></a><a href="/articles/f/fo/forma-dlya-vosstanovleniya-klemm-akb.html" class="related-bottom-card"><span class="related-bottom-title">Форма для восстановления клемм АКБ: изготовление и применение</span><span class="related-bottom-desc">Техническая инструкция по выбору и использованию формы для восстановления свинцовых клемм аккумулято</span></a><a href="/articles/p/pr/predokhranitel-kruiz-kontrolya-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Предохранитель круиз-контроля КамАЗ: схема, номинал, поиск</span><span class="related-bottom-desc">Где находится и какой номинал предохранителя круиз-контроля КамАЗ. Схема блока, поиск неисправностей</span></a><a href="/articles/r/ra/razmer-remnya-generatora-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Размер ремня генератора Камаз: таблицы, артикулы и натяжение</span><span class="related-bottom-desc">Точный размер ремня генератора Камаз для разных двигателей (740, 740.30, Cummins). Таблицы артикулов</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

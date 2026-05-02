@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Параллельная парковка на грузовике: техника и алгоритмы — Про КАМАЗ</title>
+    <meta name="description" content="Подробная инструкция по параллельной парковке грузового автомобиля. Разбор габаритов, траекторий и типичных ошибок для водителей КАМАЗ.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/p/pa/parallelnaya-parkovka-na-gruzovom-avtomobile.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Параллельная парковка на грузовике: техника и алгоритмы">
+    <meta property="og:description" content="Подробная инструкция по параллельной парковке грузового автомобиля. Разбор габаритов, траекторий и типичных ошибок для водителей КАМАЗ.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/drugoe/">Другое</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Параллельная парковка на грузовике: техника и алгоритмы</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Техника параллельной парковки на грузовом автомобиле</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#анализ-пространства-и-подготовка-к-маневру">Анализ пространства и подготовка к маневру</a></li><li><a href="#алгоритм-выполнения-парковки-задним-ходом">Алгоритм выполнения парковки задним ходом</a></li><li><a href="#особенности-парковки-автопоездов-с-прицепом">Особенности парковки автопоездов с прицепом</a></li><li><a href="#типичные-ошибки-при-парковке-грузовика">Типичные ошибки при парковке грузовика</a></li><li><a href="#финальная-фиксация-и-безопасность">Финальная фиксация и безопасность</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Ситуация на терминале логистического центра или в условиях плотной городской застройки часто ставит водителя перед необходимостью постановки многотонного автомобиля в ограниченное пространство. Отсутствие возможности развернуться или выбрать более удобное место заставляет маневрировать именно там, где есть свободный карман.</p>
+<p>Неверный расчет траектории или запоздалая реакция на изменение положения задней оси приводит к касанию бордюров, повреждению соседнего транспорта или созданию аварийной ситуации на проезжей части.</p>
+<p>Успех маневра зависит от понимания физики поворота длиннобазного транспортного средства и точного соблюдения последовательности действий, описанных ниже.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Габаритные размеры и правила дорожного движения могут варьироваться в зависимости от региона и конкретной модели тягача. Актуальные параметры всегда сверяйте в технической документации производителя или в актуальной редакции ПДД.</p></div>
+
+<h2 id="анализ-пространства-и-подготовка-к-маневру">Анализ пространства и подготовка к маневру</h2>
+
+<p>Перед началом выполнения любого маневра необходимо провести визуальную оценку доступной площади. Длина свободного места для параллельной парковки грузового автопоезда должна превышать длину транспортного средства минимум на 1,5–2 метра.</p>
+<p>Если пространство ограничено, потребуется использовать метод многоразового перестроения, что увеличивает время выполнения операции и требует повышенного внимания к слепым зонам.</p>
+<p>Водитель обязан убедиться, что дорожное покрытие в зоне маневра выдержит нагрузку, а под колесами отсутствуют люки, открытые колодцы или мягный грунт.</p>
+
+<h3>Оценка габаритов и препятствий</h3>
+
+<p>Допустим, вы подъехали к свободному месту между двумя припаркованными фургонами. Критически важно оценить не только длину, но и ширину проезжей части.</p>
+<p>Для стандартного автопоезда длиной 16,5 метров минимальная ширина коридора для выполнения маневра без заезда на тротуар должна составлять не менее 4–5 метров.</p>
+<p>Обратите внимание на нависающие элементы: ветки деревьев, рекламные конструкции или провода, которые могут зацепить верхнюю часть тента или контейнера.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>На моделях КАМАЗ с удлиненной кабиной и спальным местом радиус разворота увеличивается, что требует большего запаса пространства спереди и сзади при маневрировании.</p></div>
+
+<p>Стоит проверить состояние боковых зеркал перед началом движения. Настройка зеркал должна обеспечивать обзор зоны непосредственно за задними колесами и вдоль борта.</p>
+<p>Если обзорность ограничена конструкцией прицепа, использование услуг помощника (габаритчика) является обязательным требованием безопасности.</p>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Минимальное значение</th>
+<th>Рекомендуемое значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Длина кармана</td>
+<td>Длина ТС + 2 м</td>
+<td>Длина ТС + 4 м</td>
+</tr>
+<tr>
+<td>Ширина проезжей части</td>
+<td>4,0 метра</td>
+<td>5,5 метра</td>
+</tr>
+</tbody>
+</table>
+
+<p>Важно учитывать, что задний свес грузовика при повороте описывает траекторию, отличную от траектории передних колес.</p>
+<p>Это явление, известное как «срезание угла», требует особого контроля за задней частью автопоезда в начальной фазе поворота.</p>
+
+<h2 id="алгоритм-выполнения-парковки-задним-ходом">Алгоритм выполнения парковки задним ходом</h2>
+
+<p>Основной метод парковки грузовика осуществляется задним ходом, так как управляемые колеса в этом случае находятся впереди, обеспечивая лучшую маневренность задней части.</p>
+<p>Движение задним ходом позволяет корректировать траекторию прицепа или кузова с высокой точностью, используя рулевое колесо для изменения угла сочленения.</p>
+
+
+
+<h3>Позиционирование и начало движения</h3>
+<p>Подъедьте к впереди стоящему автомобилю параллельно, оставляя боковой интервал около 1,5 метра. Это расстояние необходимо для того, чтобы при повороте задняя часть вашего автомобиля не задела стоящий транспорт.</p>
+<p>Остановитесь в момент, когда ваша задняя ось (или задняя тележка) поравняется с задним бампером стоящего впереди автомобиля.</p>
+<p>Включите низшую передачу и убедитесь, что сзади нет движущегося транспорта, пешеходов или велосипедистов.</p>
+<p>Плавно начинайте движение назад, одновременно поворачивая рулевое колесо в сторону парковочного места. Скорость должна быть минимальной, близкой к холостым оборотам двигателя.</p>
+
+<h3>Корректировка траектории и завершение</h3>
+<p>Следите за боковым зеркалом со стороны парковки. Как только вы увидите в зеркале фару или угол впереди стоящего автомобиля, необходимо остановиться.</p>
+<p>В этот момент кузов грузовика должен находиться под углом примерно 45 градусов к линии бордюра. Далее следует выровнять колеса и продолжить движение строго назад до тех пор, пока передний угол вашего автомобиля не минует задний угол впереди стоящего соседа.</p>
+<p>После этого руль выворачивается в противоположную сторону, чтобы прижать нос автомобиля к бордюру и встать параллельно.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Резкое отпускание педали сцепления или сильное нажатие на газ при движении задним ходом может привести к неконтролируемому рывку и ДТП. Работайте пелями плавно.</p></div>
+
+<p>Финальное выравнивание производится короткими движениями вперед-назад с минимальной амплитудой поворота колес.</p>
+<p>Необходимо добиться положения, при котором расстояние до бордюра с обеих сторон будет примерно одинаковым, а автомобиль не будет выступать за габариты парковочного места.</p>
+
+<h2 id="особенности-парковки-автопоездов-с-прицепом">Особенности парковки автопоездов с прицепом</h2>
+
+<p>Парковка тягача с полуприцепом или грузовика с прицепом (роспуском) кардинально отличается от управления одиночным транспортным средством из-за наличия шарнирного соединения.</p>
+<p>Прицеп при движении задним ходом стремится сложиться с тягачом, и управление происходит «от противного»: чтобы прицеп пошел влево, руль тягача нужно крутить вправо.</p>
+
+<h3>Управление сочленением</h3>
+<p>Главная задача водителя — контролировать угол складывания (углом складывания называется угол между продольной осью тягача и прицепа).</p>
+<p>Если угол станет слишком острым, возникнет эффект «складывания» (jackknife), когда дальнейшее движение задним ходом станет невозможным без выезда вперед.</p>
+<p>Для коррекции траектории необходимо постоянно следить за положением колес прицепа в боковые зеркала.</p>
+
+<div class="checklist-block"><h4>☑️ Контроль при парковке с прицепом</h4><label class="check-item"><input type="checkbox"><span>Проверка фиксации шкворня</span></label><label class="check-item"><input type="checkbox"><span>Оценка состояния тормозных магистралей</span></label><label class="check-item"><input type="checkbox"><span>Проверка работы стоп-сигналов прицепа</span></label><label class="check-item"><input type="checkbox"><span>Визуальный осмотр зоны маневра</span></label><label class="check-item"><input type="checkbox"><span>Наличие исправного габаритчика</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 5</div></div>
+
+<p>Движение должно быть прерывистым: короткая серия рывков назад, остановка, оценка положения, коррекция рулем.</p>
+<p>При необходимости изменить направление движения прицепа, тягач выводится вперед, угол сочленения выпрямляется, и маневр повторяется заново.</p>
+
+<table>
+<thead>
+<tr>
+<th>Действие рулем тягача</th>
+<th>Реакция прицепа (задний ход)</th>
+<th>Реакция прицепа (передний ход)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Влево</td>
+<td>Вправо</td>
+<td>Влево</td>
+</tr>
+<tr>
+<td>Вправо</td>
+<td>Влево</td>
+<td>Вправо</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Работа с габаритчиком</h3>
+<p>При парковке длинномерного автопоезда наличие габаритчика (помощника снаружи) значительно снижает риски.</p>
+<p>Заранее договоритесь о системе сигналов: поднятая рука — стоп, махи рукой — направление движения, сжатие кулака — остановка двигателя.</p>
+<p>Габаритчик должен находиться в поле зрения водителя, но вне траектории движения колес и потенциального отскока груза.</p>
+
+<p>Если помощник подает сигнал остановки, действие должно быть выполнено мгновенно, независимо от того, кажется ли водителю, что еще есть запас пространства.</p>
+<p>Водитель несет полную ответственность за маневр, даже если ошибку указал габаритчик, поэтому окончательное решение всегда за рулем.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Используйте рацию или гарнитуру для связи с габаритчиком, если шум двигателя или расстояние мешают слышать голосовые команды.</p></div>
+
+<h2 id="типичные-ошибки-при-парковке-грузовика">Типичные ошибки при парковке грузовика</h2>
+
+<p>Даже опытные водители могут допускать ошибки, особенно при работе на незнакомой технике или в стрессовой ситуации.</p>
+<p>Анализ наиболее частых нарушений техники позволяет их избежать и сохранить целостность груза и транспортного средства.</p>
+
+<ol>
+<li><strong>Игнорирование переднего свеса</strong> — водитель фокусируется на задней части, забывая, что при повороте задним ходом передний угол грузовика описывает широкую дугу и может задеть проезжающий мимо транспорт или столб.</li>
+<li><strong>Слишком ранний поворот руля</strong> — попытка начать крутить руль до того, как задняя ось поравнялась с препятствием, приводит к тому, что грузовик становится поперек дороги и блокирует движение.</li>
+<li><strong>Резкие движения рулем</strong> — на скользком покрытии или при высокой скорости вращения вала рулевого управления резкий поворот может вызвать занос задней оси или складывание автопоезда.</li>
+<li><strong>Отсутствие фиксации</strong> — после завершения маневра водитель забывает затянуть стояночный тормоз или поставить автомобиль на передачу, что может привести к самопроизвольному скатыванию.</li>
+</ol>
+
+<div class="attention-box attention-info"><h4>Особенности парковки</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Высокая точность установки</li><li>✅ Возможность парковки в узких местах</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требует высокой квалификации</li><li>❌ Занимает много времени при отсутствии навыков</li></ul></div></div></div>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Ключ к успешной парковки — постоянный контроль габаритов через зеркала и минимальная скорость движения.</p></div>
+
+<h2 id="финальная-фиксация-и-безопасность">Финальная фиксация и безопасность</h2>
+
+<p>После того как автомобиль установлен в створ, необходимо убедиться в его устойчивости. На уклонах обязательно использование противооткатных упоров (башмаков).</p>
+<p>Упоры устанавливаются под колеса с той стороны, куда возможен скат, обычно под задние колеса ведущей оси или тележки прицепа.</p>
+
+<p>Выходя из кабины, всегда проверяйте, не перекрыли ли вы проезд другим участникам движения или спецтехнике.</p>
+<p>Грузовик, припаркованный с нарушением габаритов, может стать причиной затора или аварии, особенно в ночное время.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Остановка в местах с ограниченной видимостью без выставленных знаков аварийной остановки запрещена и опасна для жизни.</p></div>
+
+<p>Регулярная практика в безопасных условиях позволяет выработать мышечную память и чувство габаритов.</p>
+<p>Понимание геометрии поворота собственного автомобиля приходит с опытом, но базовые принципы остаются неизменными для всех моделей техники.</p>
+
+<p>Соблюдение алгоритмов и внимательность к деталям обеспечивают безопасность водителя и окружающих.</p>
+<p>Парковка грузовика — это навык, требующий концентрации, но при правильном подходе он становится рутинной операцией.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#анализ-пространства-и-подготовка-к-маневру">Анализ пространства и подготовка к маневру</a></li><li><a href="#алгоритм-выполнения-парковки-задним-ходом">Алгоритм выполнения парковки задним ходом</a></li><li><a href="#особенности-парковки-автопоездов-с-прицепом">Особенности парковки автопоездов с прицепом</a></li><li><a href="#типичные-ошибки-при-парковке-грузовика">Типичные ошибки при парковке грузовика</a></li><li><a href="#финальная-фиксация-и-безопасность">Финальная фиксация и безопасность</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/m/mo/mojka-dvigatelya-kausticheskoj-sodoj.html" class="related-card">Мойка двигателя каустической содой: технология и риски</a></li><li><a href="/articles/k/kr/krasnaya-strelka-na-manometre-dlya-chego.html" class="related-card">Красная стрелка на манометре: назначение и настройка</a></li><li><a href="/articles/c/ch/chem-zapayat-radiator.html" class="related-card">Чем запаять радиатор: технологии ремонта, припои и флюсы</a></li><li><a href="/articles/p/pr/prokladka-gbts-kamaz-740.html" class="related-card">Замена прокладки ГБЦ Камаз 740: Инструкция и моменты</a></li><li><a href="/articles/l/le/lenivets-na-rul-kamaz.html" class="related-card">Установка ленивца на руль Камаз: Инструкция и схемы</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/m/mo/mojka-dvigatelya-kausticheskoj-sodoj.html" class="related-bottom-card"><span class="related-bottom-title">Мойка двигателя каустической содой: технология и риски</span><span class="related-bottom-desc">Техническое руководство по мойке ДВС каустической содой. Расчет пропорций, меры безопасности и нейтр</span></a><a href="/articles/k/kr/krasnaya-strelka-na-manometre-dlya-chego.html" class="related-bottom-card"><span class="related-bottom-title">Красная стрелка на манометре: назначение и настройка</span><span class="related-bottom-desc">Подробная инструкция о том, для чего нужна красная стрелка на манометре, как её устанавливать и кали</span></a><a href="/articles/c/ch/chem-zapayat-radiator.html" class="related-bottom-card"><span class="related-bottom-title">Чем запаять радиатор: технологии ремонта, припои и флюсы</span><span class="related-bottom-desc">Подробная инструкция по выбору припоя и флюса для радиаторов. Ремонт алюминиевых и медных систем охл</span></a><a href="/articles/p/pr/prokladka-gbts-kamaz-740.html" class="related-bottom-card"><span class="related-bottom-title">Замена прокладки ГБЦ Камаз 740: Инструкция и моменты</span><span class="related-bottom-desc">Детальная инструкция по замене прокладки ГБЦ Камаз 740. Моменты затяжки, симптомы пробоя, порядок ра</span></a><a href="/articles/l/le/lenivets-na-rul-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Установка ленивца на руль Камаз: Инструкция и схемы</span><span class="related-bottom-desc">Подробное руководство по установке ленивца на рулевую колонку Камаз. Разбор моделей, схем подключени</span></a><a href="/articles/k/ka/kapitalnyj-remont-kamazov.html" class="related-bottom-card"><span class="related-bottom-title">Капитальный ремонт Камаз: этапы, нормативы и спецификация</span><span class="related-bottom-desc">Техническое руководство по капитальному ремонту грузовиков Камаз. Разборка ДВС, дефектовка узлов, до</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

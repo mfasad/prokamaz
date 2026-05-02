@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Расчет тоннажа на километр: методика и нормативы КАМАЗ — Про КАМАЗ</title>
+    <meta name="description" content="Как правильно рассчитать тоннаж на километр для грузовиков. Нормы расхода, формулы и влияние пробега на износ техники КАМАЗ.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/t/to/tonna-na-kilometr.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Расчет тоннажа на километр: методика и нормативы КАМАЗ">
+    <meta property="og:description" content="Как правильно рассчитать тоннаж на километр для грузовиков. Нормы расхода, формулы и влияние пробега на износ техники КАМАЗ.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/raskhod-i-normy/">Расход и Нормы</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Расчет тоннажа на километр: методика и нормативы КАМАЗ</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Тоннаж на километр: Расчеты, нормы и эксплуатация КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#методология-расчета-удельных-показателей">Методология расчета удельных показателей</a></li><li><a href="#влияние-массы-груза-на-технические-узлы-камаз">Влияние массы груза на технические узлы КАМАЗ</a></li><li><a href="#нормативы-расхода-и-учет-гсм">Нормативы расхода и учет ГСМ</a></li><li><a href="#типичные-ошибки-при-планировании-перевозок">Типичные ошибки при планировании перевозок</a></li><li><a href="#оптимизация-затрат-на-тонно-километр">Оптимизация затрат на тонно-километр</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>В процессе управления автопарком или планирования грузоперевозок часто возникает задача точного определения стоимости одного километра пробега с учетом полной массы транспортного средства. Водители и логисты сталкиваются с необходимостью обосновать расходы на топливо, амортизацию и техническое обслуживание перед бухгалтерией или заказчиками. Неправильный расчет может привести к существенным финансовым потерям или убыточности рейса.</p>
+<p>Особенно остро вопрос встает при работе с тяжелой грузовой техникой, такой как КАМАЗ, где разница в расходе ресурсов между пустым и груженым состоянием может достигать двукратных значений. Понимание того, как масса груза влияет на пробег и износ узлов, позволяет оптимизировать маршруты и выбирать наиболее экономичные режимы работы двигателя.</p>
+<p>На практике понятие «тонна на километр» часто используется как упрощенное обозначение удельного расхода топлива или стоимости перевозки единицы груза на определенное расстояние. Для грамотного планирования необходимо четко разделять эти показатели и учитывать их взаимосвязь с техническими характеристиками конкретного автомобиля.</p>
+
+<h2 id="методология-расчета-удельных-показателей">Методология расчета удельных показателей</h2>
+<p>Для начала работы с цифрами необходимо определить базовые параметры, от которых будет зависеть итоговая эффективность. Основным показателем является расход топлива в литрах на 100 километров пути, который затем пересчитывается с учетом грузоподъемности. Допустим, базовая норма для тягача с полуприцепом составляет 35 литров солярки на сотню километров в снаряженном состоянии.</p>
+<p>При увеличении полезной нагрузки расход топлива растет не линейно, а согласно сложной кривой, зависящей от рельефа местности и скоростного режима. Если у вас есть данные о фактическом расходе при полной загрузке, можно вывести коэффициент увеличения затрат. Например, при загрузке 20 тонн расход может вырасти до 45 литров на 100 километров.</p>
+<p>Важно учитывать, что расчет «тоннажа на километр» в контексте экономики перевозки подразумевает деление всех затрат на пройденное расстояние и массу перевезенного груза. Это позволяет получить себестоимость перевозки одной тонны груза на один километр пути. Такой подход является стандартом для логистических компаний.</p>
+<p>Для точности вычислений следует использовать данные бортовых компьютеров или чеки с АЗК за длительный период, чтобы усреднить показатели. Разовые замеры могут дать искаженную картину из-за пробок, погодных условий или стиля вождения конкретного оператора.</p>
+
+<h3>Формулы и базовые коэффициенты</h3>
+<p>Основная формула для расчета удельного расхода топлива выглядит следующим образом: количество израсходованного топлива делится на произведение массы груза и пройденного расстояния. Полученное значение показывает, сколько литров топлива тратится на перемещение одной тонны груза на один километр.</p>
+<p>Ключевым параметром здесь является <strong>коэффициент использования грузоподъемности</strong>. Если автомобиль движется порожняком, этот коэффициент равен нулю, и весь расход топлива ложится на стоимость холостого пробега. При полной загрузке эффективность использования топлива на тонно-километр максимальна.</p>
+<p>Стоит также учитывать поправочные коэффициенты, установленные Министерством транспорта. Они применяются в зависимости от времени года, типа дорог и категории населенных пунктов. Зимой расход может увеличиваться на 10-20% из-за работы отопителя и прогрева двигателя.</p>
+
+<div class="checklist-block"><h4>📋 Алгоритм расчета</h4><ol><li><strong>Шаг 1.</strong> Соберите данные о пробеге и заправках</li><li><strong>Шаг 2.</strong> Определите среднюю массу груза в рейсе</li><li><strong>Шаг 3.</strong> Разделите общий расход на массу и расстояние</li><li><strong>Шаг 4.</strong> Примените поправочные коэффициенты</li></ol></div>
+
+<p>Ниже приведена таблица с примерными значениями расхода для различных условий эксплуатации грузовиков КАМАЗ:</p>
+<table>
+<thead>
+<tr>
+<th>Условия эксплуатации</th>
+<th>Базовый расход (л/100 км)</th>
+<th>Коэффициент нагрузки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Шоссе, полная загрузка</td>
+<td>32-35</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>Городской цикл, смешанная</td>
+<td>40-45</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td>Бездорожье, карьер</td>
+<td>55-65</td>
+<td>1.5</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Для автомобилей с системой Common Rail расход может быть ниже на 10-15% при соблюдении оптимальных оборотов двигателя.</p></div>
+
+<h2 id="влияние-массы-груза-на-технические-узлы-камаз">Влияние массы груза на технические узлы КАМАЗ</h2>
+<p>Увеличение тоннажа, приходящегося на каждый километр пробега, напрямую сказывается на ресурсе агрегатов. Двигатель работает в режимах повышенной нагрузки, что требует более частой замены масла и фильтрующих элементов. Перегрев может стать серьезной проблемой при длительном движении в гору с полной массой автопоезда.</p>
+<p>Трансмиссия и сцепление испытывают колоссальные механические напряжения. Если водитель часто бросает сцепление или резко переключает передачи под нагрузкой, срок службы фрикционных накладок сокращается в разы. Это напрямую влияет на стоимость километра пробега, увеличивая статью расходов на запчасти.</p>
+<p>Тормозная система также изнашивается быстрее при перевозке тяжелых грузов. Тормозные колодки и барабаны нагреваются сильнее, что может привести к «провалу» педали тормоза или снижению эффективности торможения. На длинных спусках критически важно использовать моторный тормоз.</p>
+
+<h3>Ресурс двигателя и трансмиссии</h3>
+<p>При расчете экономической эффективности нельзя игнорировать амортизацию. Тяжелый груз ускоряет выработку в парах трения цилиндров и поршней. Масляный угар может начаться раньше регламентного срока, если автомобиль постоянно эксплуатируется с перегрузом.</p>
+<p>Для двигателей <em>КАМАЗ-740</em> и их современных аналогов критическим является температурный режим. Работа под полной нагрузкой требует исправной системы охлаждения. Забитые радиаторы или неисправный термостат могут привести к заклиниванию поршневой группы.</p>
+<p>В трансмиссии при высоких крутящих моментах быстрее разрушаются шлицевые соединения карданных валов и подшипники промежуточной опоры. Вибрации, передаваемые на кузов и кабину, также являются следствием дисбаланса в нагруженной трансмиссии.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Эксплуатация с перегрузом более 10% от паспортной грузоподъемности может привести к поломке рамы или лопнувшим рессорам, что не является гарантийным случаем.</p></div>
+
+<p>Сравнение влияния нагрузки на разные системы автомобиля:</p>
+<table>
+<thead>
+<tr>
+<th>Система автомобиля</th>
+<th>Влияние полной загрузки</th>
+<th>Рекомендуемый интервал ТО</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Двигатель</td>
+<td>Высокий температурный режим</td>
+<td>Сократить на 10%</td>
+</tr>
+<tr>
+<td>Сцепление</td>
+<td>Ускоренный износ диска</td>
+<td>Контроль каждые 10 тыс. км</td>
+</tr>
+<tr>
+<td>Шины</td>
+<td>Неравномерный износ протектора</td>
+<td>Проверка давления ежедневно</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Полная загрузка автомобиля требует более внимательного отношения к техническому обслуживанию всех узлов.</p></div>
+
+<h2 id="нормативы-расхода-и-учет-гсм">Нормативы расхода и учет ГСМ</h2>
+<p>Для предприятий, использующих грузовую технику, важен правильный учет горюче-смазочных материалов. Нормы расхода утверждаются приказом руководителя на основе методических рекомендаций, но должны корректироваться под реальные условия. Это позволяет избежать претензий со стороны налоговых органов при списании топлива.</p>
+<p>Если у вас в парке есть автомобили разных годов выпуска, нормы для них будут отличаться. Старые атмосферные двигатели потребляют больше топлива, чем современные турбированные аналоги с электронным управлением. Учет этих различий необходим для объективной оценки работы водителей.</p>
+<p>Списание ГСМ производится на основании путевых листов, где фиксируется пробег и остаток топлива. Диспетчер или механик должен проверять реальность заявленных маршрутов, используя данные систем спутникового мониторинга. Расхождения между показаниями датчиков уровня топлива в баке и расчетными данными должны быть минимальными.</p>
+<p>В зимний период допускается применение повышающих коэффициентов. Это связано с необходимостью прогрева двигателя, работы автономных отопителей и движения по снежной колее. Игнорирование сезонных коэффициентов может привести к тому, что водители будут экономить на прогреве, что вредит технике.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка путевых листов</h4><label class="check-item"><input type="checkbox"><span>Наличие подписи водителя</span></label><label class="check-item"><input type="checkbox"><span>Корректность показаний одометра</span></label><label class="check-item"><input type="checkbox"><span>Указание маршрута следования</span></label><label class="check-item"><input type="checkbox"><span>Отметки о заправках</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<h3>Сезонные и дорожные коэффициенты</h3>
+<p>Применение коэффициентов регламентируется внутренними документами предприятия, но базируется на общих отраслевых стандартах. Для работы в горной местности также устанавливаются специальные надбавки к расходу, так как двигатели работают в режимах максимальных оборотов.</p>
+<p>Городской коэффициент применяется при работе в черте мегаполисов с плотным трафиком. Частые остановки и разгоны значительно увеличивают потребление топлива на тонно-километр. В таких условиях эффективность перевозки падает, и это должно отражаться в отчетах.</p>
+<p>При использовании газомоторного топлива (метан, пропан) расчеты ведутся в кубических метрах или килограммах, но принцип остается тем же. Пересчет в дизельный эквивалент производится по специальным таблицам теплотворной способности.</p>
+
+<blockquote>
+<p>⚠️ Внимание: Использование необоснованно высоких коэффициентов расхода может быть расценено проверяющими органами как попытка хищения топлива. Все надбавки должны быть документально подтверждены.</p>
+</blockquote>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Установите системы мониторинга транспорта для автоматического сбора данных о расходе и стиле вождения, что исключит человеческий фактор при заполнении отчетов.</p></div>
+
+<h2 id="типичные-ошибки-при-планировании-перевозок">Типичные ошибки при планировании перевозок</h2>
+<p>В логистике и эксплуатации грузовиков часто допускаются ошибки, которые приводят к финансовым потерям. Понимание этих ошибок помогает избежать проблем в будущем и оптимизировать работу автопарка. Анализ реальных кейсов показывает повторяющиеся сценарии неверных расчетов.</p>
+<ol>
+<li><strong>Игнорирование холостого пробега</strong> — часто рассчитывают стоимость только с грузом, забывая, что возврат порожняком тоже стоит денег. Правильно: включать в расчет весь круговой рейс.</li>
+<li><strong>Использование паспортных данных вместо фактических</strong> — заводские нормы расхода часто далеки от реальности. Правильно: вести статистику фактического расхода по каждому автомобилю.</li>
+<li><strong>Неучет простоев</strong> — работа двигателя на холостом ходу во время погрузки не учитывается в километраже. Правильно: нормировать моточасы работы на холостом ходу отдельно.</li>
+<li><strong>Ошибки в определении массы</strong> — вес тары или упаковки груза часто не учитывается. Правильно: взвешивать автомобиль полностью перед выездом.</li>
+</ol>
+
+<div class="attention-box attention-info"><h4>Экономия на логистике</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Снижение себестоимости перевозки</li><li>✅ Увеличение рентабельности рейса</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Риск поломки техники</li><li>❌ Снижение безопасности движения</li></ul></div></div></div>
+
+<h2 id="оптимизация-затрат-на-тонно-километр">Оптимизация затрат на тонно-километр</h2>
+<p>Снижение затрат на перевозку единицы груза на единицу расстояния — главная цель любого транспортного предприятия. Это достигается не только сокращением расхода топлива, но и грамотным планированием маршрутов. Исключение холостых пробегов позволяет значительно повысить эффективность.</p>
+<p>Техническое состояние автомобиля играет ключевую роль. Подкачанные шины увеличивают сопротивление качению, а грязные воздушные фильтры ухудшают смесеобразование. Регулярное обслуживание — это не статья расходов, а инвестиция в экономию.</p>
+<p>Квалификация водителя также напрямую влияет на итоговые цифры. Обучение навыкам экономичного вождения (эко-драйвинг) позволяет сократить расход топлива до 15% без потери времени в пути. Плавные разгоны и торможения берегут технику и деньги.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Попытки искусственного занижения расхода топлива путем отключения систем экологии или настройки ТНВД на дымление приводят к ускоренному выходу двигателя из строя и штрафам при техосмотре.</p></div>
+
+<h3>Стратегии повышения эффективности</h3>
+<p>Внедрение маршрутизации позволяет избегать пробок и участков с плохим покрытием. Современные навигационные системы для грузовиков учитывают габариты и ограничения по массе, предлагая оптимальный путь. Это снижает износ и расход ресурсов.</p>
+<p>Контроль за оборотами двигателя помогает держать работу в зоне максимального крутящего момента при минимальном расходе. Для двигателей КАМАЗ это обычно диапазон 1200-1600 оборотов в минуту. Работа на высоких оборотах без необходимости ведет к перерасходу.</p>
+<p>Использование прицепа соответствующей грузоподъемности также важно. Тянуть полупустой прицеп теми же силами, что и полный, экономически нецелесообразно. В таких случаях стоит рассмотреть варианты консолидации грузов или использования техники меньшей тоннажности.</p>
+
+<p>Подводя итог, следует сказать, что показатель «тонна на километр» является комплексным индикатором эффективности работы грузового транспорта. Он объединяет в себе технические возможности машины, мастерство водителя и грамотность логистического планирования. Точный расчет и постоянный мониторинг этого параметра позволяют держать расходы под контролем и обеспечивать рентабельность перевозок даже в условиях жесткой конкуренции.</p>
+<p>Регулярный анализ данных, полученных в ходе эксплуатации, дает возможность выявлять скрытые резервы экономии. Будь то замена изношенных деталей подвески, снижающих сопротивление качению, или корректировка графика движения, каждое действие имеет значение. Внимание к деталям в конечном счете определяет успех транспортного бизнеса.</p>
+<p>Грамотное управление затратами на тонно-километр превращает грузовик из источника расходов в инструмент получения прибыли. Понимание физики процесса и экономики перевозки — ключевой навык для современного специалиста в области грузоперевозок.</p></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#методология-расчета-удельных-показателей">Методология расчета удельных показателей</a></li><li><a href="#влияние-массы-груза-на-технические-узлы-камаз">Влияние массы груза на технические узлы КАМАЗ</a></li><li><a href="#нормативы-расхода-и-учет-гсм">Нормативы расхода и учет ГСМ</a></li><li><a href="#типичные-ошибки-при-планировании-перевозок">Типичные ошибки при планировании перевозок</a></li><li><a href="#оптимизация-затрат-на-тонно-километр">Оптимизация затрат на тонно-километр</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/r/ra/raskhod-topliva-kamaz-6520-na-100-km-s-gruzom-20-tonn.html" class="related-card">Расход топлива КамАЗ 6520 с грузом 20 тонн: нормы и расчеты</a></li><li><a href="/articles/m/mo/mochevina-avtomobilnaya-chto-eto-takoe.html" class="related-card">Автомобильная мочевина: что это, зачем нужна и как доливать</a></li><li><a href="/articles/r/ra/raskhod-u-kamaza-na-100-km.html" class="related-card">Расход топлива КамАЗ на 100 км: нормы, расчет и факторы</a></li><li><a href="/articles/r/ra/raskhod-topliva-kamaz-neo-5490-s-polupritsepom.html" class="related-card">Расход топлива КАМАЗ 5490 NEO: реальные нормы и расчеты</a></li><li><a href="/articles/s/sk/skolko-solyarki-potreblyaet-kamaz-na-100-km.html" class="related-card">Расход топлива КАМАЗ на 100 км: нормы, расчет и факторы</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/r/ra/raskhod-topliva-kamaz-6520-na-100-km-s-gruzom-20-tonn.html" class="related-bottom-card"><span class="related-bottom-title">Расход топлива КамАЗ 6520 с грузом 20 тонн: нормы и расчеты</span><span class="related-bottom-desc">Подробный разбор расхода топлива КамАЗ 6520 при полной загрузке. Реальные цифры, факторы влияния, те</span></a><a href="/articles/m/mo/mochevina-avtomobilnaya-chto-eto-takoe.html" class="related-bottom-card"><span class="related-bottom-title">Автомобильная мочевина: что это, зачем нужна и как доливать</span><span class="related-bottom-desc">Подробный гид по мочевине (AdBlue): состав, принцип работы SCR, нормы расхода, ошибки и советы по эк</span></a><a href="/articles/r/ra/raskhod-u-kamaza-na-100-km.html" class="related-bottom-card"><span class="related-bottom-title">Расход топлива КамАЗ на 100 км: нормы, расчет и факторы</span><span class="related-bottom-desc">Подробный анализ расхода топлива КамАЗ на 100 км. Таблицы нормативов, влияние скорости, загрузки и и</span></a><a href="/articles/r/ra/raskhod-topliva-kamaz-neo-5490-s-polupritsepom.html" class="related-bottom-card"><span class="related-bottom-title">Расход топлива КАМАЗ 5490 NEO: реальные нормы и расчеты</span><span class="related-bottom-desc">Полный анализ расхода топлива КАМАЗ 5490 NEO с полуприцепом. Факторы влияния, бортовые системы контр</span></a><a href="/articles/s/sk/skolko-solyarki-potreblyaet-kamaz-na-100-km.html" class="related-bottom-card"><span class="related-bottom-title">Расход топлива КАМАЗ на 100 км: нормы, расчет и факторы</span><span class="related-bottom-desc">Технический анализ расхода топлива КАМАЗ. Нормы ГСМ, влияние загрузки, скорости и исправности систем</span></a><a href="/articles/s/sk/skolko-prinosit-samosval-v-mesyats.html" class="related-bottom-card"><span class="related-bottom-title">Доход самосвала в месяц: расчеты, расходы и чистая прибыль</span><span class="related-bottom-desc">Сколько приносит самосвал в месяц? Детальный разбор доходов, расходов на топливо, ремонт и налоги. Р</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>

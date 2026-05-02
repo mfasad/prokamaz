@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🚛</text></svg>">
+    <title>Ошибки автономки КАМАЗ: диагностика и сброс кодов — Про КАМАЗ</title>
+    <meta name="description" content="Разбор ошибок системы автономного руления КАМАЗ. Коды неисправностей, причины сбоев, методы диагностики и сброса в бортовой системе.">
+    <link rel="canonical" href="https://prokamaz.vercel.app/articles/a/av/avtonomka-samarskaya-oshibki.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Ошибки автономки КАМАЗ: диагностика и сброс кодов">
+    <meta property="og:description" content="Разбор ошибок системы автономного руления КАМАЗ. Коды неисправностей, причины сбоев, методы диагностики и сброса в бортовой системе.">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=1777722544">
+    <style>
+    .site-footer-premium {
+        margin-top: 60px; padding: 40px 0 0; background: #1e293b; color: #94a3b8;
+    }
+    .footer-grid {
+        display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        padding-bottom: 32px; border-bottom: 1px solid #334155;
+    }
+    .footer-brand { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+    .footer-about { font-size: 0.9rem; line-height: 1.6; margin-bottom: 8px; }
+    .footer-updated { font-size: 0.8rem; color: #64748b; }
+    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #94a3b8; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-col a:hover { color: #60a5fa; }
+    .footer-bottom { padding: 20px 0; text-align: center; font-size: 0.85rem; }
+    @media (max-width: 640px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .cookie-popup {
+        position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; color: #fff;
+        padding: 16px; transition: transform 0.5s ease; z-index: 9999; border-top: 2px solid #2563eb;
+        transform: translateY(100%);
+    }
+    .cookie-popup.visible { transform: translateY(0); }
+    .cookie-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 0.9rem; }
+    .cookie-btn { background: #2563eb; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .cookie-btn:hover { background: #1d4ed8; }
+    @media (max-width: 640px) {
+        .cookie-inner { flex-direction: column; text-align: center; }
+    }
+</style>
+    
+    <!--#include virtual="/ssi/head.html" -->
+</head>
+<body>
+        <!--#include virtual="/ssi/body_top.html" -->
+    <style>
+    .nav-dropdown { position: relative; display: inline-block; }
+    .dropdown-toggle {
+        background: none; border: none; cursor: pointer;
+        font: inherit; color: inherit; padding: 8px 12px;
+        border-radius: 8px; transition: background 0.2s;
+    }
+    .dropdown-toggle:hover { background: rgba(0,0,0,0.05); }
+    .dropdown-menu {
+        display: none; position: absolute; right: 0; top: 100%;
+        min-width: 240px; max-height: 70vh; overflow-y: auto;
+        background: var(--card-bg, #fff); border: 1px solid var(--border, #e5e7eb);
+        border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        padding: 8px 0; z-index: 1000;
+    }
+    .nav-dropdown::after {
+        content: ''; position: absolute; left: 0; right: 0;
+        top: 100%; height: 12px;
+    }
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu { display: block; }
+    .dropdown-item {
+        display: block; padding: 10px 20px; color: var(--text, #1f2937);
+        text-decoration: none; font-size: 0.95rem; transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .dropdown-item:hover { background: rgba(37,99,235,0.06); color: var(--primary, #2563eb); }
+    @media (max-width: 768px) {
+        .main-nav > .nav-link { display: none; }
+        .dropdown-toggle { display: none; }
+        .dropdown-menu {
+            display: block !important; position: static;
+            box-shadow: none; border: none; border-radius: 0;
+            min-width: auto; max-height: none; padding: 0;
+            background: transparent;
+        }
+        .dropdown-item {
+            padding: 8px 0; font-size: 1rem;
+        }
+    }
+    </style>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">🚛</span>
+                <span>Про КАМАЗ</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Меню" id="menuBtn">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <a href="/category/dvigatel-i-tnvd/" class="nav-link">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="nav-link">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="nav-link">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="nav-link">⚡ Электрооборудование</a>
+<div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">📂 Все разделы ▾</button>
+            <div class="dropdown-menu"><a href="/category/dvigatel-i-tnvd/" class="dropdown-item">⚙️ Двигатель и ТНВД</a>
+<a href="/category/transmissiya-i-kpp/" class="dropdown-item">🔧 Трансмиссия и КПП</a>
+<a href="/category/tormoznaya-sistema/" class="dropdown-item">🛑 Тормозная система</a>
+<a href="/category/elektrooborudovanie/" class="dropdown-item">⚡ Электрооборудование</a>
+<a href="/category/diagnostika-i-oshibki/" class="dropdown-item">💻 Диагностика и Ошибки</a>
+<a href="/category/khodovaya-i-rulevoe/" class="dropdown-item">🚜 Ходовая и Рулевое</a>
+<a href="/category/kabina-i-salon/" class="dropdown-item">🚪 Кабина и Салон</a>
+<a href="/category/modeli-i-kharakteristiki/" class="dropdown-item">📋 Модели и Характеристики</a>
+<a href="/category/raskhod-i-normy/" class="dropdown-item">⛽ Расход и Нормы</a>
+<a href="/category/tyuning-i-dorabotki/" class="dropdown-item">🎨 Тюнинг и Доработки</a>
+<a href="/category/shiny-i-kolesa/" class="dropdown-item">🛞 Шины и Колеса</a>
+<a href="/category/spetstekhnika/" class="dropdown-item">🏗️ Спецтехника</a>
+<a href="/category/media-i-kultura/" class="dropdown-item">🎬 Медиа и Культура</a>
+<a href="/category/drugoe/" class="dropdown-item">📁 Другое</a></div>
+        </div>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="breadcrumbs" aria-label="Навигация">
+        <div class="container"><a href="/">Главная</a><span class="breadcrumb-sep">›</span><a href="/category/diagnostika-i-oshibki/">Диагностика и Ошибки</a><span class="breadcrumb-sep">›</span><span class="breadcrumb-current">Ошибки автономки КАМАЗ: диагностика и сброс кодов</span></div>
+    </nav>
+
+    <main class="site-main">
+        <div class="container">
+            <div class="article-layout">
+                <article class="article-main">
+                    
+                    <h1>Диагностика и устранение ошибок автономного руления КАМАЗ</h1>
+                    <nav class="mobile-toc"><details><summary>📋 Содержание</summary><ul><li><a href="#принципы-работы-и-основные-причины-сбоев">Принципы работы и основные причины сбоев</a></li><li><a href="#диагностика-через-бортовой-интерфейс-и-тестер">Диагностика через бортовой интерфейс и тестер</a></li><li><a href="#типичные-коды-ошибок-и-их-расшифровка">Типичные коды ошибок и их расшифровка</a></li><li><a href="#методы-устранения-и-сброса-ошибок">Методы устранения и сброса ошибок</a></li><li><a href="#типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</a></li><li><a href="#важность-регулярного-обслуживания-комплекса">Важность регулярного обслуживания комплекса</a></li></ul></details></nav>
+                    <!--#include virtual="/ssi/article_before.html" -->
+                    <div class="article-body">
+
+<p>Появление на дисплее бортового компьютера сообщения о неисправности системы автономного управления часто застает водителя врасплох, особенно если автомобиль находится на маршруте с высокой интенсивностью движения. Вместо ожидаемой работы в автоматическом режиме электроника переходит в аварийный протокол, блокируя функции автопилота и требуя полного ручного контроля.</p>
+<p>Игнорирование индикации или попытки продолжить движение без понимания природы сбоя могут привести к критическим ситуациям на дороге, так как система перестает гарантировать безопасность маневров. Первичная реакция на загоревшийся индикатор должна быть направлена на оценку текущей дорожной обстановки и безопасную остановку транспортного средства.</p>
+<p>Анализ кодов ошибок, выдаваемых контроллером, является первым шагом к восстановлению работоспособности комплекса. Современные грузовики КАМАЗ, оснащенные системами ADAS и автономного руления, генерируют детализированные отчеты, которые позволяют локализовать источник проблемы — будь то программный сбой, загрязнение сенсоров или аппаратная неисправность.</p>
+
+<h2 id="принципы-работы-и-основные-причины-сбоев">Принципы работы и основные причины сбоев</h2>
+
+<p>Функционирование системы автономного вождения базируется на синхронизированной работе множества датчиков, включая радары, камеры и лидары. <strong>Нарушение целостности сигнала</strong> от любого из этих компонентов вызывает каскадную реакцию, которую бортовой компьютер интерпретирует как критическую ошибку, требующую вмешательства.</p>
+
+<h3>Влияние внешних факторов и загрязнения</h3>
+<p>Наиболее распространенной причиной ложных срабатываний и отказа системы является физическое препятствие для сенсоров. Грязь, снег, лед или насекомые на линзах камер или поверхностях радаров искажают получаемую картину мира, заставляя алгоритмы принимать неверные решения.</p>
+<p>Если система обнаруживает рассинхронизацию данных между визуальным каналом и радаром, она принудительно отключает функции автономного управления. В таких случаях программный сброс не поможет, пока не будет устранена физическая причина.</p>
+<p>Электронные блоки чувствительны к перепадам температур и влажности. Конденсат внутри оптических блоков или окисление контактов в разъемах проводки часто приводят к появлению ошибок связи, которые фиксируются как «Обрыв линии» или «Неверный формат данных».</p>
+
+<h3>Программные конфликты и калибровка</h3>
+<p>Программное обеспечение контроллера может содержать ошибки или конфликтовать с другими подсистемами автомобиля после обновления прошивки. <em>Калибровка углов установки камер и радаров</em> — еще один критический параметр, нарушение которого приводит к некорректной работе автопилота.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Сброс ошибок без устранения физической причины может привести к повторному отключению системы в критический момент движения.</p></div>
+
+<h2 id="диагностика-через-бортовой-интерфейс-и-тестер">Диагностика через бортовой интерфейс и тестер</h2>
+
+<p>Для точного определения причины неисправности необходимо считать коды ошибок, хранящиеся в памяти электронного блока управления. Это можно сделать через штатный дисплей или подключив внешний диагностический сканер.</p>
+
+<h3>Работа с бортовым компьютером</h3>
+<p>Штатные средства диагностики позволяют получить первичную информацию о статусе системы. Для доступа к меню необходимо перейти в соответствующий раздел настроек.</p>
+<p>Нажмите кнопку меню на руле или панели приборов, затем выберите пункт <code>Сервис</code> или <code>Диагностика</code>. В открывшемся списке ищите подраздел, связанный с системами помощи водителю или ADAS.</p>
+
+<div class="checklist-block"><h4>📋 Доступ к кодам ошибок</h4><ol><li><strong>Шаг 1.</strong> Нажмите кнопку MENU</li><li><strong>Шаг 2.</strong> Перейдите в раздел Диагностика</li><li><strong>Шаг 3.</strong> Выберите пункт Системы помощи водителю</li><li><strong>Шаг 4.</strong> Запишите отображаемые коды ошибок</li></ol></div>
+
+<p>Отображаемые коды обычно имеют буквенно-цифровой формат. Например, коды серии <code>C1xxx</code> часто относятся к шасси и системам управления, а <code>Uxxxx</code> указывают на проблемы коммуникационной сети.</p>
+
+<h3>Использование внешнего сканера</h3>
+<p>Для глубокого анализа рекомендуется использовать специализированные диагностические комплексы, совместимые с протоколами КАМАЗ. Подключение осуществляется через разъем <code>OBD-II</code>, расположенный в кабине.</p>
+<p>После сопряжения устройства выберите в меню соответствующую модель грузовика и перейдите к чтению ошибок. Расшифровка кодов в профессиональном софте содержит не только описание, но и возможные причины возникновения.</p>
+
+<table>
+<thead>
+<tr>
+<th>Тип кода</th>
+<th>Описание</th>
+<th>Вероятная причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C1A12</code></td>
+<td>Неисправность радара переднего обзора</td>
+<td>Загрязнение или обрыв проводки</td>
+</tr>
+<tr>
+<td><code>B1234</code></td>
+<td>Ошибка калибровки камеры</td>
+<td>Смещение крепления или ПО</td>
+</tr>
+</tbody>
+</table>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📝</span><p>Для корректной работы сканера зажигание должно быть включено, но двигатель лучше запустить для стабилизации напряжения в сети.</p></div>
+
+<h2 id="типичные-коды-ошибок-и-их-расшифровка">Типичные коды ошибок и их расшифровка</h2>
+
+<p>Система автономного вождения генерирует специфические коды, указывающие на конкретный узел. Понимание их значения позволяет быстро сориентироваться в характере поломки.</p>
+
+<h3>Ошибки сенсорных систем</h3>
+<p>Коды, связанные с радарами и камерами, составляют большую часть всех неисправностей. Если в логах фигурирует ошибка «Сигнал вне диапазона», это указывает на физическое повреждение датчика или его полную неработоспособность.</p>
+<p>Частой проблемой является ошибка «Температурный режим». Радары имеют рабочий диапазон температур, и при его превышении система блокируется для предотвращения выхода из строя электроники.</p>
+
+<h3>Проблемы коммуникационной сети</h3>
+<p>Сбои в передаче данных по шине <code>CAN</code> приводят к появлению ошибок связи. Если контроллер автономки не получает данные от блока управления двигателем или тормозной системой, автономное управление невозможно.</p>
+
+<div class="checklist-block"><h4>☑️ Проверка при ошибках связи</h4><label class="check-item"><input type="checkbox"><span>Проверьте напряжение в бортовой сети</span></label><label class="check-item"><input type="checkbox"><span>Осмотрите разъемы проводки на окисление</span></label><label class="check-item"><input type="checkbox"><span>Проверьте целостность предохранителей блока ADAS</span></label><label class="check-item"><input type="checkbox"><span>Выполните сброс ошибок через сканер</span></label><div class="check-progress">Выполнено: <span class="check-count">0</span> / 4</div></div>
+
+<p>Важно различать активные и пассивные ошибки. Активные неисправности требуют немедленного устранения, тогда как пассивные (исторические) могут быть следствием кратковременного скачка напряжения.</p>
+
+<h2 id="методы-устранения-и-сброса-ошибок">Методы устранения и сброса ошибок</h2>
+
+<p>После выявления причины необходимо выполнить процедуры по восстановлению работоспособности системы. Методы варьируются от простой перезагрузки до замены компонентов.</p>
+
+<h3>Процедура мягкого и жесткого сброса</h3>
+<p>Часто для устранения программного сбоя достаточно выполнить перезагрузку системы. Это можно сделать, выключив зажигание и выждав определенное время, необходимое для полного обесточивания блоков управления.</p>
+<p>Если простой перезапуск не помогает, требуется принудительный сброс через диагностический интерфейс. В меню диагностики выберите опцию <code>Сброс ошибок</code> или <code>Clear DTC</code>.</p>
+
+<pre><code>Процедура сброса:
+<p>1. Подключить диагностический сканер.</p>
+<p>2. Войти в режим «Диагностика».</p>
+<p>3. Выбрать «Системы помощи водителю».</p>
+<p>4. Нажать «Стереть коды неисправностей».</p>
+<p>5. Перезапустить двигатель.</code></pre></p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>При сбросе ошибок через сканер убедитесь, что автомобиль находится в неподвижном состоянии и стояночный тормоз активирован.</p></div>
+
+<h3>Калибровка и настройка</h3>
+<p>После замены радара или камеры, а также после снятия бампера, обязательна процедура калибровки. Она выполняется на ровной площадке с использованием специальных мишеней.</p>
+<p>Процесс калибровки автоматизирован в диагностическом ПО, но требует точного соблюдения геометрии установки автомобиля относительно мишеней. <strong>Отклонение от инструкции</strong> приведет к некорректной работе системы в будущем.</p>
+
+<ul>
+<li>Установите автомобиль на ровную горизонтальную поверхность.</li>
+<li>Проверьте давление в шинах и уровень загрузки.</li>
+<li>Установите калибровочные мишени на заданном расстоянии.</li>
+<li>Запустите процедуру через диагностический сканер.</li>
+</ul>
+
+<p>В некоторых случаях требуется обновление программного обеспечения блока управления. Прошивку следует загружать только с официальных источников производителя, так как несовместимая версия может полностью вывести систему из строя.</p>
+
+<div class="attention-box attention-info"><h4>Методы восстановления</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><strong>👍 Преимущества</strong><ul><li>✅ Восстановление работоспособности без замены деталей</li><li>✅ Возможность самостоятельного выполнения сброса</li><li>✅ Быстрая диагностика через сканер</li></ul></div><div><strong>👎 Недостатки</strong><ul><li>❌ Требуется специальное оборудование для калибровки</li><li>❌ Риск потери гарантии при самостоятельном вмешательстве</li><li>❌ Необходимость ровной площадки для настройки</li></ul></div></div></div>
+
+<h2 id="типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</h2>
+
+<p>При попытке самостоятельного ремонта или диагностики пользователи часто допускают ряд характерных ошибок, которые усугубляют ситуацию.</p>
+
+<ol>
+<li><strong>Игнорирование очистки сенсоров</strong> — попытка сбросить ошибку программно, не протерев загрязненные камеры, приводит к циклическому появлению неисправности сразу после старта.</li>
+<li><strong>Некорректный сброс без диагностики</strong> — стирание кодов ошибок без выяснения причины скрывает реальную проблему, которая может проявиться в неподходящий момент.</li>
+<li><strong>Нарушение геометрии при калибровке</strong> — установка мишеней «на глаз» без использования измерительных инструментов делает калибровку бесполезной и опасной.</li>
+<li><strong>Использование нелицензионного ПО</strong> — применение «крякнутых» версий диагностических программ может привести к повреждению программного обеспечения блока управления.</li>
+</ol>
+
+<div class="attention-box attention-tip"><span class="attention-icon">💡</span><p>Всегда проверяйте актуальность базы данных диагностического сканера перед началом работы с конкретным годом выпуска автомобиля.</p></div>
+
+<p>Соблюдение регламента технического обслуживания и регулярная проверка чистоты внешних элементов системы автономного вождения минимизируют риск возникновения ошибок. В случае persistent-ошибок, которые не устраняются стандартными методами, необходима замена неисправного модуля.</p>
+
+<div class="attention-box attention-tip"><span class="attention-icon">📌</span><p>Эффективное устранение ошибок автономки КАМАЗ требует комплексного подхода: от физической очистки датчиков до профессиональной калибровки оборудования.</p></div>
+
+<h2 id="важность-регулярного-обслуживания-комплекса">Важность регулярного обслуживания комплекса</h2>
+
+<p>Системы автономного управления становятся стандартом безопасности, и их исправность напрямую влияет на защиту водителя и груза. Регулярная диагностика позволяет выявлять скрытые дефекты проводки или начинающиеся проблемы с датчиками до их перехода в критическую фазу.</p>
+<p>Владельцам и операторам автопарков стоит внедрить практику обязательной проверки статуса ADAS при каждом плановом ТО. Это включает не только считывание ошибок, но и визуальный осмотр креплений и целостности жгутов.</p>
+<p>Техническая грамотность водителя в вопросах базовой диагностики позволяет оперативно реагировать на сигналы системы, предотвращая простои техники и обеспечивая безопасность на маршруте.</p>
+
+<div class="attention-box attention-warning"><span class="attention-icon">⚠️</span><p>Информация о кодах ошибок и методах диагностики носит справочный характер. Для проведения сложных работ и калибровки обращайтесь в авторизованные сервисные центры.</p></div></div>
+                    <!--#include virtual="/ssi/article_after.html" -->
+
+                </article>
+                <aside class="article-sidebar"><!--#include virtual="/ssi/sidebar_top.html" --><nav class="sidebar-search"><div class="sidebar-search-box"><input type="text" id="globalSearchInput" placeholder="🔍 Поиск статей..." autocomplete="off"><div class="search-dropdown" id="globalSearchDropdown"></div></div></nav><!--#include virtual="/ssi/sidebar_before_toc.html" --><nav class="sidebar-toc" id="sidebarToc"><h3>Содержание</h3><ul><li><a href="#принципы-работы-и-основные-причины-сбоев">Принципы работы и основные причины сбоев</a></li><li><a href="#диагностика-через-бортовой-интерфейс-и-тестер">Диагностика через бортовой интерфейс и тестер</a></li><li><a href="#типичные-коды-ошибок-и-их-расшифровка">Типичные коды ошибок и их расшифровка</a></li><li><a href="#методы-устранения-и-сброса-ошибок">Методы устранения и сброса ошибок</a></li><li><a href="#типичные-ошибки-при-обслуживании">Типичные ошибки при обслуживании</a></li><li><a href="#важность-регулярного-обслуживания-комплекса">Важность регулярного обслуживания комплекса</a></li></ul></nav><!--#include virtual="/ssi/sidebar_before_related.html" --><nav class="sidebar-related"><h3>Похожие статьи</h3><ul><li><a href="/articles/d/da/datchik-pedali-gaza-kamaz.html" class="related-card">Датчик педали газа КАМАЗ: устройство, проверка, коды ошибок</a></li><li><a href="/articles/k/ko/konflikt-dvizheniya-22-na-takhografe-chto-eto.html" class="related-card">Конфликт движения 22 на тахографе: что это и как устранить</a></li><li><a href="/articles/c/ch/chto-oznachaet-asr-na-kamaze.html" class="related-card">Система ASR на КамАЗ: назначение, принцип работы и диагностика</a></li><li><a href="/articles/e/e9/e9-oshibka-kitajskoj-avtonomki.html" class="related-card">Ошибка E9 на китайской автономке: причины и устранение</a></li><li><a href="/articles/n/ne/neispravnosti-pzhd-kamaz.html" class="related-card">Неисправности ПЖД Камаз: диагностика, коды ошибок, ремонт</a></li></ul></nav><!--#include virtual="/ssi/sidebar_after_related.html" --></aside>
+            </div>
+        </div>
+    </main>
+
+    <!--#include virtual="/ssi/before_related_bottom.html" -->
+    <section class="related-bottom">
+        <div class="container">
+            <h2 class="related-bottom-heading">📖 Читайте также</h2>
+            <div class="related-bottom-grid"><a href="/articles/d/da/datchik-pedali-gaza-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Датчик педали газа КАМАЗ: устройство, проверка, коды ошибок</span><span class="related-bottom-desc">Подробная инструкция по диагностике, замене и настройке датчиков акселератора на грузовиках КАМАЗ с </span></a><a href="/articles/k/ko/konflikt-dvizheniya-22-na-takhografe-chto-eto.html" class="related-bottom-card"><span class="related-bottom-title">Конфликт движения 22 на тахографе: что это и как устранить</span><span class="related-bottom-desc">Подробная инструкция по устранению конфликта движения 22 на тахографе. Причины, коды ошибок, пошагов</span></a><a href="/articles/c/ch/chto-oznachaet-asr-na-kamaze.html" class="related-bottom-card"><span class="related-bottom-title">Система ASR на КамАЗ: назначение, принцип работы и диагностика</span><span class="related-bottom-desc">Подробный разбор системы ASR на грузовиках КамАЗ. Принцип действия, отличия от ABS, коды ошибок, мет</span></a><a href="/articles/e/e9/e9-oshibka-kitajskoj-avtonomki.html" class="related-bottom-card"><span class="related-bottom-title">Ошибка E9 на китайской автономке: причины и устранение</span><span class="related-bottom-desc">Подробная инструкция по диагностике и устранению ошибки E9 на китайских дизельных отопителях. Коды н</span></a><a href="/articles/n/ne/neispravnosti-pzhd-kamaz.html" class="related-bottom-card"><span class="related-bottom-title">Неисправности ПЖД Камаз: диагностика, коды ошибок, ремонт</span><span class="related-bottom-desc">Подробный разбор неисправностей ПЖД Камаз. Коды ошибок, причины отключения, алгоритм диагностики и м</span></a><a href="/articles/n/na/namotka-spidometra-kamaz-evro-2.html" class="related-bottom-card"><span class="related-bottom-title">Намотка спидометра Камаз Евро-2: Инструкция и схемы</span><span class="related-bottom-desc">Пошаговая инструкция по намотке пробега на Камаз Евро-2. Схемы подключения, методы коррекции показан</span></a></div>
+        </div>
+    </section>
+    <!--#include virtual="/ssi/after_related_bottom.html" -->
+
+    <footer class="site-footer-premium">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">🚛 Про КАМАЗ</div>
+                    <p class="footer-about">Полный справочник по ремонту, тюнингу и эксплуатации грузовиков КАМАЗ всех моделей и годов выпуска.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Разделы</h4>
+                    <ul><li><a href="/category/dvigatel-i-tnvd/">⚙️ Двигатель и ТНВД</a></li>
+<li><a href="/category/transmissiya-i-kpp/">🔧 Трансмиссия и КПП</a></li>
+<li><a href="/category/tormoznaya-sistema/">🛑 Тормозная система</a></li>
+<li><a href="/category/elektrooborudovanie/">⚡ Электрооборудование</a></li>
+<li><a href="/category/diagnostika-i-oshibki/">💻 Диагностика и Ошибки</a></li>
+<li><a href="/category/khodovaya-i-rulevoe/">🚜 Ходовая и Рулевое</a></li></ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about.html">О проекте</a></li>
+                        <li><a href="/categories.html">Все разделы</a></li>
+                        <li><a href="/contact.html">Контакты</a></li>
+                        <li><a href="/privacy.html">Конфиденциальность</a></li>
+                        <li><a href="/sitemap.xml">Карта сайта</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© Про КАМАЗ. Все права защищены.</p>
+                <!--LiveInternet counter--><div style="margin-top:10px;"><a href="https://www.liveinternet.ru/click"
+                target="_blank"><img id="licnt06C4" width="88" height="15" style="border:0" 
+                title="LiveInternet: показано число посетителей за сегодня"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7"
+                alt=""/></a><script>(function(d,s){d.getElementById("licnt06C4").src=
+                "https://counter.yadro.ru/hit?t26.5;r"+escape(d.referrer)+
+                ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+
+                (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+
+                ";h"+escape(d.title.substring(0,150))+";"+Math.random()})(document,screen)</script></div><!--/LiveInternet-->
+            </div>
+        </div>
+    </footer>
+    <div id="cookie-consent" class="cookie-popup">
+        <div class="cookie-inner">
+            <span>🍪 Мы используем файлы cookie для улучшения работы сайта.</span>
+            <button id="cookie-accept" class="cookie-btn">Принять</button>
+        </div>
+    </div>
+    <script src="/static/js/main.js"></script>
+    <script>
+    (function() {
+        const popup = document.getElementById('cookie-consent');
+        const btn = document.getElementById('cookie-accept');
+        if (popup && btn && !localStorage.getItem('cookie-accepted')) {
+            popup.classList.add('visible');
+            btn.onclick = () => {
+                localStorage.setItem('cookie-accepted', 'true');
+                popup.classList.remove('visible');
+            };
+        }
+    })();
+    </script>
+    <script>
+    function pbPollVote(el) {
+        var poll = el.closest('.poll-widget');
+        if (poll.classList.contains('voted')) return;
+        poll.classList.add('voted');
+        el.classList.add('selected');
+        var opts = poll.querySelectorAll('.poll-widget-option');
+        var n = opts.length;
+        var raw = [];
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            var v = Math.random() * 50 + 5;
+            if (opts[i] === el) v += 30;
+            raw.push(v);
+            sum += v;
+        }
+        var pcts = raw.map(function(v) { return Math.round(v / sum * 100); });
+        var diff = 100 - pcts.reduce(function(a,b){ return a+b; }, 0);
+        pcts[Array.from(opts).indexOf(el)] += diff;
+        setTimeout(function() {
+            opts.forEach(function(opt, i) {
+                opt.querySelector('.poll-widget-bar').style.width = pcts[i] + '%';
+                opt.querySelector('.poll-widget-pct').textContent = pcts[i] + '%';
+            });
+        }, 50);
+    }
+    </script>
+    <!--#include virtual="/ssi/body_bottom.html" -->
+    <script src="/static/js/inject.js" defer></script>
+</body>
+</html>
