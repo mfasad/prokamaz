@@ -87,6 +87,20 @@ document.addEventListener('DOMContentLoaded', function () {
         var activeIdx = -1;
         var debounceTimer = null;
 
+        // URL mode: 'flat' = /slug.html, 'category' = /cat/slug.html, 'hash' = /articles/a/ab/slug.html
+        var _URL_MODE = '__URL_MODE__';
+        var _BASE = '';
+        function _buildArticleUrl(slug, cat) {
+            if (_URL_MODE === 'category' && cat) {
+                return _BASE + '/' + cat + '/' + slug + '.html';
+            }
+            if (_URL_MODE === 'hash') {
+                var l = slug.toLowerCase();
+                return _BASE + '/articles/' + l[0] + '/' + l.substring(0, Math.min(2, l.length)) + '/' + slug + '.html';
+            }
+            return _BASE + '/' + slug + '.html';
+        }
+
         // Russian → Latin transliteration (matches Python slugify)
         var TR = {
             'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
@@ -120,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function loadChunk(prefix, cb) {
             if (chunkCache[prefix]) return cb(chunkCache[prefix]);
-            fetch('/static/js/search-chunks/' + prefix + '.json')
+            fetch(_BASE + '/static/js/search-chunks/' + prefix + '.json')
                 .then(function (r) {
                     if (!r.ok) { cb([]); return; }
                     return r.json();
@@ -169,9 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     dd.innerHTML = '<div class="sd-empty">🔍 Ничего не найдено</div>';
                 } else {
                     dd.innerHTML = results.map(function (item) {
-                        var url = item.c
-                            ? '/' + item.c + '/' + item.s + '.html'
-                            : '/' + item.s + '.html';
+                        var url = _buildArticleUrl(item.s, item.c);
                         return '<a href="' + url + '" class="sd-item">' +
                             '<div class="sd-icon">' + item.i + '</div>' +
                             '<div class="sd-title">' + item.t + '</div>' +
